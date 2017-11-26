@@ -67,7 +67,7 @@ h2{
   margin-bottom: 16px;
 }
 
-.cdf-con{
+.post-con{
   font-size: 17px;
   padding-bottom: 150px;
 }
@@ -207,11 +207,6 @@ p{
   height: 440px;
 }
 
-.post-con
-{
-  width: 700px;
-  margin: auto;
-}
 
 .creator
 {
