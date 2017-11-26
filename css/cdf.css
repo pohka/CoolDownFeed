@@ -16,6 +16,10 @@ body{
   font-family: 'Open Sans', sans-serif;
 }
 
+footer{
+  width: 100%;
+}
+
 .container
 {
   background: var(--con_bg);
@@ -49,14 +53,18 @@ h1, h2, h3
 {
   text-align: center;
   font-family: 'Barlow', sans-serif;
+  max-width: 600px;
+  display: block;
+  margin: auto;
 }
 
 h1{
-  margin: 26px 0px;
+  margin: 26px auto;
 }
 
 h2{
-  margin-top: 44px;
+  margin-top: 80px;
+  margin-bottom: 16px;
 }
 
 .cdf-con{
@@ -84,6 +92,7 @@ p{
 
 .cdf-nav li{
   cursor: pointer;
+
 }
 
 .cdf-nav-filters
@@ -105,7 +114,8 @@ p{
   text-align: center;
   font-size: 20px;
   line-height: 50px;
-  margin: 0px -1px;
+  border-right: 2px solid var(--pri_faded);
+  margin-left: -3px;
 }
 
 .cdf-nav-filters li:hover
@@ -130,8 +140,8 @@ p{
   border-right: 2px solid var(--pri_faded);
 }
 
-.cdf-nav-logo:hover{
-  background: var(--hover);
+.cdf-nav-logo:hover
+{
   cursor: pointer;
 }
 
@@ -214,17 +224,17 @@ p{
 }
 
 .creator-avatar{
-  border: 2px solid var(--pri);
-  border-radius: 2em;
+  border: 1px solid var(--pri);
+  border-radius: 0em;
   overflow: hidden;
-  width: 92px;
+  width: 90px;
   height: 100%;
   display: inline-block;
 }
 
 .creator-avatar img{
-  width: 100px;
-  margin-left: -12px;
+  width: 100%;
+  height: 100%;
 }
 
 .creator-name
@@ -256,4 +266,107 @@ p{
 .post-img img
 {
   width: 100%;
+}
+
+.quote
+{
+  max-width: 700px;
+  text-align: left;
+  font-size: 24px;
+  text-shadow: 0px 2px 0px var(--hover);
+  margin: 30px auto;
+  border-left:2px solid var(--pri);
+  background: var(--hover);
+  padding: 30px 50px;
+}
+
+.quote::before, .quote::after {
+    content: '"';
+    font-size: 30px;
+    color: var(--pri);
+    position: absolute;
+    margin-top: -6px;
+    margin-left: -14px;
+}
+.quote::after{
+  margin-left: 2px;
+}
+
+/*-------------- Footer --------------*/
+.footer-con
+{
+  width: 1170px;
+  margin: auto;
+  height: 180px;
+  padding: 10px 20px;
+  border-top: 1px solid var(--pri_faded);
+}
+
+.footer-logo
+{
+  display: inline-block;
+  margin-right: 60px;
+  padding: 8px 0px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.footer-logo img
+{
+  height: 60px;
+}
+
+.footer-filter-con
+{
+  display: inline-block;
+  vertical-align: top;
+}
+
+.footer-filter
+{
+  display: inline-block;
+  cursor: pointer;
+  height: 60px;
+  width: 150px;
+  line-height: 60px;
+  font-size: 20px;
+  text-align: center;
+  margin: 10px -2px;
+  border: 1px solid var(--pri);
+}
+
+.footer-filter:hover
+{
+  background-color: var(--hover);
+}
+
+.footer-contact
+{
+  display: inline-block;
+  float: right;
+  margin-top: 10px;
+}
+
+.footer-social
+{
+  float: right;
+  font-size: 20px;
+  width: 60px;
+  height: 40px;
+  line-height: 40px;
+  border: 1px solid var(--pri_faded);
+  text-align: center;
+  margin-right: 6px;
+}
+
+.footer-social:hover
+{
+  cursor: pointer;
+  background: var(--hover);
+}
+
+.footer-email
+{
+  clear: both;
+  padding-top: 10px;
 }
