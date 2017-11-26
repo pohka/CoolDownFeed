@@ -1,19 +1,21 @@
 :root{
   --pri:        #008fea;
   --con_bg:     #222;
-  --border:     #242424;
+  --card_border: #555;
   --text:       #fff;
   --hover:      #353535;
   --page_bg:    #00040b;
-  --card_bg:    #171717;
+  --card_bg:    #10141b;
   --bg:         #121214;
   --pri_faded:  #0375be;
+  --text_faded: #ddd;
 }
 
 body{
   background: var(--bg);
   color: var(--text);
   font-family: 'Open Sans', sans-serif;
+  font-size: 15px;
 }
 
 footer{
@@ -220,7 +222,6 @@ p{
 
 .creator-avatar{
   border: 1px solid var(--pri);
-  border-radius: 0em;
   overflow: hidden;
   width: 90px;
   height: 100%;
@@ -364,4 +365,119 @@ p{
 {
   clear: both;
   padding-top: 10px;
+}
+
+/*-------------- Cards --------------*/
+
+.card-con
+{
+  width: 880px;
+  margin: auto;
+}
+
+.card
+{
+  width: 400px;
+  height: auto;
+  display: inline-block;
+  float: left;
+  margin: 20px 20px;
+  border: 1px solid var(--card_border);
+  background: var(--card_bg);
+}
+
+.card:hover
+{
+  border-color: var(--pri);
+  cursor: pointer;
+}
+
+.card-thumb
+{
+  width: 100%;
+  height: 200px;
+}
+
+.card-thumb img
+{
+  width: 100%;
+  height: 100%;
+}
+
+.card-info
+{
+  padding: 0px 16px;
+}
+
+.card-title-and-desc
+{
+  height: 140px;
+  overflow: hidden;
+}
+
+.card-title
+{
+  font-size: 30px;
+  font-family: 'Barlow', sans-serif;
+}
+
+.card-desc
+{
+  margin-bottom: 10px;
+  color: var(--text_faded);
+}
+
+.card-avatar
+{
+  margin-top: 8px;
+  border: 1px solid var(--card_border);
+  overflow: hidden;
+  width: 86px;
+  height: 46px;
+  display: inline-block;
+  float: right;
+}
+
+.card-avatar img
+{
+  width: 100%;
+  height: 100%;
+}
+
+.card-author
+{
+  display: inline-block;
+  float: right;
+  margin-top: 8px;
+  margin-right: 10px;
+  font-size: 18px;
+  margin-left: -100%;
+}
+
+.card-time
+{
+  float: right;
+  font-size: 13px;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+.card-tag-con
+{
+  display: inline-block;
+  float: left;
+  margin-top: 20px;
+  width: 60%;
+  margin-bottom: 10px;
+  height: 40px;
+  overflow: hidden;
+}
+
+.card-tag
+{
+  display: inline-block;
+  border: 1px solid var(--pri_faded);
+  padding: 2px 8px;
+  margin: 4px 1px;
+  line-height: 26px;
 }
