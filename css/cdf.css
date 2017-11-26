@@ -367,21 +367,28 @@ p{
   padding-top: 10px;
 }
 
+.email
+{
+  unicode-bidi: bidi-override;
+  direction: rtl;
+  margin-left: 6px;
+}
+
 /*-------------- Cards --------------*/
 
 .card-con
 {
-  width: 880px;
+  width: 1080px;
   margin: auto;
 }
 
 .card
 {
-  width: 400px;
+  width: 340px;
   height: auto;
   display: inline-block;
   float: left;
-  margin: 20px 20px;
+  margin: 20px 10px;
   border: 1px solid var(--card_border);
   background: var(--card_bg);
 }
@@ -395,7 +402,7 @@ p{
 .card-thumb
 {
   width: 100%;
-  height: 200px;
+  height: 191px;
 }
 
 .card-thumb img
@@ -411,64 +418,41 @@ p{
 
 .card-title-and-desc
 {
-  height: 140px;
+  height: 100px;
   overflow: hidden;
 }
 
 .card-title
 {
-  font-size: 30px;
+  font-size: 24px;
   font-family: 'Barlow', sans-serif;
 }
 
 .card-desc
 {
   margin-bottom: 10px;
+  font-size: 14px;
   color: var(--text_faded);
-}
-
-.card-avatar
-{
-  margin-top: 8px;
-  border: 1px solid var(--card_border);
-  overflow: hidden;
-  width: 86px;
-  height: 46px;
-  display: inline-block;
-  float: right;
-}
-
-.card-avatar img
-{
-  width: 100%;
-  height: 100%;
 }
 
 .card-author
 {
   display: inline-block;
-  float: right;
-  margin-top: 8px;
-  margin-right: 10px;
+  float: left;
   font-size: 18px;
-  margin-left: -100%;
 }
 
 .card-time
 {
+  margin-right: 8px;
   float: right;
-  font-size: 13px;
-  margin-top: 10px;
-  margin-right: 10px;
 }
 
 .card-tag-con
 {
-  display: inline-block;
-  float: left;
-  margin-top: 20px;
-  width: 60%;
-  margin-bottom: 10px;
+  clear: left;
+  margin-top: 30px;
+  margin-bottom: 2px;
   height: 40px;
   overflow: hidden;
 }
@@ -476,8 +460,15 @@ p{
 .card-tag
 {
   display: inline-block;
-  border: 1px solid var(--pri_faded);
+  border: 1px solid var(--card_border);
   padding: 2px 8px;
-  margin: 4px 1px;
-  line-height: 26px;
+  float: left;
+  margin-right: 4px;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.card-tag:hover
+{
+  border-color: var(--pri);
 }
