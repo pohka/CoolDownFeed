@@ -1,4 +1,5 @@
 $(document).ready(function() {
+  loadPage();
 
   $(".nav-item").click(function(){
       switch($(this).attr("id"))
@@ -17,17 +18,38 @@ $(document).ready(function() {
       }
   });
 
-  var card = genCard({
-    id : "1",
-    img : "/temp/esl_ham.png",
-    title : "Frostivus Update",
-    desc :"I was working on a couple projects in the past few weeks",
-    author : "Pohka",
-    time : "25 Nov",
-    tags : "Esl hamberg,infographic,stats"
-  });
-  $(".card-con").append(card.get());
 });
+
+function loadPage(){
+  var pageType = "";
+  var path = window.location.pathname;
+  if(path === "/" || path === "/index"){
+    pageType = "cards-home";
+  }
+
+  $.post( "php/cdf.php", {
+    type : pageType
+    }).done(function( data ) {
+
+      //console.log(data);
+      var obj = JSON.parse(data);
+      for(var i in obj){
+        //console.log(obj[i]);
+
+        var card = genCard({
+          id : obj[i]["id"],
+          img : "/temp/esl_ham.png",
+          title : obj[i]["title"],
+          desc : obj[i]["description"],
+          author : obj[i]["author"],
+          time : obj[i]["timestamp"],
+          tags : obj[i]["tags"],
+        });
+
+        $(".card-con").append(card.get());
+      }
+    });
+}
 
 function genCard(data){
   var card = new Obj({
@@ -73,10 +95,11 @@ function genCard(data){
     content : data["author"]
   });
 
+  var timeString = timeSinceString(data["time"]);
   var cardTime = new Obj({
     tag : "div",
     class : "card-time",
-    content : data["time"]
+    content : timeString
   });
 
   var cardTagCon = new Obj({
@@ -103,6 +126,50 @@ function genCard(data){
   return card;
 }
 
+function timeSinceString(time){
+  var t = time.split(/[- :]/);
+  var date = new Date(Date.UTC(t[0], t[1]-1, t[2], t[3], t[4], t[5]));
+  var now = new Date();
+  var timeDiff = Math.abs(now.getTime() - date.getTime());
+
+  var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+  var str;
+  if(diffDays == 0){
+    var diffMins = Math.ceil(timeDiff / (1000 * 60));
+    var diffHours = Math.ceil(timeDiff / (1000 * 3600));
+
+    if(diffHours == 0){
+      str = diffMins + " mins ago";
+    }
+    else{
+      str = diffHours + " hours ago";
+    }
+  }
+  else if(diffDays == 1){
+    str = "1 day ago";
+  }
+  else {
+    var diffMonths = Math.ceil(timeDiff / (1000 * 3600 * 24 * 30));
+    var diffYears = Math.ceil(timeDiff / (1000 * 3600 * 24 * 30 * 365));
+
+    if(diffMonths==1){
+      str = "1 month ago";
+    }
+    else if(diffMonths < 12){
+
+    }
+    else if(diffYears==1){
+      str = "1 year ago";
+    }
+    else if(diffYears>1){
+      str = diffYears + " years ago";
+    }
+  }
+
+  return str;
+}
+
 
 function login(){
   console.log("loggin");
@@ -123,7 +190,7 @@ function login(){
   });
 }
 
-
+//a html element
 class Obj{
   constructor(kv) {
     this.kv = kv
@@ -145,6 +212,7 @@ class Obj{
     }
   }
 
+  //adds data to this element
   addData(key, val){
     if(this.data == undefined)
       this.data = {}
