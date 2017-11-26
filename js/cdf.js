@@ -17,8 +17,8 @@ $(document).ready(function() {
       }
   });
 
-  var card = getCard({
-    id : "1"
+  var card = genCard({
+    id : "1",
     img : "/temp/esl_ham.png",
     title : "Frostivus Update",
     desc :"I was working on a couple projects in the past few weeks",
@@ -29,7 +29,7 @@ $(document).ready(function() {
   $(".card-con").append(card.get());
 });
 
-function getCard(data){
+function genCard(data){
   var card = new Obj({
     tag : "div",
     class : "card"
@@ -44,9 +44,6 @@ function getCard(data){
     tag : "img",
     src : data["img"]
   });
-
-  cardThumb.add(thumnail);
-  card.add(cardThumb);
 
   var info = new Obj({
     tag : "div",
@@ -70,25 +67,17 @@ function getCard(data){
     content : data["desc"]
   });
 
-  wrapper.add(cardTitle);
-  wrapper.add(cardDesc);
-  info.add(wrapper);
-
   var cardAuthor = new Obj({
     tag : "div",
     class : "card-author",
     content : data["author"]
   });
 
-  info.add(cardAuthor);
-
   var cardTime = new Obj({
     tag : "div",
     class : "card-time",
     content : data["time"]
   });
-
-  info.add(cardTime);
 
   var cardTagCon = new Obj({
     tag : "div",
@@ -105,9 +94,12 @@ function getCard(data){
       })
     );
   }
-  info.add(cardTagCon);
 
-  card.add(info);
+  cardThumb.add(thumnail);
+  wrapper.add([cardTitle,cardDesc]);
+  info.add([wrapper, cardAuthor, cardTime, cardTagCon]);
+  card.add([cardThumb, info]);
+  card.addData("url", data["id"]);
   return card;
 }
 
@@ -138,12 +130,26 @@ class Obj{
     this.children = [];
   }
 
-  //adds a child Obj
+  //adds a child Obj or an array of children Objs
   add(obj){
-    if(obj instanceof Obj == false){
+    if(obj instanceof Array){
+      for(var i in obj){
+        this.children.push(obj[i]);
+      }
+    }
+    else if(obj instanceof Obj){
+      this.children.push(obj);
+    }
+    else{
       console.log("addChild() not an instance Obj");
     }
-    this.children.push(obj);
+  }
+
+  addData(key, val){
+    if(this.data == undefined)
+      this.data = {}
+
+    this.data[key] = val;
   }
 
   //adds a KV to this Obj
@@ -174,6 +180,12 @@ class Obj{
       var key = Obj.identifiers[i]
       if(this.kv[key] != undefined)
         res += " " + key + "='" + this.kv[key] + "'";
+    }
+
+    if(this.data != undefined){
+      for(var key in this.data){
+        res += " data-" + key + "= '" + this.data[key] + "'";
+      }
     }
     res += ">";
     if(this.kv["tag"] !== "img"){
