@@ -246,9 +246,15 @@ class Obj{
     var res = "<" + this.kv["tag"];
 
     for(var i in Obj.identifiers){
-      var key = Obj.identifiers[i]
+      var key = Obj.identifiers[i];
       if(this.kv[key] != undefined)
         res += " " + key + "='" + this.kv[key] + "'";
+    }
+
+    for(var i in Obj.idendifiersNoVal){
+      var key = Obj.idendifiersNoVal[i];
+      if(this.kv[key] != undefined)
+        res += " " + key;
     }
 
     if(this.data != undefined){
@@ -278,7 +284,9 @@ class Obj{
   }
 }
 
-Obj.identifiers = ["id", "class", "src", "href"];
+Obj.identifiers = ["id", "class", "src", "href", "frameborder", "type"];
+Obj.idendifiersNoVal = ["autoplay", "loop", "controls", "allowfullscreen"];
+Obj.noClosingTag = ["img", "source"];
 
 //post markdown converter
 function genHtmlFromRaw(raw){
@@ -287,7 +295,8 @@ function genHtmlFromRaw(raw){
     heading1 : "!1>",
     heading2 : "!2>",
     quote : "> ",
-    list : "* "
+    list : "* ",
+    media : "!m>"
   }
 
   var lines = raw.split("\n");
@@ -343,6 +352,12 @@ function genHtmlFromRaw(raw){
           else if(key == "list"){
             curList.push(content);
           }
+          else if(key == "media"){
+            var mediaObj = genMediaEmbed(content);
+            if(mediaObj != null){
+              post.add(mediaObj);
+            }
+          }
 
           //paragraph from markdown
           if(curParagraph !== ""){
@@ -364,6 +379,7 @@ function genHtmlFromRaw(raw){
           curList = [];
         }
 
+        //end of paragraph from new markdown
         var html = parseLinks(lines[i]);
         curParagraph += html;
       }
@@ -442,4 +458,56 @@ function parseLinks(line){
     result = line;
   }
   return result;
+}
+
+function genMediaEmbed(content){
+  var mediaObj = null;
+  var url = content.replace("http://", "");
+  url = url.replace("https://", "");
+  url = url.replace("www.", "");
+
+  var els = url.split("/");
+  var domain = els[0];
+  var type = "";
+  var mediaID = "";
+  if(domain == "youtube.com"){
+    type = "youtube";
+    mediaID = els[1].replace("watch?v=", "");
+  }
+  else if(domain == "youtu.be"){
+    type = "youtube";
+    mediaID = els[1];
+  }
+  else if(domain == "gfycat.com"){
+    type = "gfycat";
+    mediaID = els[els.length-1];
+  }
+
+  if(type=="youtube"){
+    var mediaSrc = "https://www.youtube.com/embed/" + mediaID + "?color=white&vq=hd720";
+    mediaObj = new Obj({
+      tag : "iframe",
+      class : "video",
+      src : mediaSrc,
+      frameborder : "0",
+      allowfullscreen : "true"
+    });
+  }
+  else if(type=="gfycat"){
+    var mediaSrc = "https://giant.gfycat.com/" + mediaID + ".webm";
+    mediaObj = new Obj({
+      tag : "video",
+      class : "video",
+      autoplay : "true",
+      loop : "true"
+    });
+
+    mediaObj.add(new Obj({
+      tag : "source",
+      src : mediaSrc,
+      type : "video/webm"
+    }));
+  }
+
+  return mediaObj;
 }

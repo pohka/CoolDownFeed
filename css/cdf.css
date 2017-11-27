@@ -252,7 +252,7 @@ p{
   float: right;
 }
 
-.post-img
+.post-img, .video
 {
   width: 800px;
   margin: 30px auto;
@@ -290,6 +290,11 @@ p{
 .post-con ul{
   width: 700px;
   margin: auto;
+}
+
+.video{
+  display:block;
+  height: 450px;
 }
 
 /*-------------- Footer --------------*/
