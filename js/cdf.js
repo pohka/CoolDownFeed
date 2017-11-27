@@ -263,7 +263,9 @@ class Obj{
       }
     }
 
-    if(this.kv["tag"] === "img"){
+    var requiresClosingTag = $.inArray(this.kv["tag"], Obj.noClosingTag);
+
+    if(requiresClosingTag != -1){
       res += "/>";
     }
     else{
@@ -277,7 +279,7 @@ class Obj{
       res+=this.children[i].get();
     }
 
-    if(this.kv["tag"] !== "img"){
+    if(requiresClosingTag == -1){
       res += "</"+this.kv["tag"]+">\n";
     }
     return res;
@@ -482,6 +484,28 @@ function genMediaEmbed(content){
     type = "gfycat";
     mediaID = els[els.length-1];
   }
+  else if(domain == "i.imgur.com"){
+    mediaID = els[1];
+    var info = mediaID.split(".");
+    var fileType = info[1];
+    if(fileType === "gifv"){
+      type = "imgur gif";
+    }
+    else {
+      type = "imgur img";
+    }
+  }
+  else if(domain == ""){
+    var fileName = els[els.length-1];
+    var fileEls = fileName.split(".");
+    var fileType = fileEls[1];
+
+    mediaID = els.join("/");
+
+    if(fileType == "png" || fileType == "jpeg" || fileType == "jpg"){
+      type = "img"
+    }
+  }
 
   if(type=="youtube"){
     var mediaSrc = "https://www.youtube.com/embed/" + mediaID + "?color=white&vq=hd720";
@@ -506,6 +530,27 @@ function genMediaEmbed(content){
       tag : "source",
       src : mediaSrc,
       type : "video/webm"
+    }));
+  }
+  else if(type == "imgur img" || type == "img"){
+
+    var mediaSrc;
+    if(type == "imgur img"){
+      mediaSrc = "https://i.imgur.com/" + mediaID;
+    }
+    else{
+      var site = window.location.protocol + '//' + window.location.hostname;
+      mediaSrc = site + mediaID;
+    }
+
+    mediaObj = new Obj({
+      tag : "div",
+      class : "post-img"
+    });
+
+    mediaObj.add(new Obj({
+      tag : "img",
+      src : mediaSrc
     }));
   }
 
