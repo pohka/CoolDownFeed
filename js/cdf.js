@@ -30,23 +30,23 @@ function loadPage(){
   $.post( "php/cdf.php", {
     type : pageType
     }).done(function( data ) {
+      if(data != "") {
+        var obj = JSON.parse(data);
+        for(var i in obj){
+          //console.log(obj[i]);
 
-      //console.log(data);
-      var obj = JSON.parse(data);
-      for(var i in obj){
-        //console.log(obj[i]);
+          var card = genCard({
+            id : obj[i]["id"],
+            img : "/temp/esl_ham.png",
+            title : obj[i]["title"],
+            desc : obj[i]["description"],
+            author : obj[i]["author"],
+            time : obj[i]["timestamp"],
+            tags : obj[i]["tags"],
+          });
 
-        var card = genCard({
-          id : obj[i]["id"],
-          img : "/temp/esl_ham.png",
-          title : obj[i]["title"],
-          desc : obj[i]["description"],
-          author : obj[i]["author"],
-          time : obj[i]["timestamp"],
-          tags : obj[i]["tags"],
-        });
-
-        $(".card-con").append(card.get());
+          $(".card-con").append(card.get());
+        }
       }
     });
 }
@@ -126,6 +126,7 @@ function genCard(data){
   return card;
 }
 
+//generates string for time since posted e.g. 2 days ago
 function timeSinceString(time){
   var t = time.split(/[- :]/);
   var date = new Date(Date.UTC(t[0], t[1]-1, t[2], t[3], t[4], t[5]));
@@ -255,9 +256,12 @@ class Obj{
         res += " data-" + key + "= '" + this.data[key] + "'";
       }
     }
-    res += ">";
-    if(this.kv["tag"] !== "img"){
-      res += "\n";
+
+    if(this.kv["tag"] === "img"){
+      res += "/>";
+    }
+    else{
+      res += ">";
     }
 
     if(this.kv["content"] != undefined){
@@ -267,9 +271,72 @@ class Obj{
       res+=this.children[i].get();
     }
 
-    res += "</"+this.kv["tag"]+">\n";
+    if(this.kv["tag"] !== "img"){
+      res += "</"+this.kv["tag"]+">\n";
+    }
     return res;
   }
 }
 
 Obj.identifiers = ["id", "class", "src"];
+
+//post markdown converter
+function genHtmlFromRaw(raw){
+  var markdown = {
+    banner : "!b>",
+    heading1 : "!1#",
+    heading2 : "!2#",
+    quote : "> "
+  }
+
+  var lines = raw.split("\n");
+
+  var index = lines[0].indexOf(markdown["banner"]) + markdown["banner"].length;
+  var bannerSrc = lines[0].substr(index);
+
+  var banner = new Obj({
+    tag : "img",
+    class : "banner",
+    src : bannerSrc
+  });
+
+  $(".container").html(banner.get());
+
+  var post = new Obj({
+    tag : "div",
+    class : "post-con"
+  });
+  for(var i=1; i<lines.length; i++){
+    for(var key in markdown){
+      var index = lines[i].indexOf(markdown[key]);
+      if(index >= 0 ){
+        var content = lines[i].substr(index + markdown[key].length);
+        var data;
+        if(key == "heading1"){
+          data = {
+            tag : "h1",
+            content : content
+          };
+        }
+        else if(key == "heading2"){
+          data = {
+            tag : "h2",
+            content : content
+          };
+        }
+        else if(key == "quote"){
+          data = {
+            tag : "div",
+            class : "quote",
+            content : content
+          };
+        }
+
+
+        post.add(new Obj(data));
+      }
+    }
+  }
+
+  $(".container").append(post.get());
+}

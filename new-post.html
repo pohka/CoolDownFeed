@@ -1,0 +1,74 @@
+<html>
+  <head>
+    <!--jQuery-->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+    <!--bootstrap-->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- font awesome -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Barlow|Open+Sans" rel="stylesheet">
+
+    <script src="/js/cdf.js"></script>
+    <script src="/js/tool-post.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/cdf.css">
+    <title>CoolDownFeed</title>
+  </head>
+  <body>
+    <nav class="cdf-nav">
+      <div class="cdf-nav-logo skew-con">
+        <img class="skew" src="/img/logo_sm.png" />
+      </div>
+      <ul class="cdf-nav-filters" >
+        <li class="nav-item skew-con active" id="filter-home"><div class="skew">Home</div></li>
+        <li class="nav-item skew-con" id="filter-popular"><div class="skew">Popular</div></li>
+        <li class="nav-item skew-con" id="filter-discover"><div class="skew">Discover</div></li>
+      </ul>
+
+      <div class="cdf-nav-info">
+        <button id="twitter" class="fa fa-twitter"></button>
+        <button id="youtube" class="fa fa-youtube-play"></button>
+        <button id="login">Login</button>
+        <button id="start">Get Started</button>
+      </div>
+    </nav>
+
+    <div class="login-modal">
+      <input type="text" id="login-user" placeholder="Username"><br>
+      <input type="text" id="login-pass" placeholder="Password"><br>
+      <input type="button" onclick="login()" value="Submit">
+    </div>
+
+    <div class="container">
+    </div>
+
+    <div class="post-raw-edit">
+      <textarea id="editor"></textarea>
+    </div>
+
+    <footer>
+      <div class="footer-con">
+        <div class="footer-logo">
+          <img src="/img/logo_sm.png" />
+          <div class="footer-logo-text">CoolDownFeed.com</div>
+        </div>
+        <div class="footer-filter-con skew-con">
+          <div class="footer-filter" id="footer-about"><div class="skew">About</div></div>
+          <div class="footer-filter" id="footer-discover"><div class="skew">Discover</div></div>
+        </div>
+        <div class="footer-contact">
+          <div class="fa fa-youtube-play footer-social"></div>
+          <div class="fa fa-twitter footer-social"></div>
+          <div class="footer-email">
+              <span class="fa fa-envelope-o"></span> Pohka10@gmail.com
+          </div>
+        </div>
+        </div>
+      </div>
+
+    </footer>
+  </body>
+<html>
