@@ -462,6 +462,7 @@ function parseLinks(line){
   return result;
 }
 
+//generates media links into html
 function genMediaEmbed(content){
   var mediaObj = null;
   var url = content.replace("http://", "");
@@ -485,13 +486,14 @@ function genMediaEmbed(content){
     mediaID = els[els.length-1];
   }
   else if(domain == "i.imgur.com"){
-    mediaID = els[1];
-    var info = mediaID.split(".");
+    var info = els[1].split(".");
     var fileType = info[1];
-    if(fileType === "gifv"){
-      type = "imgur gif";
+    if(fileType === "gif" || fileType === "gifv"){
+      mediaID = info[0] + ".mp4";
+      type = "imgur gifv";
     }
     else {
+      mediaID = els[1];
       type = "imgur img";
     }
   }
@@ -551,6 +553,21 @@ function genMediaEmbed(content){
     mediaObj.add(new Obj({
       tag : "img",
       src : mediaSrc
+    }));
+  }
+  else if(type == "imgur gifv"){
+    console.log("found gifv");
+    mediaObj = new Obj({
+      tag : "video",
+      class : "video",
+      autoplay : "true",
+      loop : "true"
+    });
+
+    mediaObj.add(new Obj({
+      tag : "source",
+      src : "https://i.imgur.com/" + mediaID,
+      type : "video/mp4"
     }));
   }
 
