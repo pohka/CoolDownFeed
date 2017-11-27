@@ -278,7 +278,7 @@ class Obj{
   }
 }
 
-Obj.identifiers = ["id", "class", "src"];
+Obj.identifiers = ["id", "class", "src", "href"];
 
 //post markdown converter
 function genHtmlFromRaw(raw){
@@ -351,10 +351,11 @@ function genHtmlFromRaw(raw){
         }
       }
       if(!foundKey){
-        curParagraph += lines[i];
+        var html = parseLinks(lines[i]);
+        curParagraph += html;
       }
     }
-    
+
     //end of paragraph
     if(curParagraph !== "" && (!foundKey || i == lines.length -1)){
       if(curParagraph !== ""){
@@ -368,4 +369,45 @@ function genHtmlFromRaw(raw){
   }
 
   $(".container").append(post.get());
+}
+
+//parse the links into html elements in a paragraph
+function parseLinks(line){
+  if(line.indexOf("[") >= 0){
+    var state = 0;
+    var text = "";
+    var link = "";
+    var startIndex = -1;
+    var result = "";
+    for(var j=0; j<line.length; j++) {
+
+      var switchedState = true;
+      switch(line[j]){
+        case "[" : state = 1; startIndex=j; break;
+        case "]" : state = 2; break;
+        case "(" : state = 3; break;
+        case ")" : state = 4; break;
+        default : switchedState = false;
+      }
+
+      if(!switchedState){
+        switch(state){
+          case 0 : result += line[j]; break;
+          case 1 : text += line[j]; break;
+          case 3 : link += line[j]; break;
+        }
+      }
+      else if(switchedState && state == 4){
+        var newLink = new Obj({
+          tag : "a",
+          href : link,
+          content : text
+        });
+
+        result += newLink.get();
+        state = 0;
+      }
+    }
+  }
+  return result;
 }
