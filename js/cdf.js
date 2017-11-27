@@ -226,14 +226,14 @@ class Obj{
     if(this.kv[key] == undefined){
       this.kv[key] = "";
     }
-    if(key.equals("class")){
+    if(this.kv[key] === "class"){
       this.kv[key] += ", ";
     }
     this.kv[key] += val;
   }
 
   //sets a KV
-  set(key, val){
+  setKV(key, val){
     this.kv[key] += val;
   }
 
@@ -306,34 +306,63 @@ function genHtmlFromRaw(raw){
     tag : "div",
     class : "post-con"
   });
+
+  var curParagraph = "";
+
   for(var i=1; i<lines.length; i++){
-    for(var key in markdown){
-      var index = lines[i].indexOf(markdown[key]);
-      if(index >= 0 ){
-        var content = lines[i].substr(index + markdown[key].length);
-        var data;
-        if(key == "heading1"){
-          data = {
-            tag : "h1",
-            content : content
-          };
-        }
-        else if(key == "heading2"){
-          data = {
-            tag : "h2",
-            content : content
-          };
-        }
-        else if(key == "quote"){
-          data = {
-            tag : "div",
-            class : "quote",
-            content : content
-          };
-        }
+    lines[i] = lines[i].trim();
+    if(lines[i] !== ""){
+      var foundKey = false;
+      for(var key in markdown){
+        var index = lines[i].indexOf(markdown[key]);
+        if(index >= 0){
+          foundKey = true;
+          var content = lines[i].substr(index + markdown[key].length);
+          var data;
+          if(key == "heading1"){
+            data = {
+              tag : "h1",
+              content : content
+            };
+          }
+          else if(key == "heading2"){
+            data = {
+              tag : "h2",
+              content : content
+            };
+          }
+          else if(key == "quote"){
+            data = {
+              tag : "div",
+              class : "quote",
+              content : content
+            };
+          }
 
+          if(curParagraph !== ""){
+            post.add(new Obj({
+              tag : "p",
+              content : curParagraph
+            }));
+            curParagraph = "";
+          }
 
-        post.add(new Obj(data));
+          post.add(new Obj(data));
+        }
+      }
+      if(!foundKey){
+        curParagraph += lines[i];
+      }
+    }
+    
+    //end of paragraph
+    if(curParagraph !== "" && (!foundKey || i == lines.length -1)){
+      if(curParagraph !== ""){
+        post.add(new Obj({
+          tag : "p",
+          content : curParagraph
+        }));
+        curParagraph = "";
       }
     }
   }
