@@ -209,7 +209,6 @@ p{
   height: 440px;
 }
 
-
 .creator
 {
   height: 58px;
@@ -286,6 +285,11 @@ p{
 }
 .quote::after{
   margin-left: 2px;
+}
+
+.post-con ul{
+  width: 700px;
+  margin: auto;
 }
 
 /*-------------- Footer --------------*/

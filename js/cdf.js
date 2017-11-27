@@ -23,7 +23,7 @@ $(document).ready(function() {
 function loadPage(){
   var pageType = "";
   var path = window.location.pathname;
-  if(path === "/" || path === "/index"){
+  if(path === "/" || path === "/index" || path === "/index.html"){
     pageType = "cards-home";
   }
 
@@ -284,9 +284,10 @@ Obj.identifiers = ["id", "class", "src", "href"];
 function genHtmlFromRaw(raw){
   var markdown = {
     banner : "!b>",
-    heading1 : "!1#",
-    heading2 : "!2#",
-    quote : "> "
+    heading1 : "!1>",
+    heading2 : "!2>",
+    quote : "> ",
+    list : "* "
   }
 
   var lines = raw.split("\n");
@@ -308,6 +309,7 @@ function genHtmlFromRaw(raw){
   });
 
   var curParagraph = "";
+  var curList = [];
 
   for(var i=1; i<lines.length; i++){
     lines[i] = lines[i].trim();
@@ -318,7 +320,7 @@ function genHtmlFromRaw(raw){
         if(index >= 0){
           foundKey = true;
           var content = lines[i].substr(index + markdown[key].length);
-          var data;
+          var data = null;
           if(key == "heading1"){
             data = {
               tag : "h1",
@@ -338,7 +340,11 @@ function genHtmlFromRaw(raw){
               content : content
             };
           }
+          else if(key == "list"){
+            curList.push(content);
+          }
 
+          //paragraph from markdown
           if(curParagraph !== ""){
             post.add(new Obj({
               tag : "p",
@@ -347,17 +353,24 @@ function genHtmlFromRaw(raw){
             curParagraph = "";
           }
 
-          post.add(new Obj(data));
+          if(data != null)
+            post.add(new Obj(data));
         }
       }
       if(!foundKey){
+        //end of list
+        if(curList.length > 0){
+          post.add(genListObj(curList));
+          curList = [];
+        }
+
         var html = parseLinks(lines[i]);
         curParagraph += html;
       }
     }
 
     //end of paragraph
-    if(curParagraph !== "" && (!foundKey || i == lines.length -1)){
+    if(lines[i] === "" || i == lines.length -1){
       if(curParagraph !== ""){
         post.add(new Obj({
           tag : "p",
@@ -371,7 +384,22 @@ function genHtmlFromRaw(raw){
   $(".container").append(post.get());
 }
 
-//parse the links into html elements in a paragraph
+function genListObj(list){
+  var listObj = new Obj({
+    tag : "ul"
+  });
+
+  for(var i in list){
+    listObj.add(new Obj({
+      tag : "li",
+      content : list[i]
+    }));
+  }
+
+  return listObj;
+}
+
+//parse the markdown for links in a paragraph into html
 function parseLinks(line){
   if(line.indexOf("[") >= 0){
     var state = 0;
@@ -408,6 +436,10 @@ function parseLinks(line){
         state = 0;
       }
     }
+  }
+  //no links
+  else{
+    result = line;
   }
   return result;
 }
