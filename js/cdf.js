@@ -294,8 +294,8 @@ Obj.noClosingTag = ["img", "source"];
 function genHtmlFromRaw(raw){
   var markdown = {
     banner : "!b>",
-    heading1 : "!1>",
-    heading2 : "!2>",
+    heading1 : "!1#",
+    heading2 : "!2#",
     quote : "> ",
     list : "* ",
     media : "!m>"

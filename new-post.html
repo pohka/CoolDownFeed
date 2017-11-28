@@ -15,6 +15,15 @@
     <script src="/js/cdf.js"></script>
     <script src="/js/tool-post.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/cdf.css">
+
+    <!--uploader-->
+    <link rel="stylesheet" type="text/css" href="/addons/uploader/assets/css/style.css">
+    <script src="/addons/uploader/assets/js/jquery.knob.js"></script>
+		<script src="/addons/uploader/assets/js/jquery.ui.widget.js"></script>
+		<script src="/addons/uploader/assets/js/jquery.iframe-transport.js"></script>
+		<script src="/addons/uploader/assets/js/jquery.fileupload.js"></script>
+		<script src="/addons/uploader/assets/js/script.js"></script>
+
     <title>CoolDownFeed</title>
   </head>
   <body>
@@ -73,24 +82,18 @@
       <div class="post-tool-modal" id="post-tool-media">
         <h3>Add Media</h3>
         <label>Embed from url</label>
-        <input type="text" id="post-tool-media-focus" placeholder="YouTube, imgur or gfycat">
-        <div class="drag-upload">
-          <span class="fa fa-cloud-upload"></span><br>
-          <h3>Upload</h3>
-          <span>Drag and Drop</span>
-        </div>
-        <label>Upload from file</label>
-        <input type="file">
-        <input type="button" class="post-tool-submit" value="Add">
-        <input type="button" value="Cancel" onclick="closeToolModals()">
-      </div>
-
-      <!--heading-->
-      <div class="post-tool-modal" id="post-tool-heading">
-        <h3>Heading</h3>
-        <label>Heading</label>
-        <input type="text"  class="singleInput" id="post-tool-heading-focus">
-        <input type="button" class="post-tool-submit" value="Add">
+        <input type="text" id="post-tool-media-focus" class="add-media" data-field="url" placeholder="YouTube, imgur or gfycat">
+        <!-- <form action="/php/upload.php" class="dropzone" id="my-awesome-dropzone">Click here or</form> -->
+        <form id="upload" method="post" action="upload.php" enctype="multipart/form-data">
+          <div id="drop">
+            Drop Here
+            <br>
+            <a>Browse</a>
+            <input type="file" name="upl" multiple />
+          </div>
+          <ul></ul>
+        </form>
+        <input type="button" class="post-tool-submit" data-type="media" value="Add">
         <input type="button" value="Cancel" onclick="closeToolModals()">
       </div>
 
@@ -105,12 +108,21 @@
         <input type="button" value="Cancel" onclick="closeToolModals()">
       </div>
 
+      <!--heading-->
+      <div class="post-tool-modal" id="post-tool-heading">
+        <h3>Heading</h3>
+        <label>Heading</label>
+        <input type="text"  class="singleInput add-heading" id="post-tool-heading-focus" data-field="text">
+        <input type="button" class="post-tool-submit" data-type="heading" value="Add">
+        <input type="button" value="Cancel" onclick="closeToolModals()">
+      </div>
+
       <!--list-->
       <div class="post-tool-modal" id="post-tool-list">
         <h3>List</h3>
         <label>List items</label>
-        <textarea rows="10" id="post-tool-list-focus"></textarea><br>
-        <input type="button" class="post-tool-submit" value="Add">
+        <textarea rows="10" id="post-tool-list-focus" class="add-list" data-field="text"></textarea><br>
+        <input type="button" class="post-tool-submit" data-type="list" value="Add">
         <input type="button" value="Cancel" onclick="closeToolModals()">
       </div>
 
@@ -126,7 +138,7 @@
       </div>
 
       <div class="post-tool-modal" id="post-tool-code">
-        <h3>Code</h3>
+        <h3>Code Snippet</h3>
         <label>Code</label>
         <textarea rows="10" id="post-tool-quote-focus"></textarea>
         <label>Language</label>

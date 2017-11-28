@@ -1,0 +1,18 @@
+
+
+Post Editor
+--------------
+-parse markdown for:
+  -Quote
+  -list
+  -code
+-toolbar add text from modal:
+  -Quote
+  -Code
+-preview for mobile
+-file upload drag and drop
+-generate navbar and footer with js
+-Help
+-Publish
+-save draft
+-media choose existing file on website
