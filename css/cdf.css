@@ -1,7 +1,7 @@
 :root{
   --pri:        #008fea;
   --con_bg:     #222;
-  --card_border: #555;
+  --border:   #555;
   --text:       #fff;
   --hover:      #353535;
   --page_bg:    #00040b;
@@ -22,11 +22,28 @@ footer{
   width: 100%;
 }
 
+button, input[type="button"]
+{
+  background: var(--page_bg);
+  border: 1px solid var(--pri);
+  padding: 4px 10px;
+}
+
+button:hover, input[type="button"]:hover,
+button:focus, input[type="button"]:focus
+{
+  background: var(--hover);
+}
+
+label{
+  font-weight: normal !important;
+}
+
 .container
 {
   background: var(--con_bg);
   width: 1170px;
-  min-height: 800px;
+  min-height: 700px;
   padding: 0px;
   padding-top: 50px;
 }
@@ -35,6 +52,17 @@ footer{
 {
   width: 800px;
   margin: auto;
+}
+
+input[type="text"]
+{
+  background: var(--con_bg);
+  border: 1px solid var(--border);
+  display: block;
+  margin-bottom: 8px;
+  width: 100%;
+  font-size: 16px;
+  padding: 2px 6px;
 }
 
 .skew-con
@@ -398,7 +426,7 @@ p{
   display: inline-block;
   float: left;
   margin: 20px 10px;
-  border: 1px solid var(--card_border);
+  border: 1px solid var(--border);
   background: var(--card_bg);
 }
 
@@ -469,7 +497,7 @@ p{
 .card-tag
 {
   display: inline-block;
-  border: 1px solid var(--card_border);
+  border: 1px solid var(--border);
   padding: 2px 8px;
   float: left;
   margin-right: 4px;
@@ -485,18 +513,103 @@ p{
 /*-------------- New Post --------------*/
 .post-raw-edit
 {
-  position: fixed;
-  top: 70px;
-  left: 0px;
-  width: 300px;
-  height: 90%;
+  padding-top: 60px;
+  width: 700px;
+  margin: auto;
 }
 
-.post-raw-edit textarea{
+.post-raw-edit textarea
+{
+  border: 1px solid var(--border);
   width: 100%;
-  height: 100%;
+  min-height: 500px;
   background-color: var(--con_bg);
   min-width: 100%;
   max-width: 100%;
   padding: 6px 10px;
+  margin-bottom: 20px;
+}
+
+.post-preview
+{
+  padding-top: 40px;
+  display: none;
+}
+
+.post-toolbar
+{
+  position: fixed;
+  top: 50px;
+  float: right;
+  right: 50%;
+}
+
+.post-toolbar-inner
+{
+  width: 1170px;
+  margin-left: 50%;
+  background: var(--page_bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.toolbar-mode
+{
+  display: inline-block;
+  width: 100px;
+  text-align: center;
+  margin-right: -4px;
+}
+
+.toolbar-btn
+{
+  display: inline-block;
+  border: 1px solid var(--pri_faded);
+  border-top: none;
+  line-height: 39px;
+  width: 100px;
+  text-align: center;
+  height: 40px;
+  margin-bottom: -1px;
+  cursor: pointer;
+}
+
+.toolbar-btn:hover{
+  background: var(--hover);
+}
+
+.toolbar-btn-sm
+{
+  width: 50px;
+  margin-right: -4px;
+}
+
+.toolbar-mode.active
+{
+  background-color: var(--pri_faded);
+}
+
+.toolbar-btn-right{
+  float: right;
+}
+
+.fa-info-circle{
+  margin-right: 2px;
+}
+
+.post-tool-modal-wrapper
+{
+  position: fixed;
+  float: right;
+  top: 90px;
+  right: 50%;
+}
+
+.post-tool-modal
+{
+  margin-left: 50%;
+  background: var(--card_bg);
+  border: 1px solid var(--pri_faded);
+  border-top: 0px;
+  width: 1170px;
+  padding: 10px 210px;
 }

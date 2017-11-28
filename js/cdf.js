@@ -312,7 +312,7 @@ function genHtmlFromRaw(raw){
     src : bannerSrc
   });
 
-  $(".container").html(banner.get());
+  $(".post-preview").html(banner.get());
 
   var post = new Obj({
     tag : "div",
@@ -370,8 +370,9 @@ function genHtmlFromRaw(raw){
             curParagraph = "";
           }
 
-          if(data != null)
+          if(data != null){
             post.add(new Obj(data));
+          }
         }
       }
       if(!foundKey){
@@ -399,7 +400,7 @@ function genHtmlFromRaw(raw){
     }
   }
 
-  $(".container").append(post.get());
+  $(".post-preview").append(post.get());
 }
 
 function genListObj(list){
