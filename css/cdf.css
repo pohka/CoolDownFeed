@@ -39,6 +39,26 @@ label{
   font-weight: normal !important;
 }
 
+textarea
+{
+  width: 100%;
+  background-color: var(--con_bg);
+  border: 1px solid var(--border);
+  margin-bottom: 10px;
+  resize: vertical;
+}
+
+select
+{
+  padding: 1px 4px;
+  margin-left: 4px;
+  border: 1px solid var(--border);
+}
+
+option, select{
+  background-color: var(--con_bg);
+}
+
 .container
 {
   background: var(--con_bg);
@@ -63,6 +83,12 @@ input[type="text"]
   width: 100%;
   font-size: 16px;
   padding: 2px 6px;
+}
+
+input[type="file"]
+{
+  margin-bottom: 20px;
+  margin-left: 10px;
 }
 
 .skew-con
@@ -95,6 +121,10 @@ h1{
 h2{
   margin-top: 80px;
   margin-bottom: 16px;
+}
+
+h3{
+  padding-bottom: 10px;
 }
 
 .post-con{
@@ -583,7 +613,7 @@ p{
   margin-right: -4px;
 }
 
-.toolbar-mode.active
+.toolbar-mode.active, .toolbar-btn-sm.active
 {
   background-color: var(--pri_faded);
 }
@@ -602,6 +632,7 @@ p{
   float: right;
   top: 90px;
   right: 50%;
+
 }
 
 .post-tool-modal
@@ -612,4 +643,18 @@ p{
   border-top: 0px;
   width: 1170px;
   padding: 10px 210px;
+  display: none;
+}
+
+.drag-upload{
+  width: 100%;
+  border: 2px dashed var(--border);
+  text-align: center;
+  padding: 60px 0px;
+  font-size: 26px;
+  margin: 20px 0px;
+}
+
+.post-tool-submit{
+  margin-top: 10px;
 }

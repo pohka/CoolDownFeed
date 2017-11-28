@@ -7,8 +7,18 @@ $(document).ready(function() {
     toggleToolMode(this);
   });
 
+  //clicks for toolbar item
   $(".toolbar-btn-sm").click(function(){
-    openToolOption(this);
+    if($(this).hasClass('active')){
+      closeToolModals();
+    }
+    else{
+      openToolOption(this);
+      $(".toolbar-btn-sm").each(function(){
+        $(this).removeClass('active');
+      })
+      $(this).addClass('active');
+    }
   });
 
   //allows single input fields to be submitted with enter key
@@ -19,6 +29,12 @@ $(document).ready(function() {
           $(this).click();
         }
       }
+  });
+
+  $(document).on("keyup", function(e){
+    if(e.keyCode == 27){
+      closeToolModals();
+    }
   });
 });
 
@@ -76,6 +92,9 @@ function toggleToolMode(selector){
 function closeToolModals(){
   $(".post-tool-modal").each(function(){
     $(this).hide();
+  });
+  $(".toolbar-btn-sm").each(function(){
+    $(this).removeClass('active');
   });
 }
 
