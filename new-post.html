@@ -72,14 +72,15 @@
       <!--media-->
       <div class="post-tool-modal" id="post-tool-media">
         <h3>Add Media</h3>
-        <label>Embed from url:</label>
+        <label>Embed from url</label>
         <input type="text" id="post-tool-media-focus" placeholder="YouTube, imgur or gfycat">
         <div class="drag-upload">
           <span class="fa fa-cloud-upload"></span><br>
           <h3>Upload</h3>
           <span>Drag and Drop</span>
         </div>
-        <label>Upload from file: </label><input type="file">
+        <label>Upload from file</label>
+        <input type="file">
         <input type="button" class="post-tool-submit" value="Add">
         <input type="button" value="Cancel" onclick="closeToolModals()">
       </div>
@@ -97,10 +98,10 @@
       <div class="post-tool-modal" id="post-tool-link">
         <h3>Link</h3>
         <label>Link</label>
-        <input type="text" id="post-tool-link-focus">
+        <input type="text" id="post-tool-link-focus" class="add-link" data-field="link">
         <label>Text</label>
-        <input type="text">
-        <input type="button" class="post-tool-submit" value="Add">
+        <input type="text" class="add-link" data-field="text">
+        <input type="button" class="post-tool-submit" data-type="link" value="Add">
         <input type="button" value="Cancel" onclick="closeToolModals()">
       </div>
 

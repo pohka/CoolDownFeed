@@ -63,7 +63,7 @@ option, select{
 {
   background: var(--con_bg);
   width: 1170px;
-  min-height: 700px;
+  min-height: 800px;
   padding: 0px;
   padding-top: 50px;
 }
@@ -657,4 +657,8 @@ p{
 
 .post-tool-submit{
   margin-top: 10px;
+}
+
+#post-editor{
+  height: 700px;
 }

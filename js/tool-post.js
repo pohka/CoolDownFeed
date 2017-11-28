@@ -1,8 +1,12 @@
+var cursorPosition=0;
+
 $(document).ready(function() {
-  $('.editor').on('change keyup paste', function() {
-    genPreview();
+  //track cursor postion
+  $("#post-editor").on("click keyup paste change", function(){
+    cursorPosition = $('#post-editor').prop("selectionStart");
   });
 
+  //toggles between edit and preview mode
   $(".toolbar-mode").click(function(){
     toggleToolMode(this);
   });
@@ -16,7 +20,7 @@ $(document).ready(function() {
       openToolOption(this);
       $(".toolbar-btn-sm").each(function(){
         $(this).removeClass('active');
-      })
+      });
       $(this).addClass('active');
     }
   });
@@ -31,26 +35,38 @@ $(document).ready(function() {
       }
   });
 
+  //closes all modals when the escape button is pressed
   $(document).on("keyup", function(e){
     if(e.keyCode == 27){
       closeToolModals();
     }
   });
+
+  //button for sumbitting toolbar modal
+  $(".post-tool-submit").click(function(){
+    var type = $(this).data("type");
+    addMarkdownToEditor(type);
+    closeToolModals();
+    $("#post-editor").focus();
+  });
 });
 
+//alerts the user before the close the window if they haven't saved their draft
 window.onbeforeunload = function(){
   if($("#post-editor").val().length > 0 && window.location.hostname !== "cdf2")
     return 'Any unsaved changes will not be saved?';
 };
 
+//generate the preview
 function genPreview(){
   var raw = "";
   var banner = $("#post-editor-banner").val().trim();
-  if(banner!== ""){
-    raw += "!b>" + banner;
+
+  if(banner!== "" && imageExists(banner)){
+    raw += "!b>" + banner + "\n";
   }
   else {
-    raw += "!b>/temp/esl_ham.png\n";
+    raw += "!b>/img/placeholder_banner.png\n";
   }
 
   var title = $("#post-editor-title").val().trim();
@@ -109,4 +125,37 @@ function openToolOption(thisSel){
     var focus = selector + "-focus";
     $(focus).focus();
   }
+}
+
+//returns true if the image exists
+function imageExists(url)
+{
+   var img = new Image();
+   img.src = url;
+   return img.height != 0;
+}
+
+//adds markdown to editor textarea from the fields in the toolbar modal
+function addMarkdownToEditor(type){
+  var fields = getFieldsForModalType(type);
+  var res = "";
+  if(type === "link"){
+    res = " [" + fields["text"] + "](" + fields["link"] + ") ";
+  }
+
+  var curText = $("#post-editor").val();
+  var newText = curText.substr(0,cursorPosition) + res + curText.substr(cursorPosition+1);
+  $("#post-editor").val(newText);
+}
+
+//returns a KV array with each of the fields and also clears the fields for this type
+function getFieldsForModalType(type){
+  var fields = {};
+  $(".add-" + type).each(function(){
+    var field = $(this).data("field");
+    var val = $(this).val();
+    fields[field] = val;
+    $(this).val("");
+  });
+  return fields;
 }
