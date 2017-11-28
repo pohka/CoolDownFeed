@@ -140,6 +140,23 @@ p{
   margin-bottom: 20px;
 }
 
+/*-------------- Scrollbar --------------*/
+html::-webkit-scrollbar-track
+{
+	background-color: var(--card_bg);
+}
+
+html::-webkit-scrollbar
+{
+	width: 4px;
+	background-color: var(--card_bg);
+}
+
+html::-webkit-scrollbar-thumb
+{
+	background-color: var(--border);
+}
+
 /*-------------- Navbar --------------*/
 .cdf-nav
 {
