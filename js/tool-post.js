@@ -193,6 +193,9 @@ function addMarkdownToEditor(type){
       res += "\n!m>" + src + "\n";
     }
   }
+  else if(type === "quote"){
+    res += "\n> " + fields["text"] + "\n";
+  }
 
   var curText = $("#post-editor").val();
   var newText = curText.substr(0,cursorPosition) + res + curText.substr(cursorPosition);

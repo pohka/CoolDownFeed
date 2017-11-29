@@ -369,7 +369,8 @@ html::-webkit-scrollbar-thumb
   margin: 30px auto;
   border-left:2px solid var(--pri);
   background: var(--hover);
-  padding: 30px 50px;
+  padding: 20px 50px;
+  font-style: italic;
 }
 
 .quote::before, .quote::after {
