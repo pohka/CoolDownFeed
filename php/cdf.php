@@ -10,8 +10,9 @@ switch($_POST["type"]){
   case "cards-home" :
     $sql =
       "SELECT cards.id, cards.title, cards.description, " .
-      "users.username as author, cards.timestamp, cards.tags" .
-      " FROM cards JOIN users ON users.id = cards.userid";
+      "users.username as author, cards.publish_time, cards.tags " .
+      "FROM cards JOIN users ON users.id = cards.userid " .
+      "WHERE cards.published = 1";
       break;
    case "image-upload" :
       $userID = $_POST['userid'];

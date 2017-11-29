@@ -18,6 +18,15 @@ $(document).ready(function() {
       }
   });
 
+  $(document).on("mouseover", ".card", function(){
+    var id = "#tags-" + $(this).data("url");
+    $(id).slideDown('fast')
+  });
+
+  $(document).on("mouseleave", ".card", function(){
+    var id = "#tags-" + $(this).data("url");
+    $(id).hide();
+  });
 });
 
 function loadPage(){
@@ -40,7 +49,7 @@ function loadPage(){
             title : obj[i]["title"],
             desc : obj[i]["description"],
             author : obj[i]["author"],
-            time : obj[i]["timestamp"],
+            time : obj[i]["publish_time"],
             tags : obj[i]["tags"],
           });
 
@@ -105,7 +114,8 @@ function genCard(data){
 
   var cardTagCon = new Obj({
     tag : "div",
-    class : "card-tag-con"
+    class : "card-tag-con",
+    id : "tags-" + data["id"]
   });
 
   var els = data["tags"].split(",");
@@ -121,8 +131,9 @@ function genCard(data){
 
   cardThumb.add(thumnail);
   wrapper.add([cardTitle,cardDesc]);
-  info.add([wrapper, cardAuthor, cardTime, cardTagCon]);
-  card.add([cardThumb, info]);
+  info.add([wrapper, cardAuthor, cardTime]);
+  //card.add(cardTagCon);
+  card.add([cardThumb,cardTagCon, info]);
   card.addData("url", data["id"]);
   return card;
 }

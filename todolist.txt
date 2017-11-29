@@ -1,4 +1,8 @@
-
+cards
+-------------
+-ordered by timestamp
+-open in new tab with middle button click
+-hide tags on mouse leave bug
 
 Post Editor
 --------------
@@ -22,6 +26,9 @@ Post Editor
 -once an image is uploaded open the cloud modal
 -uploaded images search
 -links to external website open in new tab
+-predate posts i.e. publish_time
+-future post
+
 
 
 CMS

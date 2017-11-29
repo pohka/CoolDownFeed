@@ -503,7 +503,7 @@ html::-webkit-scrollbar-thumb
 
 .card-con
 {
-  width: 1080px;
+  width: 1044px;
   margin: auto;
 }
 
@@ -513,8 +513,8 @@ html::-webkit-scrollbar-thumb
   height: auto;
   display: inline-block;
   float: left;
-  margin: 20px 10px;
-  border: 1px solid var(--border);
+  margin: 4px 4px;
+  border: 1px solid transparent;
   background: var(--card_bg);
 }
 
@@ -527,7 +527,7 @@ html::-webkit-scrollbar-thumb
 .card-thumb
 {
   width: 100%;
-  height: 191px;
+  height: 190px;
 }
 
 .card-thumb img
@@ -538,13 +538,18 @@ html::-webkit-scrollbar-thumb
 
 .card-info
 {
-  padding: 0px 16px;
+  padding: 2px 16px;
+  border-top: 1px solid var(--border);
+  position: relative;
+  z-index: 5;
 }
 
 .card-title-and-desc
 {
-  height: 100px;
+  height: 80px;
   overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 6px;
 }
 
 .card-title
@@ -564,39 +569,42 @@ html::-webkit-scrollbar-thumb
 {
   display: inline-block;
   float: left;
-  font-size: 18px;
+  font-size: 16px;
+  margin-bottom: 6px;
 }
 
 .card-time
 {
   margin-right: 8px;
   float: right;
+  font-size: 14px;
 }
 
 .card-tag-con
 {
   clear: left;
-  margin-top: 30px;
   margin-bottom: 2px;
   height: 40px;
   overflow: hidden;
+  display: none;
+  position: absolute;
+  margin-top: -32px;
+  margin-left: 10px;
+  z-index: 2;
 }
 
 .card-tag
 {
   display: inline-block;
-  border: 1px solid var(--border);
-  padding: 2px 8px;
+  border: 1px solid var(--pri_faded);
+  padding: 2px 10px;
   float: left;
   margin-right: 4px;
   font-size: 14px;
   line-height: 22px;
+  background: var(--card_bg);
 }
 
-.card-tag:hover
-{
-  border-color: var(--pri);
-}
 
 /*-------------- New Post --------------*/
 .post-raw-edit
