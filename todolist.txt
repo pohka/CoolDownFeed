@@ -16,3 +16,9 @@ Post Editor
 -Publish
 -save draft
 -media choose existing file on website
+
+
+CMS
+-----------------
+-files upload to user id folder
+-image-upload should be array and not single request each time

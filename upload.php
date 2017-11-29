@@ -12,8 +12,9 @@ if(isset($_FILES['upl']) && $_FILES['upl']['error'] == 0){
 		exit;
 	}
 
-	if(move_uploaded_file($_FILES['upl']['tmp_name'], 'uploads/'.$_FILES['upl']['name'])){
+	if(move_uploaded_file($_FILES['upl']['tmp_name'], 'i/'.$_FILES['upl']['name'])){
 		echo '{"status":"success"}';
+		//echo $_FILES['upl']['name'];
 		exit;
 	}
 }

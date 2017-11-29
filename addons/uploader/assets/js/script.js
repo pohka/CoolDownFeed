@@ -62,6 +62,32 @@ $(function(){
             }
         },
 
+        done:function(e, data){
+          var fileNames = [];
+
+          for(var i=0; i<20; i++){
+            var file = data["originalFiles"][""+i];
+            if(file == undefined) break;
+            else{
+              fileNames.push(file["name"]);
+            }
+          }
+
+          for(var i in fileNames){
+            var fileInfo = fileNames[i].split(".");
+
+            $.post( "php/cdf.php", {
+              type : "image-upload",
+              userid : getUser(),
+              name : fileInfo[0],
+              ext : fileInfo[1],
+              uid : genUID()
+              }).done(function( data ) {
+                //file successfully added to database
+            });
+          }
+        },
+
         fail:function(e, data){
             // Something has gone wrong!
             data.context.addClass('error');
