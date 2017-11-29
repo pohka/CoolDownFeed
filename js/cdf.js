@@ -294,11 +294,11 @@ Obj.noClosingTag = ["img", "source"];
 //post markdown converter
 function genHtmlFromRaw(raw){
   var markdown = {
-    banner : "!b>",
-    heading1 : "!1#",
-    heading2 : "!2#",
-    quote : "> ",
-    media : "!m>"
+    banner : "b#",
+    heading1 : "t#",
+    heading2 : "#",
+    quote : ">",
+    media : "m#"
   }
 
   var lines = raw.split("\n");
@@ -346,7 +346,7 @@ function genHtmlFromRaw(raw){
       var foundKey = false;
       for(var key in markdown){
         var index = lines[i].indexOf(markdown[key]);
-        if(index >= 0){
+        if(index == 0){
           foundKey = true;
           var content = lines[i].substr(index + markdown[key].length);
           var data = null;

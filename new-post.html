@@ -61,25 +61,26 @@
       </div>
     </div>
 
+    <!--toolbar-->
     <div class="post-toolbar">
       <div class="post-toolbar-inner">
         <div class="toolbar-mode toolbar-btn active" id="mode-editor">Editor</div>
         <div class="toolbar-mode toolbar-btn" id="mode-preview">Preview</div>
-        <div class="fa fa-cloud-upload toolbar-btn toolbar-btn-sm" id="post-add-file"></div>
-        <div class="fa fa-file-video-o toolbar-btn toolbar-btn-sm" id="post-add-media"></div>
-        <div class="fa fa-link toolbar-btn toolbar-btn-sm" id="post-add-link"></div>
-        <div class="toolbar-btn toolbar-btn-sm" id="post-add-heading">H</div>
-        <div class="fa fa-code toolbar-btn toolbar-btn-sm" id="post-add-code"></div>
-        <div class="fa fa-list-ul toolbar-btn toolbar-btn-sm" id="post-add-list"></div>
-        <div class="fa fa-quote-right toolbar-btn toolbar-btn-sm" id="post-add-quote"></div>
-        <div class="fa fa-chevron-down toolbar-btn toolbar-btn-sm" id="post-add-more"></div>
+        <div class="fa fa-cloud-upload toolbar-btn toolbar-btn-sm toolbar-modal-btn" id="post-add-file"></div>
+        <div class="fa fa-file-video-o toolbar-btn toolbar-btn-sm toolbar-modal-btn" id="post-add-media"></div>
+        <div class="fa fa-link toolbar-btn toolbar-btn-sm toolbar-modal-btn" id="post-add-link"></div>
+        <div class="toolbar-btn toolbar-btn-sm toolbar-modal-btn" id="post-add-heading">H</div>
+        <div class="fa fa-code toolbar-btn toolbar-btn-sm toolbar-modal-btn" id="post-add-code"></div>
+        <div class="fa fa-list-ul toolbar-btn toolbar-btn-sm toolbar-modal-btn" id="post-add-list"></div>
+        <div class="fa fa-quote-right toolbar-btn toolbar-btn-sm toolbar-modal-btn" id="post-add-quote"></div>
+        <div class="fa fa-chevron-down toolbar-btn toolbar-btn-sm toolbar-modal-btn" id="post-add-more"></div>
         <div class="toolbar-btn toolbar-btn-right">Publish</div>
         <div class="toolbar-btn toolbar-btn-right">Save Draft</div>
-        <div class="toolbar-btn toolbar-btn-right"><span class="fa fa-info-circle"></span> Help</div>
+        <div class="toolbar-btn toolbar-btn-right toolbar-modal-btn" id="post-add-help"><span class="fa fa-info-circle"></span> Help</div>
       </div>
     </div>
 
-    <!--tool modals-->
+    <!--toolbar modals-->
     <div class="post-tool-modal-wrapper">
 
       <!--file-->
@@ -176,13 +177,66 @@
         <textarea rows="10" id="post-tool-quote-focus"></textarea>
         <label>Language</label>
         <select>
-          <option>Other</option>
-          <option>JavaScript</option>
-          <option>Lua</option>
+          <option value="none">Other</option>
+          <option value="js">JavaScript</option>
+          <option value="lua">Lua</option>
+          <option value="xml">XML</option>
+          <option value="css">CSS</option>
         </select>
         <br>
         <input type="button" class="post-tool-submit" data-type="code" value="Add">
         <input type="button" value="Cancel" onclick="closeToolModals()">
+      </div>
+
+      <div class="post-tool-modal" id="post-tool-help">
+        <h3>Markdown Help</h3>
+        <p>
+         The text markdown is plain text formatting system that'll helps
+         format your posts. It keeps posts consistant throughout the website and you
+         can generate the markdown by using the toolbar or
+         write them yourself.<br><br>
+         All markdowns must be a the start of a new line
+       </p>
+       <table>
+        <tr>
+         <th>Type</th>
+         <th>Markdown</th>
+         <th>More Info</th>
+        </tr>
+        <tr>
+          <td>Heading</td>
+          <td>#My Heading</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Media</td>
+          <td>m#https://youtu.be/MwEbtGAvs28</td>
+          <td>
+            Add an image or video from:<br>
+            cooldownfeed.com, youtube.com, youtu.be, gfycat, imgur
+          </td>
+        </tr>
+        <tr>
+          <td>Link</td>
+          <td>[text](link)</td>
+          <td>Adds a link like this: <a href="#">Text</a></td>
+        </tr>
+        <tr>
+          <td>Quote</td>
+          <td>>Cool story</td>
+          <td>Highlighted ilatic text with quotation marks</td>
+        </tr>
+        <tr>
+          <td>Code</td>
+          <td>todo</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>List</td>
+          <td>* item 1 <br>* item 2<br>* item 3</td>
+          <td>Unordered list</td>
+        </tr>
+      </table><br><br>
       </div>
     </div>
 

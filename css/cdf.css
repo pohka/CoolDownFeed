@@ -104,12 +104,22 @@ input[type="file"]
   margin-left: 10px;
 }
 
-.dropzone{
-  height: 200px;
+table{
   width: 100%;
-  content = "";
-  border: 2px dashed var(--border);
-  margin-top: 20px;
+  table-layout: auto;
+  border-collapse: collapse;
+}
+
+th{
+  background-color: var(--hover);
+  padding: 8px;
+  font-weight: normal;
+  font-size: 18px;
+}
+
+th, td{
+  padding: 4px 8px;
+  border: 1px solid var(--border);
 }
 
 .skew-con
@@ -160,6 +170,14 @@ p{
   margin: 10px auto;
 
   margin-bottom: 20px;
+}
+
+a{
+  color: var(--pri_faded);
+}
+
+a:hover{
+  color: var(--pri);
 }
 
 /*-------------- Scrollbar --------------*/
@@ -653,7 +671,7 @@ html::-webkit-scrollbar-thumb
   margin-right: -4px;
 }
 
-.toolbar-mode.active, .toolbar-btn-sm.active
+.toolbar-mode.active, .toolbar-modal-btn.active
 {
   background-color: var(--pri_faded);
 }
@@ -684,6 +702,10 @@ html::-webkit-scrollbar-thumb
   width: 1170px;
   padding: 10px 210px;
   display: none;
+}
+
+.post-tool-modal textarea{
+  resize: none;
 }
 
 .drag-upload{

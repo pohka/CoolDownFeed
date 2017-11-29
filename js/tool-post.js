@@ -14,13 +14,13 @@ $(document).ready(function() {
   });
 
   //clicks for toolbar item
-  $(".toolbar-btn-sm").click(function(){
+  $(".toolbar-modal-btn").click(function(){
     if($(this).hasClass('active')){
       closeToolModals();
     }
     else{
       openToolOption(this);
-      $(".toolbar-btn-sm").each(function(){
+      $(".toolbar-modal-btn").each(function(){
         $(this).removeClass('active');
       });
       $(this).addClass('active');
@@ -90,18 +90,18 @@ function genPreview(){
   var banner = $("#post-editor-banner").val().trim();
 
   if(banner!== "" && imageExists(banner)){
-    raw += "!b>" + banner + "\n";
+    raw += "b#" + banner + "\n";
   }
   else {
-    raw += "!b>/img/placeholder_banner.png\n";
+    raw += "b#/img/placeholder_banner.png\n";
   }
 
   var title = $("#post-editor-title").val().trim();
   if(title != ""){
-    raw += "!1#" + title + "\n";
+    raw += "t#" + title + "\n";
   }
   else{
-    raw += "!1#Some Title\n";
+    raw += "t#Some Title\n";
   }
   raw += $("#post-editor").val();
 
@@ -136,7 +136,7 @@ function closeToolModals(){
   $(".post-tool-modal").each(function(){
     $(this).hide();
   });
-  $(".toolbar-btn-sm").each(function(){
+  $(".toolbar-modal-btn").each(function(){
     $(this).removeClass('active');
   });
 
@@ -172,7 +172,7 @@ function addMarkdownToEditor(type){
     res = " [" + fields["text"] + "](" + fields["link"] + ") ";
   }
   else if(type === "heading"){
-    res = "\n!2#" + fields["text"] + "\n";
+    res = "\n#" + fields["text"] + "\n";
   }
   else if(type === "list"){
     var items = fields["text"].split("\n");
@@ -183,18 +183,18 @@ function addMarkdownToEditor(type){
   else if(type === "media"){
     var url = fields["url"].trim();
     if(url !== ""){
-      res = "\n!m>" + url + "\n";
+      res = "\nm#" + url + "\n";
     }
   }
   else if(type === "img"){
     if($(".img-viewer-thumb.active").length >= 0){
       var src = $(".img-viewer-thumb.active img").attr("src");
       var alt = $(".img-viewer-thumb.active img").attr("alt");
-      res += "\n!m>" + src + "\n";
+      res += "\nm#" + src + "\n";
     }
   }
   else if(type === "quote"){
-    res += "\n> " + fields["text"] + "\n";
+    res += "\n>" + fields["text"] + "\n";
   }
 
   var curText = $("#post-editor").val();

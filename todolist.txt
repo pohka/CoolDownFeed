@@ -21,6 +21,7 @@ Post Editor
 -dont upload image unless it has tags
 -once an image is uploaded open the cloud modal
 -uploaded images search
+-links to external website open in new tab
 
 
 CMS
