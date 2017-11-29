@@ -27,6 +27,13 @@ $(document).ready(function() {
     }
   });
 
+  $(".open-modal").click(function(){
+    var type = $(this).data("type");
+    closeToolModals();
+    $("#post-tool-" + type).show();
+    loadModal(type);
+  });
+
   //allows single input fields to be submitted with enter key
   $(".singleInput").on('keyup', function (e) {
     if (e.keyCode == 13) {
@@ -60,6 +67,14 @@ $(document).ready(function() {
       var files = event.target.files;
       upload(files);
     }
+  });
+
+  //sets an image being viewed to active
+  $(document).on("click", ".img-viewer-thumb", function(){
+    $(".img-viewer-thumb").each(function(){
+      $(this).removeClass('active');
+    });
+    $(this).addClass('active');
   });
 });
 
@@ -124,6 +139,8 @@ function closeToolModals(){
   $(".toolbar-btn-sm").each(function(){
     $(this).removeClass('active');
   });
+
+  $(".img-viewer-thumb.active").removeClass('active');
 }
 
 //opens the a tool option
@@ -167,9 +184,12 @@ function addMarkdownToEditor(type){
     if(url !== ""){
       res = "!m>" + url + "\n";
     }
-    else {
-      //console.log("file:" + fields["file"]);
-      //upload();
+  }
+  else if(type === "img"){
+    if($(".img-viewer-thumb.active").length >= 0){
+      var src = $(".img-viewer-thumb.active img").attr("src");
+      var alt = $(".img-viewer-thumb.active img").attr("alt");
+      res += "!m>" + src + "\n";
     }
   }
 
@@ -188,4 +208,41 @@ function getFieldsForModalType(type){
     $(this).val("");
   });
   return fields;
+}
+
+//loads a modal which requires a database request
+var modalsLoaded = [];
+function loadModal(type){
+  if(type==="cloud"){
+    //dont request this modal if there has been no changes
+    if(jQuery.inArray(type, modalsLoaded) !== -1) return;
+
+    modalsLoaded.push(type);
+
+    $.post( "php/cdf.php", {
+      type : "user-images",
+      userid : getUser()
+      }).done(function( data ) {
+        if(data != "") {
+          var obj = JSON.parse(data);
+
+          for(var i in obj){
+            var div = new Obj({
+              tag : "div",
+              class : "img-viewer-thumb"
+            });
+            var imgSrc = "/i/" + obj[i]["name"] + "." + obj[i]["extension"];
+            //var imgSrc = data["file"] + data["extension"]; //change to this when file name is uid
+            var img = new Obj({
+              tag : "img",
+              src : imgSrc,
+              alt : obj[i]["tag"]
+            });
+            div.add(img);
+
+            $(".image-viewer").append(div.get());
+          }
+        }
+      });
+  }
 }

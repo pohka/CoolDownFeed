@@ -19,12 +19,12 @@ switch($_POST["type"]){
       $ext = $_POST['ext'];
       $uid = $_POST['uid'];
       $sql =
-        "INSERT INTO `images` (`id`, `userid`, `name`, `extension`, `file`) " .
-        "VALUES (NULL, '" . $userID ."', '" . $name . "', '" . $ext . "', '" . $uid . "')";
+        "INSERT INTO `images` (`id`, `userid`, `name`, `extension`, `file`, `tag`) " .
+        "VALUES (NULL, '" . $userID ."', '" . $name . "', '" . $ext . "', '" . $uid . "', '')";
       echo $sql;
       break;
     case "user-images" :
-      $sql = "SELECT * FROM `images` WHERE `userid`= " + $_POST['userid'];
+      $sql = "SELECT * FROM `images` WHERE `userid`= " . $_POST['userid'];
       break;
 }
 

@@ -83,7 +83,12 @@
 
       <!--file-->
       <div class="post-tool-modal" id="post-tool-file">
-        <h3>Upload Images</h3>
+        <h3>Cloud Images</h3>
+        <ul>
+          <li class="open-modal" data-type="cloud">
+            <span class="fa fa-image"></span> Select from uploaded images
+          </li>
+        </ul>
         <form id="upload" method="post" action="upload.php" enctype="multipart/form-data">
           <div id="drop">
             Drop Here
@@ -93,7 +98,8 @@
           </div>
           <ul></ul>
         </form>
-        <input type="button" class="post-tool-submit" data-type="file" value="Add">
+        <label>Tag</label>
+        <input type="text" placeholder="1-3 word descripton (REQUIRED)">
         <input type="button" value="Cancel" onclick="closeToolModals()">
       </div>
 
@@ -101,7 +107,7 @@
       <div class="post-tool-modal" id="post-tool-media">
         <h3>Add External Media</h3>
         <label>URL</label>
-        <input type="text" id="post-tool-media-focus" class="singleInput add-media" data-field="url" placeholder="YouTube, imgur or gfycat">
+        <input type="text" id="post-tool-media-focus" class="singleInput add-media" data-field="url" placeholder="YouTube, imgur or gfycat link">
         <input type="button" class="post-tool-submit" data-type="media" value="Add">
         <input type="button" value="Cancel" onclick="closeToolModals()">
       </div>
@@ -142,17 +148,27 @@
         <input type="text" id="post-tool-quote-focus">
         <label>Person</label>
         <input type="text">
-        <input type="button" class="post-tool-submit" value="Add">
+        <input type="button" class="post-tool-submit" data-type="quote" value="Add">
         <input type="button" value="Cancel" onclick="closeToolModals()">
       </div>
 
-      <!--quote-->
+      <!--more-->
       <div class="post-tool-modal" id="post-tool-more">
         <h3>More</h3>
-        <ul class="more-options">
+        <ul>
           <li>Item</li>
           <li>Hero</li>
+          <li>Ability</li>
         </ul>
+      </div>
+
+      <!--cloud (uploaded imaged)-->
+      <div class="post-tool-modal" id="post-tool-cloud">
+        <h3>Uploaded Images</h3>
+        <div class="image-viewer">
+        </div>
+        <input type="button" class="post-tool-submit" data-type="img" value="Add">
+        <input type="button" value="Cancel" onclick="closeToolModals()">
       </div>
 
       <div class="post-tool-modal" id="post-tool-code">
@@ -166,7 +182,7 @@
           <option>Lua</option>
         </select>
         <br>
-        <input type="button" class="post-tool-submit" value="Add">
+        <input type="button" class="post-tool-submit" data-type="code" value="Add">
         <input type="button" value="Cancel" onclick="closeToolModals()">
       </div>
     </div>
@@ -175,7 +191,7 @@
     <footer>
       <div class="footer-con">
         <div class="footer-logo">
-          <img src="/img/logo_sm.png" />
+          <img src="/img/logo_sm.png"/>
           <div class="footer-logo-text">CoolDownFeed.com</div>
         </div>
         <div class="footer-filter-con skew-con">

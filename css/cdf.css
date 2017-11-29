@@ -671,7 +671,7 @@ html::-webkit-scrollbar-thumb
   float: right;
   top: 90px;
   right: 50%;
-
+  z-index: 10;
 }
 
 .post-tool-modal
@@ -706,7 +706,13 @@ html::-webkit-scrollbar-thumb
   display: block;
 }
 
-.more-options li{
+.post-tool-modal ul{
+  padding-left: 0;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.post-tool-modal li{
   display: block;
   background: var(--hover);
   padding: 0px 30px;
@@ -714,12 +720,51 @@ html::-webkit-scrollbar-thumb
   line-height: 49px;
   height: 50px;
   list-style: none;
+  margin-left: 0;
   cursor: pointer;
   border-left: 1px solid var(--pri_faded);
   margin-bottom: 2px;
   font-size: 20px;
 }
 
-.more-options li:hover{
+.post-tool-modal li:hover{
   background: var(--border);
+}
+
+.post-tool-modal li .fa{
+  padding-right: 4px;
+}
+
+.image-viewer
+{
+  height: 600px;
+  width: 840px;
+  margin: 0 -20px;
+  padding: 6px 8px;
+  overflow-y: scroll;
+  border: 1px solid var(--border);
+  background: var(--con_bg);
+  margin-bottom: 15px;
+}
+
+.img-viewer-thumb{
+  width: 260px;
+  height: 146px;
+  display: inline-block;
+  border: 3px solid var(--border);
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.img-viewer-thumb:hover{
+  border-color: var(--pri_faded);
+}
+
+.img-viewer-thumb.active{
+  border-color: var(--pri);
+}
+
+.img-viewer-thumb img{
+  height: 100%;
+  width: 100%;
 }

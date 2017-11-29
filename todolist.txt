@@ -6,6 +6,7 @@ Post Editor
   -Quote
   -list
   -code
+  -image alt tags
 -toolbar add text from modal:
   -Quote
   -Code
@@ -16,9 +17,15 @@ Post Editor
 -Publish
 -save draft
 -media choose existing file on website
+-no images upload yet
+-dont upload image unless it has tags
+-once an image is uploaded open the cloud modal
+-uploaded images search
 
 
 CMS
 -----------------
 -files upload to user id folder
+-files are renamed to the uid
 -image-upload should be array and not single request each time
+-sort table for select queries

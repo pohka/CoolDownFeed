@@ -285,7 +285,7 @@ class Obj{
   }
 }
 
-Obj.identifiers = ["id", "class", "src", "href", "frameborder", "type"];
+Obj.identifiers = ["id", "class", "src", "href", "frameborder", "type", "alt"];
 Obj.idendifiersNoVal = ["autoplay", "loop", "controls", "allowfullscreen"];
 Obj.noClosingTag = ["img", "source"];
 
