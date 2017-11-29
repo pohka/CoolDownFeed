@@ -172,24 +172,25 @@ function addMarkdownToEditor(type){
     res = " [" + fields["text"] + "](" + fields["link"] + ") ";
   }
   else if(type === "heading"){
-    res = "!2#" + fields["text"] + "\n";
+    res = "\n!2#" + fields["text"] + "\n";
   }
   else if(type === "list"){
     var items = fields["text"].split("\n");
+    res += "\n";
     for(var i in items)
       res += "* " + items[i] + "\n";
   }
   else if(type === "media"){
     var url = fields["url"].trim();
     if(url !== ""){
-      res = "!m>" + url + "\n";
+      res = "\n!m>" + url + "\n";
     }
   }
   else if(type === "img"){
     if($(".img-viewer-thumb.active").length >= 0){
       var src = $(".img-viewer-thumb.active img").attr("src");
       var alt = $(".img-viewer-thumb.active img").attr("alt");
-      res += "!m>" + src + "\n";
+      res += "\n!m>" + src + "\n";
     }
   }
 

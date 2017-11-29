@@ -50,6 +50,8 @@ function loadPage(){
     });
 }
 
+//generates a card from data
+//id, img, title, desc, author, time, tags
 function genCard(data){
   var card = new Obj({
     tag : "div",
@@ -296,7 +298,6 @@ function genHtmlFromRaw(raw){
     heading1 : "!1#",
     heading2 : "!2#",
     quote : "> ",
-    list : "* ",
     media : "!m>"
   }
 
@@ -319,9 +320,27 @@ function genHtmlFromRaw(raw){
   });
 
   var curParagraph = "";
-  var curList = [];
+  var lists = getListsFromLines(lines);
 
   for(var i=1; i<lines.length; i++){
+    //parses lists
+    for(var a in lists){
+      console.log("here");
+      if(lists[a][0] == i){
+        var listObj = new Obj({
+          tag : "ul"
+        });
+        for(var b = 1; b<lists[a].length; b++){
+          listObj.add(new Obj({
+            tag : "li",
+            content : lists[a][b]
+          }));
+          i++;
+        }
+        post.add(listObj);
+      }
+    }
+
     lines[i] = lines[i].trim();
     if(lines[i] !== ""){
       var foundKey = false;
@@ -350,9 +369,6 @@ function genHtmlFromRaw(raw){
               content : content
             };
           }
-          else if(key == "list"){
-            curList.push(content);
-          }
           else if(key == "media"){
             var mediaObj = genMediaEmbed(content);
             if(mediaObj != null){
@@ -375,12 +391,6 @@ function genHtmlFromRaw(raw){
         }
       }
       if(!foundKey){
-        //end of list
-        if(curList.length > 0){
-          post.add(genListObj(curList));
-          curList = [];
-        }
-
         //end of paragraph from new markdown
         var html = parseLinks(lines[i]);
         curParagraph += html;
@@ -402,19 +412,23 @@ function genHtmlFromRaw(raw){
   $(".post-preview").append(post.get());
 }
 
-function genListObj(list){
-  var listObj = new Obj({
-    tag : "ul"
-  });
-
-  for(var i in list){
-    listObj.add(new Obj({
-      tag : "li",
-      content : list[i]
-    }));
+//returns 2 array with index 0 of each array containing the line number
+function getListsFromLines(lines){
+  var lists = [];
+  var curList = [];
+  for(var i=0; i<lines.length; i++){
+    if(lines[i].charAt(0) === "*" && lines[i].charAt(1) === " "){
+      if(curList.length == 0){
+        curList.push(i);
+      }
+      curList.push(lines[i].substr(2));
+    }
+    else if(curList.length > 0){
+      lists.push(curList);
+      curList = [];
+    }
   }
-
-  return listObj;
+  return lists;
 }
 
 //parse the markdown for links in a paragraph into html
@@ -574,6 +588,7 @@ function genMediaEmbed(content){
   return mediaObj;
 }
 
+//generate a unique id
 function genUID() {
     var firstPart = (Math.random() * 46656) | 0;
     var secondPart = (Math.random() * 46656) | 0;
@@ -582,6 +597,7 @@ function genUID() {
     return firstPart + secondPart;
 }
 
+//gets the current user id
 function getUser(){
   return 1;
 }
