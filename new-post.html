@@ -64,7 +64,8 @@
       <div class="post-toolbar-inner">
         <div class="toolbar-mode toolbar-btn active" id="mode-editor">Editor</div>
         <div class="toolbar-mode toolbar-btn" id="mode-preview">Preview</div>
-        <div class="fa fa-image toolbar-btn toolbar-btn-sm" id="post-add-media"></div>
+        <div class="fa fa-cloud-upload toolbar-btn toolbar-btn-sm" id="post-add-file"></div>
+        <div class="fa fa-file-video-o toolbar-btn toolbar-btn-sm" id="post-add-media"></div>
         <div class="fa fa-link toolbar-btn toolbar-btn-sm" id="post-add-link"></div>
         <div class="toolbar-btn toolbar-btn-sm" id="post-add-heading">H</div>
         <div class="fa fa-code toolbar-btn toolbar-btn-sm" id="post-add-code"></div>
@@ -78,12 +79,10 @@
 
     <!--tool modals-->
     <div class="post-tool-modal-wrapper">
-      <!--media-->
-      <div class="post-tool-modal" id="post-tool-media">
-        <h3>Add Media</h3>
-        <label>Embed from url</label>
-        <input type="text" id="post-tool-media-focus" class="add-media" data-field="url" placeholder="YouTube, imgur or gfycat">
-        <!-- <form action="/php/upload.php" class="dropzone" id="my-awesome-dropzone">Click here or</form> -->
+
+      <!--file-->
+      <div class="post-tool-modal" id="post-tool-file">
+        <h3>Upload Images</h3>
         <form id="upload" method="post" action="upload.php" enctype="multipart/form-data">
           <div id="drop">
             Drop Here
@@ -93,6 +92,15 @@
           </div>
           <ul></ul>
         </form>
+        <input type="button" class="post-tool-submit" data-type="file" value="Add">
+        <input type="button" value="Cancel" onclick="closeToolModals()">
+      </div>
+
+      <!--media-->
+      <div class="post-tool-modal" id="post-tool-media">
+        <h3>Add External Media</h3>
+        <label>URL</label>
+        <input type="text" id="post-tool-media-focus" class="singleInput add-media" data-field="url" placeholder="YouTube, imgur or gfycat">
         <input type="button" class="post-tool-submit" data-type="media" value="Add">
         <input type="button" value="Cancel" onclick="closeToolModals()">
       </div>

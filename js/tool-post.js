@@ -28,10 +28,7 @@ $(document).ready(function() {
   //allows single input fields to be submitted with enter key
   $(".singleInput").on('keyup', function (e) {
     if (e.keyCode == 13) {
-        $(this).next().focus();
-        if($(this).val() == "Add"){
-          $(this).click();
-        }
+        $(this).next().click();
       }
   });
 
@@ -175,7 +172,7 @@ function addMarkdownToEditor(type){
   }
 
   var curText = $("#post-editor").val();
-  var newText = curText.substr(0,cursorPosition) + res + curText.substr(cursorPosition+1);
+  var newText = curText.substr(0,cursorPosition) + res + curText.substr(cursorPosition);
   $("#post-editor").val(newText);
 }
 
