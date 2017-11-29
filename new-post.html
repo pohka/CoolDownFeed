@@ -71,6 +71,7 @@
         <div class="fa fa-code toolbar-btn toolbar-btn-sm" id="post-add-code"></div>
         <div class="fa fa-list-ul toolbar-btn toolbar-btn-sm" id="post-add-list"></div>
         <div class="fa fa-quote-right toolbar-btn toolbar-btn-sm" id="post-add-quote"></div>
+        <div class="fa fa-chevron-down toolbar-btn toolbar-btn-sm" id="post-add-more"></div>
         <div class="toolbar-btn toolbar-btn-right">Publish</div>
         <div class="toolbar-btn toolbar-btn-right">Save Draft</div>
         <div class="toolbar-btn toolbar-btn-right"><span class="fa fa-info-circle"></span> Help</div>
@@ -143,6 +144,15 @@
         <input type="text">
         <input type="button" class="post-tool-submit" value="Add">
         <input type="button" value="Cancel" onclick="closeToolModals()">
+      </div>
+
+      <!--quote-->
+      <div class="post-tool-modal" id="post-tool-more">
+        <h3>More</h3>
+        <ul class="more-options">
+          <li>Item</li>
+          <li>Hero</li>
+        </ul>
       </div>
 
       <div class="post-tool-modal" id="post-tool-code">
