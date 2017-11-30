@@ -132,8 +132,8 @@ function genCard(data){
   cardThumb.add(thumnail);
   wrapper.add([cardTitle,cardDesc]);
   info.add([wrapper, cardAuthor, cardTime]);
-  //card.add(cardTagCon);
-  card.add([cardThumb,cardTagCon, info]);
+  //card.add([cardThumb,cardTagCon, info]);
+  card.add([cardThumb, info]);
   card.addData("url", data["id"]);
   return card;
 }

@@ -5,6 +5,7 @@ if(mysqli_connect_errno())
   echo "Failed to connect to MySQL: " . mysqli_connect_error();
 }
 
+date_default_timezone_set('UTC');
 $sql = "";
 switch($_POST["type"]){
   case "cards-home" :
@@ -26,6 +27,42 @@ switch($_POST["type"]){
       break;
     case "user-images" :
       $sql = "SELECT * FROM `images` WHERE `userid`= " . $_POST['userid'];
+      break;
+    case "add-post" :
+      $text  = htmlspecialchars($_POST['text'], ENT_QUOTES);
+      $id = $_POST['id'];
+      $title = $_POST['title'];
+      $desc = $_POST['desc'];
+      $userid = $_POST['userid'];
+
+      $timestamp_epoch  = $_POST['timestamp'];
+      $dt = new DateTime("@$timestamp_epoch");
+      $timestamp = $dt->format('Y-m-d H:i:s');
+
+      $tags = $_POST['tags'];
+      $published = $_POST['published'];
+
+      $publish_time_epoch = $_POST['publish_time'];
+      $dt2 = new DateTime("@$publish_time_epoch");
+      $publish_time = $dt2->format('Y-m-d H:i:s');
+
+
+      $game = $_POST['game'];
+
+      $sql1 =
+        "INSERT INTO `cards` (`id`, `title`, `description`, `userid`, " .
+        "`timestamp`, `tags`, `published`, `publish_time`, `game`) " .
+        "VALUES ('" . $id . "', '" . $title. "', '" . $desc . "', " .
+          $userid . ", '" . $timestamp . "', '" .
+          $tags . "', '" . $published . "', '" .
+          $publish_time . "', '" . $game . "'); ";
+      $sql2 =
+          "INSERT INTO `posts` (`id`, `title`, `text`) " .
+          "VALUES ('" . $id . "', '" . $title . "', '" . $text . "')";
+
+          mysqli_query($con, $sql1);
+          mysqli_query($con, $sql2);
+          echo "success";
       break;
 }
 

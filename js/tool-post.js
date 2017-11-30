@@ -1,8 +1,6 @@
 var cursorPosition=0;
 
 $(document).ready(function() {
-  //console.log(genUID());
-
   //track cursor postion
   $("#post-editor").on("click keyup paste change", function(){
     cursorPosition = $('#post-editor').prop("selectionStart");
@@ -76,6 +74,18 @@ $(document).ready(function() {
     });
     $(this).addClass('active');
   });
+
+  //save draft or publish button
+  $("#publish").click(function() {
+    if(validate()){
+      save(true);
+    }
+  });
+  $("#draft").click(function() {
+    if(validate()){
+      save(false);
+    }
+  });
 });
 
 //alerts the user before the close the window if they haven't saved their draft
@@ -86,6 +96,11 @@ window.onbeforeunload = function(){
 
 //generate the preview
 function genPreview(){
+  var html = genHtmlFromRaw(getRaw());
+  $(".container").html(html);
+}
+
+function getRaw(){
   var raw = "";
   var banner = $("#post-editor-banner").val().trim();
 
@@ -104,9 +119,7 @@ function genPreview(){
     raw += "t#Some Title\n";
   }
   raw += $("#post-editor").val();
-
-  var html = genHtmlFromRaw(raw);
-  $(".container").html(html);
+  return raw;
 }
 
 //toggles the mod of the tools
@@ -249,4 +262,39 @@ function loadModal(type){
         }
       });
   }
+}
+
+//todo validate
+function validate(){
+  return true;
+}
+
+function save(forNow){
+  var text = getRaw();
+  var userID = getUser();
+  var title = $("#post-editor-title").val();
+  var desc = $("#post-editor").val().substr(0, 65).trim();
+  var banner = $("#post-editor-banner").val();
+  var time = Math.floor(Date.now() / 1000);
+  var publish = 1;
+  if(!forNow)
+    publish = 0;
+  var publishTime = time;
+
+  $.post( "php/cdf.php", {
+    type : "add-post",
+    id : genUID(),
+    text : text,
+    title : title,
+    desc : desc,
+    userid : userID,
+    timestamp : time,
+    tags : $("#post-editor-tags").val().trim(),
+    published : publish,
+    publish_time : publishTime,
+    game : $("#post-editor-game").val()
+    }).done(function( data ) {
+      //console.log(data);
+      //show success msg
+    });
 }

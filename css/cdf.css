@@ -799,3 +799,8 @@ html::-webkit-scrollbar-thumb
   height: 100%;
   width: 100%;
 }
+
+#post-editor-game{
+  width: 90%;
+  margin-bottom: 8px;
+}

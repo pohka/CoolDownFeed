@@ -55,9 +55,15 @@
     <div class="container">
       <div class="post-preview"></div>
       <div class="post-raw-edit">
+        <label>Game:</label>
+        <select id="post-editor-game">
+          <option value="dota-2">Dota 2</option>
+          <option value="irl">IRL</option>
+        </select>
         <input type="text" class="editor" id="post-editor-banner" placeholder="Banner Image">
         <input type="text" class="editor" id="post-editor-title" placeholder="Title">
         <textarea class="editor" id="post-editor"></textarea>
+        <input type="text" id="post-editor-tags" placeholder="Tags"><br>
       </div>
     </div>
 
@@ -74,8 +80,8 @@
         <div class="fa fa-list-ul toolbar-btn toolbar-btn-sm toolbar-modal-btn" id="post-add-list"></div>
         <div class="fa fa-quote-right toolbar-btn toolbar-btn-sm toolbar-modal-btn" id="post-add-quote"></div>
         <div class="fa fa-chevron-down toolbar-btn toolbar-btn-sm toolbar-modal-btn" id="post-add-more"></div>
-        <div class="toolbar-btn toolbar-btn-right">Publish</div>
-        <div class="toolbar-btn toolbar-btn-right">Save Draft</div>
+        <div class="toolbar-btn toolbar-btn-right" id="publish">Publish</div>
+        <div class="toolbar-btn toolbar-btn-right" id="draft">Save Draft</div>
         <div class="toolbar-btn toolbar-btn-right toolbar-modal-btn" id="post-add-help"><span class="fa fa-info-circle"></span> Help</div>
       </div>
     </div>

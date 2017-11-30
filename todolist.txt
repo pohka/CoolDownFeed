@@ -1,4 +1,18 @@
-cards
+Overall
+-------------
+-sessions
+-database login
+-navigation
+-tracking page views
+
+Pages
+------------
+-user login modal
+-About
+-popular
+
+
+Cards
 -------------
 -ordered by timestamp
 -open in new tab with middle button click
@@ -28,6 +42,8 @@ Post Editor
 -links to external website open in new tab
 -predate posts i.e. publish_time
 -future post
+-validate posts
+-generate html document
 
 
 
@@ -37,3 +53,4 @@ CMS
 -files are renamed to the uid
 -image-upload should be array and not single request each time
 -sort table for select queries
+-queries use html special character and decode them too
