@@ -53,89 +53,65 @@ function loadPage(){
             tags : obj[i]["tags"],
           });
 
-          $(".card-con").append(card.get());
+          //$(".card-con").append(card.get());
         }
       }
     });
 }
 
-//generates a card from data
+//generates a card from data with bwe
 //id, img, title, desc, author, time, tags
 function genCard(data){
-  var card = new Obj({
+  var json = {
     tag : "div",
-    class : "card"
-  });
-
-  var cardThumb = new Obj({
-    tag : "div",
-    class : "card-thumb"
-  });
-
-  var thumnail  = new Obj({
-    tag : "img",
-    src : data["img"]
-  });
-
-  var info = new Obj({
-    tag : "div",
-    class : "card-info"
-  });
-
-  var wrapper = new Obj({
-    tag : "div",
-    class : "card-title-and-desc"
-  });
-
-  var cardTitle = new Obj({
-    tag : "div",
-    class : "card-title",
-    content : data["title"]
-  });
-
-  var cardDesc = new Obj({
-    tag : "div",
-    class : "card-desc",
-    content : data["desc"]
-  });
-
-  var cardAuthor = new Obj({
-    tag : "div",
-    class : "card-author",
-    content : data["author"]
-  });
-
-  var timeString = timeSinceString(data["time"]);
-  var cardTime = new Obj({
-    tag : "div",
-    class : "card-time",
-    content : timeString
-  });
-
-  var cardTagCon = new Obj({
-    tag : "div",
-    class : "card-tag-con",
-    id : "tags-" + data["id"]
-  });
-
-  var els = data["tags"].split(",");
-  for(var i in els){
-    cardTagCon.add(
-      new Obj({
+    class : "card",
+    data : [{ url : "1" }],
+    children : [
+      {
         tag : "div",
-        class : "tag card-tag",
-        content : els[i]
-      })
-    );
-  }
-
-  cardThumb.add(thumnail);
-  wrapper.add([cardTitle,cardDesc]);
-  info.add([wrapper, cardAuthor, cardTime]);
-  //card.add([cardThumb,cardTagCon, info]);
-  card.add([cardThumb, info]);
-  card.addData("url", data["id"]);
-  return card;
+        class : "card-thumb",
+        children : [
+          {
+            tag : "img",
+            src : data["img"]
+          }
+        ]
+      },
+      {
+        tag : "div",
+        class : "card-info",
+        children : [
+          {
+            tag : "div",
+            class : "card-title-and-desc",
+            children : [
+              {
+                tag : "div",
+                class : "card-title",
+                con : data["title"]
+              },
+              {
+                tag : "div",
+                class : "card-desc",
+                con : data["desc"]
+              }
+            ]
+          },
+          {
+            tag : "div",
+            class : "card-author",
+            con : data["author"]
+          },
+          {
+            tag : "div",
+            class : "card-time",
+            con : timeSinceString(data["time"])
+          }
+        ]
+      }
+    ]
+  };
+  bwe.append(".card-con", json);
 }
 
 //generates string for time since posted e.g. 2 days ago
