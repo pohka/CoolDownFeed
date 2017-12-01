@@ -244,20 +244,21 @@ function loadModal(type){
           var obj = JSON.parse(data);
 
           for(var i in obj){
-            var div = new Obj({
+            var div = {
               tag : "div",
-              class : "img-viewer-thumb"
-            });
+              class : "img-viewer-thumb",
+              children : []
+            };
             var imgSrc = "/i/" + obj[i]["name"] + "." + obj[i]["extension"];
             //var imgSrc = data["file"] + data["extension"]; //change to this when file name is uid
-            var img = new Obj({
+            var img = {
               tag : "img",
               src : imgSrc,
               alt : obj[i]["tag"]
-            });
-            div.add(img);
+            };
+            div["children"].push(img);
 
-            $(".image-viewer").append(div.get());
+            bwe.append(".image-viewer", div);
           }
         }
       });
