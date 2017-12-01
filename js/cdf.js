@@ -293,40 +293,35 @@ function genHtmlFromRaw(raw){
   var index = lines[0].indexOf(markdown["banner"]) + markdown["banner"].length;
   var bannerSrc = lines[0].substr(index);
 
-  var banner = new Obj({
+  var banner = {
     tag : "img",
     class : "banner",
     src : bannerSrc
-  });
+  };
 
-  $(".post-preview").html(banner.get());
+  //$(".post-preview").html(banner.get());
 
-  var post = new Obj({
+  var post = {
     tag : "div",
-    class : "post-con"
-  });
+    class : "post-con",
+    children : [
+      banner
+    ]
+  };
 
   var curParagraph = "";
   var lists = getListsFromLines(lines);
 
   for(var i=1; i<lines.length; i++){
     //parses lists
-    for(var a in lists){
-      console.log("here");
-      if(lists[a][0] == i){
-        var listObj = new Obj({
-          tag : "ul"
-        });
-        for(var b = 1; b<lists[a].length; b++){
-          listObj.add(new Obj({
-            tag : "li",
-            content : lists[a][b]
-          }));
-          i++;
-        }
-        post.add(listObj);
-      }
-    }
+     for(var a in lists){
+       if(lists[a][0] == i){
+         lists[a].splice(0, 1)
+         var listObj = bwe.genList({}, lists[a]);
+         i += lists[a].length;
+         post["children"].push(listObj);
+       }
+     }
 
     lines[i] = lines[i].trim();
     if(lines[i] !== ""){
@@ -340,40 +335,41 @@ function genHtmlFromRaw(raw){
           if(key == "heading1"){
             data = {
               tag : "h1",
-              content : content
+              con : content
             };
           }
           else if(key == "heading2"){
             data = {
               tag : "h2",
-              content : content
+              con : content
             };
           }
           else if(key == "quote"){
             data = {
               tag : "div",
               class : "quote",
-              content : content
+              con : content
             };
           }
           else if(key == "media"){
             var mediaObj = genMediaEmbed(content);
             if(mediaObj != null){
-              post.add(mediaObj);
+              post["children"].push(mediaObj);
             }
           }
 
           //paragraph from markdown
           if(curParagraph !== ""){
-            post.add(new Obj({
+            post["children"].push({
               tag : "p",
-              content : curParagraph
-            }));
+              con : curParagraph
+            });
             curParagraph = "";
           }
 
           if(data != null){
-            post.add(new Obj(data));
+            //post.add(new Obj(data));
+            post["children"].push(data);
           }
         }
       }
@@ -387,16 +383,17 @@ function genHtmlFromRaw(raw){
     //end of paragraph
     if(lines[i] === "" || i == lines.length -1){
       if(curParagraph !== ""){
-        post.add(new Obj({
+        post["children"].push({
           tag : "p",
-          content : curParagraph
-        }));
+          con : curParagraph
+        });
         curParagraph = "";
       }
     }
   }
 
-  $(".post-preview").append(post.get());
+  $(".post-preview").html("");
+  bwe.append(".post-preview", post);
 }
 
 //returns 2 array with index 0 of each array containing the line number
@@ -512,28 +509,29 @@ function genMediaEmbed(content){
 
   if(type=="youtube"){
     var mediaSrc = "https://www.youtube.com/embed/" + mediaID + "?color=white&vq=hd720";
-    mediaObj = new Obj({
+    mediaObj = {
       tag : "iframe",
       class : "video",
       src : mediaSrc,
       frameborder : "0",
       allowfullscreen : "true"
-    });
+    };
   }
   else if(type=="gfycat"){
     var mediaSrc = "https://giant.gfycat.com/" + mediaID + ".webm";
-    mediaObj = new Obj({
+    mediaObj = {
       tag : "video",
       class : "video",
       autoplay : "true",
-      loop : "true"
-    });
-
-    mediaObj.add(new Obj({
-      tag : "source",
-      src : mediaSrc,
-      type : "video/webm"
-    }));
+      loop : "true",
+      children : [
+        {
+          tag : "source",
+          src : mediaSrc,
+          type : "video/webm"
+        }
+      ]
+    };
   }
   else if(type == "imgur img" || type == "img"){
 
@@ -546,30 +544,31 @@ function genMediaEmbed(content){
       mediaSrc = site + mediaID;
     }
 
-    mediaObj = new Obj({
+    mediaObj = {
       tag : "div",
-      class : "post-img"
-    });
-
-    mediaObj.add(new Obj({
-      tag : "img",
-      src : mediaSrc
-    }));
+      class : "post-img",
+      children : [
+        {
+          tag : "img",
+          src : mediaSrc
+        }
+      ]
+    };
   }
   else if(type == "imgur gifv"){
-    console.log("found gifv");
-    mediaObj = new Obj({
+    mediaObj = {
       tag : "video",
       class : "video",
       autoplay : "true",
-      loop : "true"
-    });
-
-    mediaObj.add(new Obj({
-      tag : "source",
-      src : "https://i.imgur.com/" + mediaID,
-      type : "video/mp4"
-    }));
+      loop : "true",
+      children : [
+        {
+          tag : "source",
+          src : "https://i.imgur.com/" + mediaID,
+          type : "video/mp4"
+        }
+      ]
+    };
   }
 
   return mediaObj;
