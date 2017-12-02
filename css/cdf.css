@@ -222,7 +222,7 @@ html::-webkit-scrollbar-thumb
   padding: 0;
 }
 
-.cdf-nav-filters li
+.cdf-nav-filters a
 {
   display: inline-block;
   height: 100%;
@@ -234,14 +234,15 @@ html::-webkit-scrollbar-thumb
   line-height: 50px;
   border-right: 2px solid var(--pri_faded);
   margin-left: -3px;
+  cursor: pointer;
 }
 
-.cdf-nav-filters li:hover
+.cdf-nav-filters a:hover
 {
     background: var(--hover);
 }
 
-.cdf-nav-filters li.active
+.cdf-nav-filters a.active
 {
   background-color: var(--pri_faded);
 }

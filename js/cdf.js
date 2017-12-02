@@ -30,6 +30,7 @@ $(document).ready(function() {
 });
 
 function loadPage(){
+  genNavbar();
   var pageType = "";
   var path = window.location.pathname;
   if(path === "/" || path === "/index" || path === "/index.html"){
@@ -57,6 +58,87 @@ function loadPage(){
         }
       }
     });
+}
+
+function genNavbar(){
+  $("nav").html("");
+  bwe.pages = [
+    {
+      name : "Home",
+      page : "index.html"
+    },
+    {
+      name : "Trending",
+      page : "#"
+    },
+    {
+      name : "Discover",
+      page : "new-post.html"
+    }
+  ];
+
+  bwe.append("nav",{
+    tag : "div",
+    class : "cdf-nav-filters",
+    children : [
+      {
+        tag : "div",
+        class : "cdf-nav-logo skew-con",
+        children : [
+          {
+            tag : "img",
+            class : "skew",
+            src : "/img/logo_sm.png"
+          }
+        ]
+      }
+    ]
+  });
+
+  bwe.append("nav",{
+    tag : "div",
+    class : "cdf-nav-filters",
+    children : bwe.genNavItems(
+      {
+        class : "nav-item skew-con"
+      },
+      {
+        tag : "div",
+        class : "skew"
+      }
+    )
+  });
+
+  bwe.append("nav",{
+    tag : "div",
+    class : "cdf-nav-info",
+    children : [
+      {
+        tag : "button",
+        id : "twitter",
+        class : "fa fa-twitter"
+      },
+      {
+        tag : "button",
+        id : "youtube",
+        class : "fa fa-youtube-play"
+      },
+      {
+        tag : "button",
+        id : "login",
+        con : "Login"
+      },
+      {
+        tag : "button",
+        id : "start",
+        con : "Get Started"
+      }
+    ]
+  });
+
+  /*
+    {"tag":"nav","class":"cdf-nav","children":[{"tag":"div","class":"cdf-nav-logo skew-con","children":[{"tag":"img","class":"skew","src":"/img/logo_sm.png"}]},{"tag":"ul","class":"cdf-nav-filters","children":[{"tag":"li","class":"nav-item skew-con active","id":"filter-home","children":[{"tag":"div","class":"skew"}]},{"tag":"li","class":"nav-item skew-con","id":"filter-popular","children":[{"tag":"div","class":"skew"}]},{"tag":"li","class":"nav-item skew-con","id":"filter-discover","children":[{"tag":"div","class":"skew"}]}]},{"tag":"div","class":"cdf-nav-info","children":[{"tag":"button","id":"twitter","class":"fa fa-twitter"},{"tag":"button","id":"youtube","class":"fa fa-youtube-play"},{"tag":"button","id":"login"},{"tag":"button","id":"start"}]}]}
+  */
 }
 
 //generates a card from data with bwe
