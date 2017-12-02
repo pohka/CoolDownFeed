@@ -69,7 +69,7 @@ function genNavbar(){
     },
     {
       name : "Trending",
-      page : "#"
+      page : "post.html"
     },
     {
       name : "Discover",

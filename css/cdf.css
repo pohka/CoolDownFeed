@@ -257,6 +257,8 @@ html::-webkit-scrollbar-thumb
   background: var(--bg);
   border-bottom: 1px solid var(--pri_faded);
   border-right: 2px solid var(--pri_faded);
+  position: relative;
+  z-index: 901;
 }
 
 .cdf-nav-logo:hover
