@@ -27,6 +27,18 @@ $(document).ready(function() {
     var id = "#tags-" + $(this).data("url");
     $(id).hide();
   });
+
+  $(document).on("click", "#login", function(){
+    $(".login-modal").show();
+    disableScroll();
+  });
+
+  $(document).on("click", ".login-menu div", function(){
+    if($(this).hasClass('active') == false){
+      $(".login-menu div.active").removeClass('active');
+      $(this).addClass('active');
+    }
+  })
 });
 
 function loadPage(){
@@ -243,21 +255,20 @@ function timeSinceString(time){
 
 
 function login(){
-  console.log("loggin");
-
   $.post( "php/login.php", {
     username: $("#login-user").val(),
     password: $("#login-pass").val()
     }).done(function( data ) {
-      console.log( data );
       if(data=="success"){
         //create session
+        notification("Logged In", "success", 5);
+        $(".login-modal").fadeOut('fast');
       }
       else{
-        //give error msg
+        notification("Login details were incorrect", "error", 8);
       }
     }).fail(function() {
-      console.log( "post failed" );
+      //console.log( "connection failed" );
   });
 }
 
@@ -571,3 +582,76 @@ function genUID() {
 function getUser(){
   return 1;
 }
+
+//shows a notification at the top right
+function notification(text, type, duration){
+  var cls = "fa ";
+  switch(type){
+    case "success" : cls += "fa-check"; break;
+    case "warning" : cls += "fa-exclamation"; break;
+    case "error" : cls += "fa-exclamation-triangle"; break;
+  }
+
+  var id = "note-"+genUID();
+
+  $(".notification-con").prepend(bwe.build({
+    tag : "div",
+    id : id,
+    class : "notification",
+    children : [
+      {
+        tag : "div",
+        class : "notification-text",
+        con : text
+      },
+      {
+        tag : "div",
+        class : "notification-icon " + cls
+      }
+    ]
+  }));
+
+  setTimeout(function(){
+      $("#"+id).fadeOut('fast', function() {
+        $("#"+id).remove();
+      });
+    },
+    duration*1000);
+}
+
+//Enable/Disable scolling
+//--------------------------------------------------
+var keys = {37: 1, 38: 1, 39: 1, 40: 1};
+
+function preventDefault(e) {
+ e = e || window.event;
+ if (e.preventDefault)
+     e.preventDefault();
+ e.returnValue = false;
+}
+
+function preventDefaultForScrollKeys(e) {
+   if (keys[e.keyCode]) {
+       preventDefault(e);
+       return false;
+   }
+}
+
+function disableScroll() {
+ if (window.addEventListener) // older FF
+     window.addEventListener('DOMMouseScroll', preventDefault, false);
+ window.onwheel = preventDefault; // modern standard
+ window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
+ window.ontouchmove  = preventDefault; // mobile
+ document.onkeydown  = preventDefaultForScrollKeys;
+}
+
+function enableScroll() {
+   if (window.removeEventListener)
+       window.removeEventListener('DOMMouseScroll', preventDefault, false);
+   window.onmousewheel = document.onmousewheel = null;
+   window.onwheel = null;
+   window.ontouchmove = null;
+   document.onkeydown = null;
+}
+//------------------------------------------------

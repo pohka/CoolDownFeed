@@ -24,10 +24,18 @@
     <nav class="cdf-nav"></nav>
 
     <div class="login-modal">
-      <input type="text" id="login-user" placeholder="Username"><br>
-      <input type="text" id="login-pass" placeholder="Password"><br>
-      <input type="button" onclick="login()" value="Submit">
+      <div class="login-con">
+        <div class="login-menu">
+          <div id="login-existing" class="active">Login</div>
+          <div id="login-newuser">Register</div>
+        </div>
+        <input type="text" id="login-user" placeholder="Username"><br>
+        <input type="password" id="login-pass" placeholder="Password"><br>
+        <input type="button" onclick="login()" value="Submit">
+      </div>
     </div>
+
+    <div class="notification-con"></div>
 
     <div class="container">
       <div class="card-con">
