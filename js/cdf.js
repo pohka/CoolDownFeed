@@ -273,6 +273,8 @@ function login(){
           clearNotifications();
           notification("Logged In", "success", 4);
           toggleLoginModal();
+          $("#login-user").val("");
+          $("#login-pass").val("");
           document.cookie = "session=" + data + "; expires=Fri, 31 Dec 9999 23:59:59 GMT";
           startSession();
       }
