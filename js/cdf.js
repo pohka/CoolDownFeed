@@ -28,17 +28,15 @@ $(document).ready(function() {
     $(id).hide();
   });
 
-  $(document).on("click", "#login", function(){
-    $(".login-modal").show();
-    disableScroll();
-  });
-
   $(document).on("click", ".login-menu div", function(){
     if($(this).hasClass('active') == false){
       $(".login-menu div.active").removeClass('active');
       $(this).addClass('active');
     }
   })
+
+  $(document).on("click", "#submit-login", login);
+  $(document).on("click", "#login, #hide-login", toggleLoginModal);
 });
 
 function loadPage(){
@@ -126,22 +124,26 @@ function genNavbar(){
     class : "cdf-nav-info",
     children : [
       {
-        tag : "button",
+        tag : "a",
+        href : "https://twitter.com/PohkaDota",
+        target : "_blank",
         id : "twitter",
         class : "fa fa-twitter"
       },
       {
-        tag : "button",
+        tag : "a",
+        href : "https://www.youtube.com/c/pohka",
+        target : "_blank",
         id : "youtube",
         class : "fa fa-youtube-play"
       },
       {
-        tag : "button",
+        tag : "div",
         id : "login",
         con : "Login"
       },
       {
-        tag : "button",
+        tag : "div",
         id : "start",
         con : "Get Started"
       }
@@ -259,10 +261,14 @@ function login(){
     username: $("#login-user").val(),
     password: $("#login-pass").val()
     }).done(function( data ) {
-      if(data=="success"){
+      console.log(data);
+      var json = jQuery.parseJSON(data);
+      if(json["user_id"]!==""){
         //create session
+        clearNotifications();
         notification("Logged In", "success", 5);
-        $(".login-modal").fadeOut('fast');
+        toggleLoginModal();
+
       }
       else{
         notification("Login details were incorrect", "error", 8);
@@ -270,6 +276,19 @@ function login(){
     }).fail(function() {
       //console.log( "connection failed" );
   });
+}
+
+function toggleLoginModal(show){
+  var sel = ".login-modal"
+  if($(sel).is(":hidden")){
+    $(".login-modal").show();
+    $("#login-user").focus();
+    disableScroll();
+  }
+  else{
+    $(".login-modal").fadeOut("fast");
+    enableScroll();
+  }
 }
 
 //post markdown converter
@@ -617,6 +636,10 @@ function notification(text, type, duration){
       });
     },
     duration*1000);
+}
+
+function clearNotifications(){
+  $(".notification").each(function(){ $(this).hide(); });
 }
 
 //Enable/Disable scolling

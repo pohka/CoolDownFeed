@@ -280,17 +280,35 @@ html::-webkit-scrollbar-thumb
   margin-right: 0px;
 }
 
-.cdf-nav-info button
+.cdf-nav-info a,
+.cdf-nav-info div
 {
-  line-height: 50px;
-  height: 100%;
+  display: inline-block;
+  line-height: 49px;
+  height: 49px;
   margin: 0px;
+  clear: left;
+  vertical-align: top;
   border:none;
   background: none;
-  vertical-align: top;
+  text-align: center;
+  text-decoration: none;
+  color: var(--text);
+  cursor: pointer;
 }
 
-#login, #start{
+#login{
+  width: 120px;
+}
+
+.cdf-nav-info a:hover,
+.cdf-nav-info div:hover
+{
+  background-color: var(--hover);
+}
+
+#start{
+  display: none;
   padding: 0px 30px;
   font-size: 15px;
 }
@@ -318,7 +336,7 @@ html::-webkit-scrollbar-thumb
 /*-------------- Login Modal --------------*/
 .login-modal
 {
-  /*display: none;*/
+  display: none;
   position: fixed;
   top: 50;
   height: 100vh;

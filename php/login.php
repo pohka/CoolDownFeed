@@ -11,7 +11,15 @@
 
   if($rowcount == 1)
   {
-    echo "success";
+    $row = mysqli_fetch_row($result);
+    //echo json_encode($row);
+    $data = array(
+      "user_id" => $row[0],
+      "user_name" => $row[1],
+      "user_avatar" => $row[2]
+    );
+    echo json_encode($data);
+    //echo "success";
   }
 
   mysqli_close($con);
