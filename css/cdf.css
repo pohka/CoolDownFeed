@@ -332,6 +332,38 @@ html::-webkit-scrollbar-thumb
   width: 60px;
 }
 
+.session-con
+{
+  min-width: 200px;
+  padding: 0px 20px;
+  text-align: left !important;
+  max-width: 400px;
+}
+
+.session-con span{
+  margin-left: 10px;
+}
+
+.session-avatar-con {
+  border: 1px solid var(--pri) !important;
+  overflow: hidden;
+  height: 32px !important;
+  width: 32px;
+  margin-top: 9px !important;
+}
+
+#session-down-icon{
+  float: right;
+  width: 30px;
+  padding-left: 10px;
+  color: rgba(255,255,255,0.4);
+}
+
+#session-avatar{
+  height: 100%;
+  width: 100%;
+}
+
 
 /*-------------- Login Modal --------------*/
 .login-modal

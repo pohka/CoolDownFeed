@@ -1,5 +1,6 @@
 $(document).ready(function() {
   loadPage();
+  startSession();
 
   $(".nav-item").click(function(){
       switch($(this).attr("id"))
@@ -261,14 +262,14 @@ function login(){
     username: $("#login-user").val(),
     password: $("#login-pass").val()
     }).done(function( data ) {
-      console.log(data);
       var json = jQuery.parseJSON(data);
       if(json["user_id"]!==""){
         //create session
         clearNotifications();
-        notification("Logged In", "success", 5);
+        notification("Logged In", "success", 4);
         toggleLoginModal();
-
+        document.cookie = "session=" + data + "; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+        startSession();
       }
       else{
         notification("Login details were incorrect", "error", 8);
@@ -276,6 +277,68 @@ function login(){
     }).fail(function() {
       //console.log( "connection failed" );
   });
+}
+
+//sets the session info at the top right
+function startSession(){
+  var session = getCookie("session");
+  if(session !== ""){
+    var data = jQuery.parseJSON(session);
+    $("#login").hide();
+    bwe.append(".cdf-nav-info", {
+      tag : "div",
+      class : "session-con",
+      children : [
+        {
+          tag : "div",
+          class : "session-avatar-con",
+          children : [
+            {
+              tag : "img",
+              id  : "session-avatar",
+              src : data["user_avatar"]
+            }
+          ]
+        },
+        {
+          tag : "span",
+          id  : "session-username",
+          con : data["user_name"]
+        },
+        {
+          tag : "div",
+          id : "session-down-icon",
+          class : "fa fa-caret-down"
+        }
+      ]
+    });
+  }
+}
+
+function endSession(){
+  var session = getCookie("session");
+  if(session !== ""){
+    var cookie = session.split(";")[0] +  ": " + (new Date()-1000);
+    document.cookie = cookie;
+    $(".session-con").remove();
+    $("#login").show();
+  }
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
 }
 
 function toggleLoginModal(show){

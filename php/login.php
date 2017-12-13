@@ -5,21 +5,26 @@
     echo "Failed to connect to MySQL: " . mysqli_connect_error();
   }
 
-  $sql = "SELECT * FROM users WHERE username = '" . htmlspecialchars($_POST["username"]) ."' AND password = '" . htmlspecialchars($_POST["password"]) ."'";
+  $pass = htmlspecialchars($_POST["password"]);
+  $user = htmlspecialchars($_POST["username"]);
+  $sql = "SELECT * FROM users WHERE username = '" . $user ."' AND password = '" . $pass ."'";
   $result = mysqli_query($con, $sql);
   $rowcount = mysqli_num_rows($result);
 
   if($rowcount == 1)
   {
     $row = mysqli_fetch_row($result);
-    //echo json_encode($row);
+    $salt1 = "placeholder";
+    $salt2 = "placeholder";
+    $id = md5($salt1.$user.$salt2);
+
     $data = array(
+      "cookie_id" => $id,
       "user_id" => $row[0],
       "user_name" => $row[1],
       "user_avatar" => $row[2]
     );
     echo json_encode($data);
-    //echo "success";
   }
 
   mysqli_close($con);
