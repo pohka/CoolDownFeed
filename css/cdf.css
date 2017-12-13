@@ -405,11 +405,33 @@ html::-webkit-scrollbar-thumb
   border: 1px solid var(--pri);
 }
 
+.user-menu{
+  display: none;
+  position: fixed;
+  right: 0;
+  top: 50px;
+  width: 200px;
+  background: var(--con_bg);
+  border: 1px solid var(--pri_faded);
+}
+
+.user-menu div{
+  width: 100%;
+  padding: 0 20px;
+  line-height: 40px;
+  background: var(--con_bg);
+  cursor: pointer;
+}
+
+.user-menu div:hover{
+  background: var(--hover);
+}
+
 /*-------------- Notifications --------------*/
 .notification-con
 {
   position: fixed;
-  top: 60;
+  bottom: 10;
   right: 10;
   width: 320px;
   z-index: 200;

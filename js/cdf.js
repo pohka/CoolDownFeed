@@ -38,6 +38,11 @@ $(document).ready(function() {
 
   $(document).on("click", "#submit-login", login);
   $(document).on("click", "#login, #hide-login", toggleLoginModal);
+  $(document).on("click", ".session-con", toggleUserMenu);
+
+  $(document).on("click", ".user-menu div", function(){
+    userMenuAction($(this).data("action"));
+  })
 });
 
 function loadPage(){
@@ -256,20 +261,20 @@ function timeSinceString(time){
   return str;
 }
 
-
+//request login user
 function login(){
   $.post( "php/login.php", {
     username: $("#login-user").val(),
     password: $("#login-pass").val()
     }).done(function( data ) {
-      var json = jQuery.parseJSON(data);
-      if(json["user_id"]!==""){
-        //create session
-        clearNotifications();
-        notification("Logged In", "success", 4);
-        toggleLoginModal();
-        document.cookie = "session=" + data + "; expires=Fri, 31 Dec 9999 23:59:59 GMT";
-        startSession();
+      if( data !== ""){
+        var json = jQuery.parseJSON(data);
+          //create session
+          clearNotifications();
+          notification("Logged In", "success", 4);
+          toggleLoginModal();
+          document.cookie = "session=" + data + "; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+          startSession();
       }
       else{
         notification("Login details were incorrect", "error", 8);
@@ -315,13 +320,16 @@ function startSession(){
   }
 }
 
+//logs the user out of their current session
 function endSession(){
   var session = getCookie("session");
   if(session !== ""){
-    var cookie = session.split(";")[0] +  ": " + (new Date()-1000);
+    var cookie = "session=;expires=Thu, 01 Jan 1970 00:00:01 GMT;";
     document.cookie = cookie;
     $(".session-con").remove();
     $("#login").show();
+    $(".user-menu").hide();
+    notification("Logged Out", "", 3);
   }
 }
 
@@ -341,7 +349,7 @@ function getCookie(cname) {
     return "";
 }
 
-function toggleLoginModal(show){
+function toggleLoginModal(){
   var sel = ".login-modal"
   if($(sel).is(":hidden")){
     $(".login-modal").show();
@@ -703,6 +711,22 @@ function notification(text, type, duration){
 
 function clearNotifications(){
   $(".notification").each(function(){ $(this).hide(); });
+}
+
+function toggleUserMenu(){
+  var sel = ".user-menu"
+  if($(sel).is(":hidden")){
+    $(sel).show();
+  }
+  else{
+    $(sel).hide();
+  }
+}
+
+function userMenuAction(action){
+  switch(action){
+    case "log-out" : endSession(); break;
+  }
 }
 
 //Enable/Disable scolling
