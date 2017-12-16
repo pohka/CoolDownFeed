@@ -223,7 +223,7 @@ function timeSinceString(time){
   var now = new Date();
   var timeDiff = Math.abs(now.getTime() - date.getTime());
 
-  var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+  var diffDays = Math.floor(timeDiff / (1000 * 3600 * 24));
 
   var str;
   if(diffDays == 0){
