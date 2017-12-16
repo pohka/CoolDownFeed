@@ -227,8 +227,8 @@ function timeSinceString(time){
 
   var str;
   if(diffDays == 0){
-    var diffMins = Math.ceil(timeDiff / (1000 * 60));
-    var diffHours = Math.ceil(timeDiff / (1000 * 3600));
+    var diffMins = Math.floor(timeDiff / (1000 * 60));
+    var diffHours = Math.floor(timeDiff / (1000 * 3600));
 
     if(diffHours == 0){
       str = diffMins + " mins ago";
