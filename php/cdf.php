@@ -1,9 +1,19 @@
 <?php
+
 $con = mysqli_connect("cdf2","root","","cdf");
 if(mysqli_connect_errno())
 {
   echo "Failed to connect to MySQL: " . mysqli_connect_error();
 }
+
+function getUserID($cookie, $con) {
+  $sql = "SELECT *  FROM sessions WHERE session_id = '".$cookie . "'";
+  $result = mysqli_query($con, $sql);
+  while($row = mysqli_fetch_assoc($result)) {
+      return $row["user_id"];
+  }
+}
+
 
 date_default_timezone_set('UTC');
 $sql = "";
@@ -13,7 +23,8 @@ switch($_POST["type"]){
       "SELECT cards.id, cards.title, cards.description, " .
       "users.username as author, cards.publish_time, cards.tags " .
       "FROM cards JOIN users ON users.id = cards.userid " .
-      "WHERE cards.published = 1";
+      "WHERE cards.published = 1 " .
+      "ORDER BY cards.publish_time DESC";
       break;
    case "image-upload" :
       $userID = $_POST['userid'];
@@ -33,7 +44,7 @@ switch($_POST["type"]){
       $id = $_POST['id'];
       $title = $_POST['title'];
       $desc = $_POST['desc'];
-      $userid = $_POST['userid'];
+      $userid = getUserID($_POST['cookieid'], $con);
 
       $timestamp_epoch  = $_POST['timestamp'];
       $dt = new DateTime("@$timestamp_epoch");

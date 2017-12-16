@@ -671,8 +671,12 @@ function genUID() {
 }
 
 //gets the current user id
-function getUser(){
-  return 1;
+function getUserCookieID(){
+  var session = getCookie("session");
+  if(session !== ""){
+    var data = jQuery.parseJSON(session);
+    return data["cookie_id"];
+  }
 }
 
 //shows a notification at the top right

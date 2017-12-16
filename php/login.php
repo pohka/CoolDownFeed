@@ -20,7 +20,6 @@
 
     $data = array(
       "cookie_id" => $id,
-      "user_id" => $row[0],
       "user_name" => $row[1],
       "user_avatar" => $row[2]
     );

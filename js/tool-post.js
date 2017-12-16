@@ -1,4 +1,5 @@
 var cursorPosition=0;
+var postID = genUID()
 
 $(document).ready(function() {
   //track cursor postion
@@ -238,7 +239,7 @@ function loadModal(type){
 
     $.post( "php/cdf.php", {
       type : "user-images",
-      userid : getUser()
+      userid : getUserCookieID()
       }).done(function( data ) {
         if(data != "") {
           var obj = JSON.parse(data);
@@ -265,37 +266,50 @@ function loadModal(type){
   }
 }
 
-//todo validate
+//todo validate user input
 function validate(){
   return true;
 }
 
 function save(forNow){
+  var cookieID = getUserCookieID();
+  if(cookieID == undefined){
+    notification("Not Logged In", "error", 6);
+    return;
+  }
   var text = getRaw();
-  var userID = getUser();
   var title = $("#post-editor-title").val();
   var desc = $("#post-editor").val().substr(0, 65).trim();
   var banner = $("#post-editor-banner").val();
   var time = Math.floor(Date.now() / 1000);
   var publish = 1;
-  if(!forNow)
-    publish = 0;
+  if(!forNow) publish = 0;
   var publishTime = time;
 
   $.post( "php/cdf.php", {
     type : "add-post",
-    id : genUID(),
+    id : postID,
     text : text,
     title : title,
     desc : desc,
-    userid : userID,
+    cookieid : cookieID,
     timestamp : time,
     tags : $("#post-editor-tags").val().trim(),
     published : publish,
     publish_time : publishTime,
     game : $("#post-editor-game").val()
     }).done(function( data ) {
-      //console.log(data);
-      //show success msg
+      if(data==="success"){
+        if(publish == 1){
+          notification("Published", "success", 6);
+        }
+        else {
+          notification("Saved", "success", 6);
+        }
+      }
+      else{
+        console.log(data);
+        notification("Server Error", "error", 6);
+      }
     });
 }
