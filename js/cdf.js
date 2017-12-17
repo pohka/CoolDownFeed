@@ -1,6 +1,6 @@
 $(document).ready(function() {
   loadPage();
-  startSession();
+  loadSession();
 
   $(".footer-filter").click(function(){
       switch($(this).attr("id"))
@@ -158,7 +158,7 @@ function genNavbar(){
     },
     {
       name : "Trending",
-      page : "/post"
+      page : "/post-example"
     },
     {
       name : "Discover",
@@ -230,6 +230,7 @@ function genNavbar(){
   });
 }
 
+//generate footer
 function genFooter(){
   bwe.append("footer", {
     tag:"div",
@@ -422,14 +423,14 @@ function login(){
     }).done(function( data ) {
       if( data !== ""){
         var json = jQuery.parseJSON(data);
-          //create session
-          clearNotifications();
-          notification("Logged In", "success", 4);
-          toggleLoginModal();
-          $("#login-user").val("");
-          $("#login-pass").val("");
-          document.cookie = "session=" + data + "; expires=Fri, 31 Dec 9999 23:59:59 GMT";
-          startSession();
+        //create session
+        clearNotifications();
+        notification("Logged In", "success", 4);
+        toggleLoginModal();
+        $("#login-user").val("");
+        $("#login-pass").val("");
+        document.cookie = "session=" + data + "; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+        loadSession();
       }
       else{
         notification("Login details were incorrect", "error", 8);
@@ -440,7 +441,7 @@ function login(){
 }
 
 //sets the session info at the top right
-function startSession(){
+function loadSession(){
   var session = getCookie("session");
   if(session !== ""){
     var data = jQuery.parseJSON(session);
@@ -488,6 +489,7 @@ function endSession(){
   }
 }
 
+//gets the cookie by they key value
 function getCookie(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
@@ -506,6 +508,9 @@ function getCookie(cname) {
 
 function toggleLoginModal(){
   var sel = ".login-modal"
+  if($(sel).length == 0){
+    genLoginModal();
+  }
   if($(sel).is(":hidden")){
     $(".login-modal").show();
     $("#login-user").focus();
@@ -515,6 +520,79 @@ function toggleLoginModal(){
     $(".login-modal").fadeOut("fast");
     enableScroll();
   }
+}
+
+//generate the login modal
+function genLoginModal(){
+  bwe.append("body", {
+    tag:"div",
+    class:"login-modal",
+    children:[
+      {
+        tag:"div",
+        class:"login-con",
+        children:[
+          {
+            tag:"div",
+            class:"login-menu",
+            children:[
+              {
+                tag:"div",
+                id:"login-existing",
+                class:"active",
+                con: "Login",
+              },
+              {
+                tag:"div",
+                id:"login-newuser",
+                con :"Register"
+              }
+            ]
+          },
+          {
+            tag:"input",
+            type:"text",
+            id:"login-user",
+            placeholder:"Username",
+            children:[
+              {
+                tag:"br",
+                children:[
+                  {
+                    tag:"input",
+                    type:"password",
+                    id:"login-pass",
+                    placeholder:"Password",
+                    children:[
+                      {
+                        tag:"br",
+                        children:[
+                          {
+                            tag:"input",
+                            type:"button",
+                            id:"submit-login",
+                            value:"Submit",
+                            children:[
+                              {
+                                tag:"input",
+                                type:"button",
+                                id:"hide-login",
+                                value:"Cancel"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  });
 }
 
 //post markdown converter
@@ -842,6 +920,12 @@ function notification(text, type, duration){
 
   var id = "note-"+genUID();
 
+  if($(".notification-con").length == 0){
+    bwe.append("body", {
+      tag : "div",
+      class : "notification-con"
+    });
+  }
   $(".notification-con").prepend(bwe.build({
     tag : "div",
     id : id,
@@ -873,12 +957,34 @@ function clearNotifications(){
 
 function toggleUserMenu(){
   var sel = ".user-menu"
+  if($(sel).length == 0){
+    genUserMenu();
+  }
   if($(sel).is(":hidden")){
     $(sel).show();
   }
   else{
     $(sel).hide();
   }
+}
+
+function genUserMenu(){
+  bwe.append("body",{
+    "tag":"div",
+    "class":"user-menu",
+    "children":[
+      {
+        tag:"div",
+        data:[{action : "my-posts"}],
+        con:"My Posts"
+      },
+      {
+        tag:"div",
+        data:[{action : "log-out"}],
+        con:"Log Out"
+      }
+    ]
+  });
 }
 
 function userMenuAction(action){
