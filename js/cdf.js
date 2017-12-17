@@ -49,7 +49,7 @@ $(document).ready(function() {
   });
 });
 
-//loads the card for each page
+//generates the content for each page
 function loadPage(){
   genNavbar();
   var pageType = "";
@@ -61,85 +61,92 @@ function loadPage(){
     pageType = "post-view";
   }
 
-  //cards home
-  if(pageType === "cards-home"){
-    $.post( "php/cdf.php", {
-      type : pageType
-      }).done(function( data ) {
-        if(data !== "") {
-          var obj = JSON.parse(data);
-          for(var i in obj){
-
-            var card = genCard({
-              id : obj[i]["id"],
-              img : "/temp/esl_ham.png",
-              title : obj[i]["title"],
-              desc : obj[i]["description"],
-              author : obj[i]["author"],
-              time : obj[i]["publish_time"],
-              tags : obj[i]["tags"],
-            });
-          }
-        }
-    });
+  switch(pageType){
+    case "cards-home" : genHome(pageType); break;
+    case "post-view"  : genPost(pageType, path); break;
   }
 
-  //view post
-  else if(pageType === "post-view"){
-    var postID = path.replace("/p/", "");
-    $.ajax(
-      {
-      url: "/php/cdf.php",
-      type: "POST",
-      data: {
-        type : pageType,
-        id : postID
-      },
-      success: function(data){
-          if(data !== ""){
-          var post = JSON.parse(data)[0];
-          var html = genHtmlFromRaw(post["text"]);
-          var time = timeSinceString(post["publish_time"]);
-          bwe.append(".container", html);
+  genFooter();
+}
 
-          //add creator div
-          $("h1").after(bwe.build({
-            tag : "div",
-            class : "creator",
-            children : [
-              {
-                tag : "div",
-                class : "creator-avatar",
-                children : [
-                  {
-                    tag : "img",
-                    src : post["avatar"]
-                  }
-                ]
-              },
-              {
-                tag : "div",
-                class : "creator-name",
-                con: post["username"]
-              },
-              {
-                tag : "div",
-                class : "creator-date",
-                con : time
-              }
-            ]
-          }));
-        }
-        //post link doesn't exist
-        else{
-          bwe.append(".container", {
-            tag : "h1",
-            con : "Zoinks! That link doesn't exist"
+//generates content for home
+function genHome(pageType){
+  $.post( "php/cdf.php", {
+    type : pageType
+    }).done(function( data ) {
+      if(data !== "") {
+        var obj = JSON.parse(data);
+        for(var i in obj){
+
+          var card = genCard({
+            id : obj[i]["id"],
+            img : "/temp/esl_ham.png",
+            title : obj[i]["title"],
+            desc : obj[i]["description"],
+            author : obj[i]["author"],
+            time : obj[i]["publish_time"],
+            tags : obj[i]["tags"],
           });
         }
       }
-    });
-  }
+  });
+}
+
+//generates content for posts
+function genPost(pageType, path){
+  var postID = path.replace("/p/", "");
+  $.ajax(
+    {
+    url: "/php/cdf.php",
+    type: "POST",
+    data: {
+      type : pageType,
+      id : postID
+    },
+    success: function(data){
+        if(data !== ""){
+        var post = JSON.parse(data)[0];
+        var html = genHtmlFromRaw(post["text"]);
+        var time = timeSinceString(post["publish_time"]);
+        bwe.append(".container", html);
+
+        //add creator div
+        $("h1").after(bwe.build({
+          tag : "div",
+          class : "creator",
+          children : [
+            {
+              tag : "div",
+              class : "creator-avatar",
+              children : [
+                {
+                  tag : "img",
+                  src : post["avatar"]
+                }
+              ]
+            },
+            {
+              tag : "div",
+              class : "creator-name",
+              con: post["username"]
+            },
+            {
+              tag : "div",
+              class : "creator-date",
+              con : time
+            }
+          ]
+        }));
+      }
+      //post link doesn't exist
+      else{
+        bwe.append(".container", {
+          tag : "h1",
+          con : "Zoinks! That link doesn't exist"
+        });
+      }
+    }
+  });
 }
 
 function genNavbar(){
@@ -165,7 +172,7 @@ function genNavbar(){
     children : [
       {
         tag : "div",
-        class : "cdf-nav-logo skew-con",
+        class : "cdf-nav-logo skew-con noselect",
         children : [
           {
             tag : "img",
@@ -221,10 +228,90 @@ function genNavbar(){
       }
     ]
   });
+}
 
-  /*
-    {"tag":"nav","class":"cdf-nav","children":[{"tag":"div","class":"cdf-nav-logo skew-con","children":[{"tag":"img","class":"skew","src":"/img/logo_sm.png"}]},{"tag":"ul","class":"cdf-nav-filters","children":[{"tag":"li","class":"nav-item skew-con active","id":"filter-home","children":[{"tag":"div","class":"skew"}]},{"tag":"li","class":"nav-item skew-con","id":"filter-popular","children":[{"tag":"div","class":"skew"}]},{"tag":"li","class":"nav-item skew-con","id":"filter-discover","children":[{"tag":"div","class":"skew"}]}]},{"tag":"div","class":"cdf-nav-info","children":[{"tag":"button","id":"twitter","class":"fa fa-twitter"},{"tag":"button","id":"youtube","class":"fa fa-youtube-play"},{"tag":"button","id":"login"},{"tag":"button","id":"start"}]}]}
-  */
+function genFooter(){
+  bwe.append("footer", {
+    tag:"div",
+    class:"footer-con",
+    children:[
+      {
+        tag:"div",
+        class:"footer-logo",
+        children:[
+          {
+            tag:"img",
+            src:"/img/logo_sm.png",
+          },
+          {
+            tag:"div",
+            class:"footer-logo-text",
+            con:"CoolDownFeed.com"
+          }
+        ]
+      },
+      {
+        tag:"div",
+        class:"footer-filter-con skew-con",
+        children:[
+          {
+            tag:"div",
+            class:"footer-filter noselect",
+            id:"footer-about",
+            children:[
+              {
+                tag:"div",
+                class:"skew",
+                con:"About"
+              }
+            ]
+          },
+          {
+            tag:"div",
+            class:"footer-filter noselect",
+            id:"footer-discover",
+            children:[
+              {
+                tag:"div",
+                class:"skew",
+                con:"Discover"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        tag:"div",
+        class:"footer-contact",
+        children:[
+          {
+            tag:"div",
+            class:"fa fa-youtube-play footer-social"
+          },
+          {
+            tag:"div",
+            class:"fa fa-twitter footer-social"
+          },
+          {
+            tag:"div",
+            class:"footer-email",
+            children:[
+              {
+                tag:"span",
+                children:[
+                  {
+                    tag: "span",
+                    class: "email",
+                    con:"moc.liamg@01akhop"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  });
 }
 
 //generates a card from data with bwe

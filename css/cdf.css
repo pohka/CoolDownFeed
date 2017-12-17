@@ -181,6 +181,11 @@ a:hover{
   color: var(--pri);
 }
 
+.noselect{
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+}
+
 /*-------------- Scrollbar --------------*/
 html::-webkit-scrollbar-track
 {
@@ -664,6 +669,8 @@ html::-webkit-scrollbar-thumb
   unicode-bidi: bidi-override;
   direction: rtl;
   margin-left: 6px;
+  -webkit-user-select: all;  /* Chrome 49+ */
+  -moz-user-select: all;     /* Firefox 43+ */
 }
 
 /*-------------- Cards --------------*/
