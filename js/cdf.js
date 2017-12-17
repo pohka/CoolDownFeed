@@ -149,6 +149,7 @@ function genPost(pageType, path){
   });
 }
 
+//generate navbar
 function genNavbar(){
   $("nav").html("");
   bwe.pages = [
@@ -417,9 +418,13 @@ function timeSinceString(time){
 
 //request login user
 function login(){
-  $.post( "php/login.php", {
-    username: $("#login-user").val(),
-    password: $("#login-pass").val()
+  $.ajax({
+    url: "/php/login.php",
+    type: "POST",
+    data: {
+      username: $("#login-user").val(),
+      password: $("#login-pass").val()
+    }
     }).done(function( data ) {
       if( data !== ""){
         var json = jQuery.parseJSON(data);
@@ -429,7 +434,7 @@ function login(){
         toggleLoginModal();
         $("#login-user").val("");
         $("#login-pass").val("");
-        document.cookie = "session=" + data + "; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+        document.cookie = "session=" + data + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
         loadSession();
       }
       else{
