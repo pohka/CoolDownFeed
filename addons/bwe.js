@@ -5,8 +5,9 @@ class bwe{
 
     for(var i in bwe.identifiers){
       var key = bwe.identifiers[i];
-      if(kv[key] != undefined)
+      if(kv[key] != undefined && key!=="data"){
         res += " " + key + "='" + kv[key] + "'";
+      }
     }
 
     for(var i in bwe.idendifiersNoVal){
@@ -16,8 +17,11 @@ class bwe{
     }
 
     if(kv["data"] != undefined){
-      for(var key in kv["data"]){
-        res += " data-" + key + "= '" + kv["data"][key] + "'";
+      for(var i in kv["data"]){
+        for(var key in kv["data"][i]){
+          console.log(" data-" + key + "='" + kv["data"][i][key] + "'");
+          res += " data-" + key + "= '" + kv["data"][i][key] + "'";
+        }
       }
     }
 
@@ -46,6 +50,7 @@ class bwe{
   //builds a html string from the json and appends it to the selector's html
   static append(sel, kv){
     var res = bwe.build(kv);
+    console.log(res);
     $(sel).append(res);
   }
 

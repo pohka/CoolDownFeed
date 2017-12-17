@@ -2,6 +2,7 @@ Overall
 -------------
 -tracking page views
 -restrict users from using tools
+-bwe data values for clicking on cards
 
 Pages
 ------------
