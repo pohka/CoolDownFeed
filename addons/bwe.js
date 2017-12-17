@@ -166,7 +166,7 @@ class bwe{
         return bwe.pages[i]["name"];
       }
     }
-    console.log("Current page not found");
+    //console.log("Current page not found");
   }
 
   //appends the value an attribute of an item,

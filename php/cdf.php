@@ -75,6 +75,14 @@ switch($_POST["type"]){
           mysqli_query($con, $sql2);
           echo "success";
       break;
+
+    case "post-view" :
+      $id = $_POST['id'];
+      $sql = "SELECT cards.title, users.username, users.avatar, cards.publish_time, posts.text " .
+      "FROM `cards` INNER JOIN posts ON posts.id = cards.id ".
+      "INNER JOIN users ON cards.userid = users.id ".
+      "WHERE cards.id = '" . $id ."'";
+      break;
 }
 
 //echo $sql;

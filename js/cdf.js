@@ -2,20 +2,11 @@ $(document).ready(function() {
   loadPage();
   startSession();
 
-  $(".nav-item").click(function(){
-      switch($(this).attr("id"))
-      {
-        case "filter-discover":   window.open("/post.html", "_self"); break;
-        case "filter-popular":    window.open("/index.html", "_self"); break;
-        case "filter-home" :      window.open("/index.html", "_self"); break;
-      }
-  });
-
   $(".footer-filter").click(function(){
       switch($(this).attr("id"))
       {
-        case "footer-about" :     window.open("/index.html", "_self"); break;
-        case "footer-discover":   window.open("/index.html", "_self"); break;
+        case "footer-about" :     window.open("/", "_self"); break;
+        case "footer-discover":   window.open("/", "_self"); break;
       }
   });
 
@@ -27,6 +18,10 @@ $(document).ready(function() {
   $(document).on("mouseleave", ".card", function(){
     var id = "#tags-" + $(this).data("url");
     $(id).hide();
+  });
+
+  $(document).on("click", ".cdf-nav-logo", function(){
+    window.open("/", "_self");
   });
 
   $(document).on("click", ".login-menu div", function(){
@@ -53,28 +48,89 @@ function loadPage(){
   if(path === "/" || path === "/index" || path === "/index.html"){
     pageType = "cards-home";
   }
+  else if(path.startsWith("/p/")){
+    pageType = "post-view";
+  }
 
-  $.post( "php/cdf.php", {
-    type : pageType
-    }).done(function( data ) {
-      if(data != "") {
-        var obj = JSON.parse(data);
-        for(var i in obj){
+  //cards home
+  if(pageType === "cards-home"){
+    $.post( "php/cdf.php", {
+      type : pageType
+      }).done(function( data ) {
+        if(data !== "") {
+          var obj = JSON.parse(data);
+          for(var i in obj){
 
-          var card = genCard({
-            id : obj[i]["id"],
-            img : "/temp/esl_ham.png",
-            title : obj[i]["title"],
-            desc : obj[i]["description"],
-            author : obj[i]["author"],
-            time : obj[i]["publish_time"],
-            tags : obj[i]["tags"],
+            var card = genCard({
+              id : obj[i]["id"],
+              img : "/temp/esl_ham.png",
+              title : obj[i]["title"],
+              desc : obj[i]["description"],
+              author : obj[i]["author"],
+              time : obj[i]["publish_time"],
+              tags : obj[i]["tags"],
+            });
+          }
+        }
+    });
+  }
+
+  //view post
+  else if(pageType === "post-view"){
+    var postID = path.replace("/p/", "");
+    $.ajax(
+      {
+      url: "/php/cdf.php",
+      type: "POST",
+      data: {
+        type : pageType,
+        id : postID
+      },
+      success: function(data){
+          if(data !== ""){
+          var post = JSON.parse(data)[0];
+          var html = genHtmlFromRaw(post["text"]);
+          var time = timeSinceString(post["publish_time"]);
+          bwe.append(".container", html);
+
+          //add creator div
+          $("h1").after(bwe.build({
+            tag : "div",
+            class : "creator",
+            children : [
+              {
+                tag : "div",
+                class : "creator-avatar",
+                children : [
+                  {
+                    tag : "img",
+                    src : post["avatar"]
+                  }
+                ]
+              },
+              {
+                tag : "div",
+                class : "creator-name",
+                con: post["username"]
+              },
+              {
+                tag : "div",
+                class : "creator-date",
+                con : time
+              }
+            ]
+          }));
+        }
+        //post link doesn't exist
+        else{
+          bwe.append(".container", {
+            tag : "h1",
+            con : "Zoinks! That link doesn't exist"
           });
-
-          //$(".card-con").append(card.get());
         }
       }
     });
+  }
 }
 
 function genNavbar(){
@@ -82,15 +138,15 @@ function genNavbar(){
   bwe.pages = [
     {
       name : "Home",
-      page : "index"
+      page : "/"
     },
     {
       name : "Trending",
-      page : "post"
+      page : "/post"
     },
     {
       name : "Discover",
-      page : "new-post"
+      page : "/new-post"
     }
   ];
 
@@ -221,11 +277,11 @@ function genCard(data){
 function timeSinceString(time){
   var t = time.split(/[- :]/);
   var date = new Date(Date.UTC(t[0], t[1]-1, t[2], t[3], t[4], t[5]));
+
   var now = new Date();
   var timeDiff = Math.abs(now.getTime() - date.getTime());
 
   var diffDays = Math.floor(timeDiff / (1000 * 3600 * 24));
-
   var str;
   if(diffDays == 0){
     var diffMins = Math.floor(timeDiff / (1000 * 60));
@@ -242,8 +298,8 @@ function timeSinceString(time){
     str = "1 day ago";
   }
   else {
-    var diffMonths = Math.ceil(timeDiff / (1000 * 3600 * 24 * 30));
-    var diffYears = Math.ceil(timeDiff / (1000 * 3600 * 24 * 30 * 365));
+    var diffMonths = Math.floor(timeDiff / (1000 * 3600 * 24 * 30));
+    var diffYears = Math.floor(timeDiff / (1000 * 3600 * 24 * 30 * 365));
 
     if(diffMonths==1){
       str = "1 month ago";
@@ -478,8 +534,7 @@ function genHtmlFromRaw(raw){
     }
   }
 
-  $(".post-preview").html("");
-  bwe.append(".post-preview", post);
+  return post;
 }
 
 //returns 2 array with index 0 of each array containing the line number

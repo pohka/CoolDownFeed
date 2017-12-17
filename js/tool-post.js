@@ -98,7 +98,8 @@ window.onbeforeunload = function(){
 //generate the preview
 function genPreview(){
   var html = genHtmlFromRaw(getRaw());
-  $(".container").html(html);
+  $(".post-preview").html("");
+  bwe.append(".post-preview", html);
 }
 
 function getRaw(){
