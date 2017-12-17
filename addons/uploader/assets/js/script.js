@@ -78,12 +78,12 @@ $(function(){
 
             $.post( "php/cdf.php", {
               type : "image-upload",
-              userid : getUser(),
+              cookieid : getUserCookieID(),
               name : fileInfo[0],
               ext : fileInfo[1],
               uid : genUID()
               }).done(function( data ) {
-                //file successfully added to database
+                notification("File Uploaded", "success", 3);
             });
           }
         },
@@ -119,3 +119,7 @@ $(function(){
     }
 
 });
+
+function upload(files){
+  console.log(files);
+}

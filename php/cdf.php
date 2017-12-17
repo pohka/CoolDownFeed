@@ -27,7 +27,7 @@ switch($_POST["type"]){
       "ORDER BY cards.publish_time DESC";
       break;
    case "image-upload" :
-      $userID = $_POST['userid'];
+      $userID = getUserID($_POST['cookieid'], $con);
       $name = $_POST['name'];
       $ext = $_POST['ext'];
       $uid = $_POST['uid'];
@@ -37,7 +37,7 @@ switch($_POST["type"]){
       echo $sql;
       break;
     case "user-images" :
-      $sql = "SELECT * FROM `images` WHERE `userid`= " . $_POST['userid'];
+      $sql = "SELECT * FROM `images` WHERE `userid`= '" . getUserID($_POST['userid'], $con) . "'";
       break;
     case "add-post" :
       $text  = htmlspecialchars($_POST['text'], ENT_QUOTES);

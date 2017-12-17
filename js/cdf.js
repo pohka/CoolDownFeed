@@ -45,6 +45,7 @@ $(document).ready(function() {
   })
 });
 
+//loads the card for each page
 function loadPage(){
   genNavbar();
   var pageType = "";
@@ -81,15 +82,15 @@ function genNavbar(){
   bwe.pages = [
     {
       name : "Home",
-      page : "index.html"
+      page : "index"
     },
     {
       name : "Trending",
-      page : "post.html"
+      page : "post"
     },
     {
       name : "Discover",
-      page : "new-post.html"
+      page : "new-post"
     }
   ];
 

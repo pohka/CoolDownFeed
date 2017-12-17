@@ -1,51 +1,37 @@
 Overall
 -------------
--sessions
--database login
--navigation
 -tracking page views
+-restrict users from using tools
 
 Pages
 ------------
--user login modal
 -About
+-profile
+-my posts
+-edit post
 -popular
 
 
 Cards
 -------------
--ordered by timestamp
 -open in new tab with middle button click
--hide tags on mouse leave bug
 
 Post Editor
 --------------
 -parse markdown for:
-  -Quote
-  -list
   -code
   -image alt tags
--toolbar add text from modal:
-  -Quote
-  -Code
 -preview for mobile
--file upload drag and drop
--generate navbar and footer with js
--Help
--Publish
--save draft
--media choose existing file on website
+-generate footer with js
+-publish in future
 -no images upload yet
--dont upload image unless it has tags
 -once an image is uploaded open the cloud modal
 -uploaded images search
 -links to external website open in new tab
--predate posts i.e. publish_time
--future post
 -validate posts
--generate html document
-
-
+-banner image selection
+-tag selector
+-preview post after viewing
 
 CMS
 -----------------
