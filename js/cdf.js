@@ -38,6 +38,15 @@ $(document).ready(function() {
   $(document).on("click", ".user-menu div", function(){
     userMenuAction($(this).data("action"));
   })
+
+  //clicking on cards
+  $(document).on("mousedown", ".link", function(e){
+    var id = $(this).data("url");
+    switch(e.which){
+      case 1 : window.open("/p/"+id, "_self"); break;
+      case 2 : window.open("/p/"+id, "_blank"); break;
+    }
+  });
 });
 
 //loads the card for each page
@@ -223,8 +232,8 @@ function genNavbar(){
 function genCard(data){
   var json = {
     tag : "div",
-    class : "card",
-    data : [{ url : "1" }],
+    class : "card link",
+    data : [{ url : data["id"] }],
     children : [
       {
         tag : "div",

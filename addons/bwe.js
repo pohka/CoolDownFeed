@@ -5,7 +5,7 @@ class bwe{
 
     for(var i in bwe.identifiers){
       var key = bwe.identifiers[i];
-      if(kv[key] != undefined && key!=="data"){
+      if(kv[key] != undefined){
         res += " " + key + "='" + kv[key] + "'";
       }
     }
@@ -19,7 +19,6 @@ class bwe{
     if(kv["data"] != undefined){
       for(var i in kv["data"]){
         for(var key in kv["data"][i]){
-          console.log(" data-" + key + "='" + kv["data"][i][key] + "'");
           res += " data-" + key + "= '" + kv["data"][i][key] + "'";
         }
       }
@@ -50,7 +49,6 @@ class bwe{
   //builds a html string from the json and appends it to the selector's html
   static append(sel, kv){
     var res = bwe.build(kv);
-    console.log(res);
     $(sel).append(res);
   }
 
@@ -204,7 +202,7 @@ class bwe{
 //tag elements with a value
 bwe.identifiers = [
   "accept", "accept-charset", "accesskey", "action", "alt", "autocomplete", "charset", "cite", "class",
-  "cols", "colspan", "content", "contenteditable", "coords", "data", "dir", "dirname", "draggable",
+  "cols", "colspan", "content", "contenteditable", "coords", "dir", "dirname", "draggable",
   "enctype", "for", "form", "formaction", "headers", "height", "href", "hreflang", "http-equiv",
   "id", "kind", "label", "lang", "list", "low", "max", "maxlength", "media", "method", "min", "name",
   "onabort", "onbeforeunload", "onblur", "oncanplay", "oncanplaythrough", "onchange", "onclick",
