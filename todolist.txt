@@ -1,8 +1,6 @@
 Overall
 -------------
 -tracking page views
--restrict users from using tools
--bwe data values for clicking on cards
 
 Pages
 ------------
@@ -13,17 +11,12 @@ Pages
 -popular
 
 
-Cards
--------------
--open in new tab with middle button click
-
 Post Editor
 --------------
 -parse markdown for:
   -code
   -image alt tags
 -preview for mobile
--generate footer with js
 -publish in future
 -no images upload yet
 -once an image is uploaded open the cloud modal

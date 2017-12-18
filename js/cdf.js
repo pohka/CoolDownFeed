@@ -246,11 +246,7 @@ function genNavbar(){
     class : "cdf-nav-filters",
     children : bwe.genNavItems(
       {
-        class : "nav-item skew-con"
-      },
-      {
-        tag : "div",
-        class : "skew"
+        class : "nav-item btn"
       }
     )
   });
@@ -264,17 +260,18 @@ function genNavbar(){
         href : "https://twitter.com/PohkaDota",
         target : "_blank",
         id : "twitter",
-        class : "fa fa-twitter"
+        class : "fa fa-twitter btn"
       },
       {
         tag : "a",
         href : "https://www.youtube.com/c/pohka",
         target : "_blank",
         id : "youtube",
-        class : "fa fa-youtube-play"
+        class : "fa fa-youtube-play btn"
       },
       {
         tag : "div",
+        class : "btn",
         id : "login",
         con : "Login"
       },
@@ -295,7 +292,7 @@ function genFooter(){
     children:[
       {
         tag:"div",
-        class:"footer-logo",
+        class:"footer-logo btn",
         children:[
           {
             tag:"img",
@@ -310,29 +307,16 @@ function genFooter(){
       },
       {
         tag:"div",
-        class:"footer-filter-con skew-con",
+        class:"footer-filter-con",
         children:[
           {
             tag:"div",
-            class:"footer-filter noselect",
+            class:"footer-filter noselect btn",
             id:"footer-about",
             children:[
               {
                 tag:"div",
-                class:"skew",
                 con:"About"
-              }
-            ]
-          },
-          {
-            tag:"div",
-            class:"footer-filter noselect",
-            id:"footer-discover",
-            children:[
-              {
-                tag:"div",
-                class:"skew",
-                con:"Discover"
               }
             ]
           }
@@ -344,11 +328,11 @@ function genFooter(){
         children:[
           {
             tag:"div",
-            class:"fa fa-youtube-play footer-social"
+            class:"fa fa-youtube-play footer-social btn"
           },
           {
             tag:"div",
-            class:"fa fa-twitter footer-social"
+            class:"fa fa-twitter footer-social btn"
           },
           {
             tag:"div",
@@ -402,11 +386,6 @@ function genCard(data){
                 tag : "div",
                 class : "card-title",
                 con : data["title"]
-              },
-              {
-                tag : "div",
-                class : "card-desc",
-                con : data["desc"]
               }
             ]
           },
@@ -455,6 +434,9 @@ function timeSinceString(time){
     var diffMonths = Math.floor(timeDiff / (1000 * 3600 * 24 * 30));
     var diffYears = Math.floor(timeDiff / (1000 * 3600 * 24 * 30 * 365));
 
+    if(diffMonths==0){
+      str = diffDays+" days ago";
+    }
     if(diffMonths==1){
       str = "1 month ago";
     }

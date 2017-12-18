@@ -1,17 +1,19 @@
 :root{
-  --pri:        #008fea;
-  --con_bg:     #222;
-  --border:     #555;
-  --text:       #fff;
-  --hover:      #353535;
-  --page_bg:    #00040b;
-  --card_bg:    #10141b;
-  --bg:         #121214;
-  --pri_faded:  #0375be;
-  --text_faded: #ddd;
+  --pri:        #0384d6;
+  --text:       #000;
+  --hover:      #eee;
+  --card_bg:    #ffff;
+  --bg:         #fdfdfd;
+  --text_faded: #555;
+  --text_alt:   #fff;
+  --border:     #333;
+
+  --nav_bg:     #fff;
+  --shadow:     #aaa;
 }
 
 body{
+  margin: 0;
   background: var(--bg);
   color: var(--text);
   font-family: 'Open Sans', sans-serif;
@@ -24,7 +26,7 @@ footer{
 
 button, input[type="button"]
 {
-  background: var(--page_bg);
+  background: var(--bg);
   border: 1px solid var(--pri);
   padding: 4px 10px;
 }
@@ -42,7 +44,7 @@ label{
 textarea
 {
   width: 100%;
-  background-color: var(--con_bg);
+  background-color: var(--bg);
   border: 1px solid var(--border);
   margin-bottom: 10px;
   resize: vertical;
@@ -56,7 +58,7 @@ select
 }
 
 option, select{
-  background-color: var(--con_bg);
+  background-color: var(--bg);
 }
 
 .progress{
@@ -74,10 +76,11 @@ option, select{
 
 .container
 {
-  background: var(--con_bg);
+  background: var(--bg);
   width: 1170px;
   min-height: 800px;
   padding: 0px;
+  margin: 0 auto;
   padding-top: 50px;
 }
 
@@ -90,7 +93,7 @@ option, select{
 input[type="text"],
 input[type="password"]
 {
-  background: var(--con_bg);
+  background: var(--bg);
   border: 1px solid var(--border);
   display: block;
   margin-bottom: 8px;
@@ -174,7 +177,7 @@ p{
 }
 
 a{
-  color: var(--pri_faded);
+  color: var(--pri);
 }
 
 a:hover{
@@ -208,10 +211,11 @@ html::-webkit-scrollbar-thumb
 {
   height: 50px;
   position: fixed;
-  border-bottom: 1px solid var(--pri_faded);
-  background: var(--page_bg);
+  background: var(--nav_bg);
   width: 100%;
   z-index : 900;
+  background: var(--nav_bg);
+  box-shadow: 1px 0px 6px var(--shadow);
 }
 
 .cdf-nav li{
@@ -231,38 +235,41 @@ html::-webkit-scrollbar-thumb
 .cdf-nav-filters a
 {
   display: inline-block;
-  height: 100%;
+  height: 47px;
   width: 150px;
   color: var(--text);
   text-decoration: none;
   text-align: center;
   font-size: 20px;
   line-height: 50px;
-  border-right: 2px solid var(--pri_faded);
   margin-left: -3px;
+
+}
+
+.btn
+{
+  border-bottom: 3px solid transparent;
+  -webkit-transition: border 0.3s;
+  transition: border 0.3s;
   cursor: pointer;
 }
 
-.cdf-nav-filters a:hover
+.btn:hover, .btn.active
 {
-    background: var(--hover);
-}
-
-.cdf-nav-filters a.active
-{
-  background-color: var(--pri_faded);
+  border-bottom-color: var(--pri);
+  padding-bottom: 0px;
 }
 
 .cdf-nav-logo
 {
   display: inline-block;
-  width: 190px;
+  width: 130px;
   margin-left: -20px;
+  margin-right: 20px;
   padding: 6px 0px;
   padding-left: 46px;
-  background: var(--bg);
-  border-bottom: 1px solid var(--pri_faded);
-  border-right: 2px solid var(--pri_faded);
+  background: var(--nav_bg);
+  box-shadow: 1px 1px 4px var(--shadow);
   position: relative;
   z-index: 901;
 }
@@ -281,7 +288,6 @@ html::-webkit-scrollbar-thumb
 {
   display: inline-block;
   float: right;
-  height: 100%;
   margin-right: 0px;
 }
 
@@ -289,12 +295,12 @@ html::-webkit-scrollbar-thumb
 .cdf-nav-info div
 {
   display: inline-block;
-  line-height: 49px;
-  height: 49px;
-  margin: 0px;
+  line-height: 50px;
+  height: 47px;
+  min-width: 70px;
+  margin-right: -4px;
   clear: left;
   vertical-align: top;
-  border:none;
   background: none;
   text-align: center;
   text-decoration: none;
@@ -306,11 +312,6 @@ html::-webkit-scrollbar-thumb
   width: 120px;
 }
 
-.cdf-nav-info a:hover,
-.cdf-nav-info div:hover
-{
-  background-color: var(--hover);
-}
 
 #start{
   display: none;
@@ -327,14 +328,17 @@ html::-webkit-scrollbar-thumb
   border-radius: 2em;
 }
 
-.cdf-nav-info button:hover
-{
-  background: var(--hover);
+.cdf-nav-info .fa{
+  font-size: 20px;
+  width: 60px;
 }
 
-.cdf-nav-info .fa{
-  font-size: 21px;
-  width: 60px;
+.fa-twitter:hover{
+  color: var(--pri);
+}
+
+.fa-youtube-play:hover{
+  color: red;
 }
 
 .session-con
@@ -392,13 +396,13 @@ html::-webkit-scrollbar-thumb
   line-height: 40px;
   font-size: 18px;
   margin-bottom: 20px;
-  background: var(--con_bg);
+  background: var(--bg);
   cursor: pointer;
 }
 
 .login-menu div.active
 {
-  background: var(--pri_faded);
+  background: var(--pri);
 }
 
 .login-con
@@ -406,7 +410,7 @@ html::-webkit-scrollbar-thumb
   width: 400px;
   margin: 20 auto;
   padding: 20px 30px;
-  background: var(--page_bg);
+  background: var(--bg);
   border: 1px solid var(--pri);
 }
 
@@ -416,15 +420,15 @@ html::-webkit-scrollbar-thumb
   right: 0;
   top: 50px;
   width: 200px;
-  background: var(--con_bg);
-  border: 1px solid var(--pri_faded);
+  background: var(--bg);
+  border: 1px solid var(--pri);
 }
 
 .user-menu div{
   width: 100%;
   padding: 0 20px;
   line-height: 40px;
-  background: var(--con_bg);
+  background: var(--bg);
   cursor: pointer;
 }
 
@@ -524,8 +528,8 @@ html::-webkit-scrollbar-thumb
   width: 800px;
   margin: 40px auto;
   padding: 4px 20px;
-  border-bottom: 1px solid var(--pri_faded);
-  border-top: 1px solid var(--pri_faded);
+  border-bottom: 1px solid var(--pri);
+  border-top: 1px solid var(--pri);
 }
 
 .creator-avatar{
@@ -608,20 +612,27 @@ html::-webkit-scrollbar-thumb
 }
 
 /*-------------- Footer --------------*/
+
+footer{
+  padding-top: 20px;
+  clear: left;
+}
+
 .footer-con
 {
   width: 1170px;
   margin: auto;
   height: 180px;
   padding: 10px 20px;
-  border-top: 1px solid var(--pri_faded);
+  border-top: 1px solid var(--pri);
 }
 
 .footer-logo
 {
   display: inline-block;
-  margin-right: 60px;
-  padding: 8px 0px;
+  margin-right: 20px;
+  padding: 8px 20px;
+  height: 90px;
   text-align: center;
   cursor: pointer;
 }
@@ -641,18 +652,12 @@ html::-webkit-scrollbar-thumb
 {
   display: inline-block;
   cursor: pointer;
-  height: 60px;
+  height: 57px;
   width: 150px;
   line-height: 60px;
-  font-size: 20px;
+  font-size: 16px;
   text-align: center;
   margin: 10px -2px;
-  border: 1px solid var(--pri);
-}
-
-.footer-filter:hover
-{
-  background-color: var(--hover);
 }
 
 .footer-contact
@@ -668,15 +673,13 @@ html::-webkit-scrollbar-thumb
   font-size: 20px;
   width: 60px;
   height: 40px;
-  line-height: 40px;
-  border: 1px solid var(--pri_faded);
+  line-height: 43px;
   text-align: center;
   margin-right: 6px;
 }
 
-.footer-social:hover
+.footer-social:hover, .footer-filter:hover, .footer-logo:hover
 {
-  cursor: pointer;
   background: var(--hover);
 }
 
@@ -699,8 +702,8 @@ html::-webkit-scrollbar-thumb
 
 .card-con
 {
-  width: 1044px;
-  margin: auto;
+  width: 1104px;
+  margin: 0 auto;
 }
 
 .card
@@ -709,15 +712,17 @@ html::-webkit-scrollbar-thumb
   height: auto;
   display: inline-block;
   float: left;
-  margin: 4px 4px;
-  border: 1px solid transparent;
+  margin: 14px 14px;
   background: var(--card_bg);
+  box-shadow: 0px 2px 6px var(--shadow);
+  -webkit-transition: box-shadow 0.2s;
+  transition: box-shadow 0.2s;
 }
 
 .card:hover
 {
-  border-color: var(--pri);
   cursor: pointer;
+  box-shadow: 0px 2px 22px black;
 }
 
 .card-thumb
@@ -734,7 +739,7 @@ html::-webkit-scrollbar-thumb
 
 .card-info
 {
-  padding: 2px 16px;
+  padding: 8px 16px;
   border-top: 1px solid var(--border);
   position: relative;
   z-index: 5;
@@ -744,7 +749,6 @@ html::-webkit-scrollbar-thumb
 {
   height: 80px;
   overflow: hidden;
-  border-bottom: 1px solid var(--border);
   margin-bottom: 6px;
 }
 
@@ -792,7 +796,7 @@ html::-webkit-scrollbar-thumb
 .card-tag
 {
   display: inline-block;
-  border: 1px solid var(--pri_faded);
+  border: 1px solid var(--pri);
   padding: 2px 10px;
   float: left;
   margin-right: 4px;
@@ -815,7 +819,7 @@ html::-webkit-scrollbar-thumb
   border: 1px solid var(--border);
   width: 100%;
   min-height: 500px;
-  background-color: var(--con_bg);
+  background-color: var(--bg);
   min-width: 100%;
   max-width: 100%;
   padding: 6px 10px;
@@ -840,7 +844,7 @@ html::-webkit-scrollbar-thumb
 {
   width: 1170px;
   margin-left: 50%;
-  background: var(--page_bg);
+  background: var(--bg);
   border-bottom: 1px solid var(--border);
 }
 
@@ -855,7 +859,7 @@ html::-webkit-scrollbar-thumb
 .toolbar-btn
 {
   display: inline-block;
-  border: 1px solid var(--pri_faded);
+  border: 1px solid var(--pri);
   border-top: none;
   line-height: 39px;
   width: 100px;
@@ -877,7 +881,7 @@ html::-webkit-scrollbar-thumb
 
 .toolbar-mode.active, .toolbar-modal-btn.active
 {
-  background-color: var(--pri_faded);
+  background-color: var(--pri);
 }
 
 .toolbar-btn-right{
@@ -901,7 +905,7 @@ html::-webkit-scrollbar-thumb
 {
   margin-left: 50%;
   background: var(--card_bg);
-  border: 1px solid var(--pri_faded);
+  border: 1px solid var(--pri);
   border-top: 0px;
   width: 1170px;
   padding: 10px 210px;
@@ -949,7 +953,7 @@ html::-webkit-scrollbar-thumb
   list-style: none;
   margin-left: 0;
   cursor: pointer;
-  border-left: 1px solid var(--pri_faded);
+  border-left: 1px solid var(--pri);
   margin-bottom: 2px;
   font-size: 20px;
 }
@@ -970,7 +974,7 @@ html::-webkit-scrollbar-thumb
   padding: 6px 8px;
   overflow-y: scroll;
   border: 1px solid var(--border);
-  background: var(--con_bg);
+  background: var(--bg);
   margin-bottom: 15px;
 }
 
@@ -984,7 +988,7 @@ html::-webkit-scrollbar-thumb
 }
 
 .img-viewer-thumb:hover{
-  border-color: var(--pri_faded);
+  border-color: var(--pri);
 }
 
 .img-viewer-thumb.active{
