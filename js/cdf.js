@@ -1,6 +1,7 @@
 $(document).ready(function() {
   loadPage();
   loadSession();
+  checkPrivilages(deniedCallback);
 
   $(".footer-filter").click(function(){
       switch($(this).attr("id"))
@@ -54,19 +55,74 @@ function loadPage(){
   genNavbar();
   var pageType = "";
   var path = window.location.pathname;
-  if(path === "/" || path === "/index" || path === "/index.html"){
-    pageType = "cards-home";
-  }
-  else if(path.startsWith("/p/")){
-    pageType = "post-view";
-  }
+  var allowed = true;
+  if(allowed){
+    if(path === "/" || path === "/index" || path === "/index.html"){
+      pageType = "cards-home";
+    }
+    else if(path.startsWith("/p/")){
+      pageType = "post-view";
+    }
 
-  switch(pageType){
-    case "cards-home" : genHome(pageType); break;
-    case "post-view"  : genPost(pageType, path); break;
+    switch(pageType){
+      case "cards-home" : genHome(pageType); break;
+      case "post-view"  : genPost(pageType, path); break;
+    }
   }
-
   genFooter();
+}
+
+//conceals the page, displats privilage msg and redirects to the home page
+function deniedCallback(){
+  bwe.append("body",{
+    tag : "div",
+    class : "conceal",
+    children :[
+      {
+        tag : "div",
+        class : "conceal-msg",
+        con : "Denied!"
+      }
+    ]
+  });
+  disableScroll();
+  setTimeout(function(){
+    window.open("/", "_self");
+  }, 2000);
+}
+
+//calls the callback function if the user doesn't have privilage to view the current page
+function checkPrivilages(callbackIfDenied){
+  var privilagePages = [
+    "/new-post"
+  ];
+  var path = window.location.pathname;
+  if($.inArray(path, privilagePages) == -1){
+    return;
+  }
+  var cookie = getCookie("session");
+  if(cookie === ""){
+    callbackIfDenied();
+  }
+  else
+  {
+    var json = JSON.parse(cookie);
+    var cookieID = json["cookie_id"];
+    $.ajax(
+      {
+        url: "/php/privilages.php",
+        type: "POST",
+        data: {
+          session_id : cookieID,
+          page: path
+        },
+        success : function(data){
+          if(data!=="true"){
+            callbackIfDenied();
+          }
+        }
+      });
+  }
 }
 
 //generates content for home
