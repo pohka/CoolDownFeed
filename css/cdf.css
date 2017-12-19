@@ -1,13 +1,11 @@
 :root{
   --pri:        #0384d6;
   --text:       #000;
-  --hover:      #eee;
-  --card_bg:    #ffff;
+  --hover:      #f6f6f6;
+  --card_bg:    #fff;
   --bg:         #fdfdfd;
-  --text_faded: #555;
-  --text_alt:   #fff;
+  --text_faded: #ddd;
   --border:     #333;
-
   --nav_bg:     #fff;
   --shadow:     #aaa;
 }
@@ -18,6 +16,7 @@ body{
   color: var(--text);
   font-family: 'Open Sans', sans-serif;
   font-size: 15px;
+  overflow-x: hidden;
 }
 
 footer{
@@ -27,14 +26,17 @@ footer{
 button, input[type="button"]
 {
   background: var(--bg);
-  border: 1px solid var(--pri);
-  padding: 4px 10px;
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+  margin: 0px 10px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 button:hover, input[type="button"]:hover,
 button:focus, input[type="button"]:focus
 {
-  background: var(--hover);
+  box-shadow: 0px 0px 3px var(--shadow);
 }
 
 label{
@@ -77,7 +79,7 @@ option, select{
 .container
 {
   background: var(--bg);
-  width: 1170px;
+  width: 100vw;
   min-height: 800px;
   padding: 0px;
   margin: 0 auto;
@@ -154,8 +156,8 @@ h1{
 }
 
 h2{
-  margin-top: 80px;
-  margin-bottom: 16px;
+  margin-top: 60px;
+  margin-bottom: 20px;
 }
 
 h3{
@@ -252,6 +254,8 @@ html::-webkit-scrollbar-thumb
   -webkit-transition: border 0.3s;
   transition: border 0.3s;
   cursor: pointer;
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
 }
 
 .btn:hover, .btn.active
@@ -269,13 +273,14 @@ html::-webkit-scrollbar-thumb
   padding: 6px 0px;
   padding-left: 46px;
   background: var(--nav_bg);
-  box-shadow: 1px 1px 4px var(--shadow);
+  box-shadow: 1px 1px 3px var(--shadow);
   position: relative;
   z-index: 901;
 }
 
 .cdf-nav-logo:hover
 {
+  box-shadow: 1px 1px 3px #066cad;
   cursor: pointer;
 }
 
@@ -343,10 +348,15 @@ html::-webkit-scrollbar-thumb
 
 .session-con
 {
-  min-width: 200px;
+  min-width: 220px;
   padding: 0px 20px;
+  height: 50px !important;
   text-align: left !important;
   max-width: 400px;
+}
+
+.session-con:hover{
+  background: var(--hover);
 }
 
 .session-con span{
@@ -354,10 +364,10 @@ html::-webkit-scrollbar-thumb
 }
 
 .session-avatar-con {
-  border: 1px solid var(--pri) !important;
   overflow: hidden;
   height: 32px !important;
-  width: 32px;
+  width: 60px !important;
+  min-width: 60px !important;
   margin-top: 9px !important;
 }
 
@@ -365,7 +375,7 @@ html::-webkit-scrollbar-thumb
   float: right;
   width: 30px;
   padding-left: 10px;
-  color: rgba(255,255,255,0.4);
+  color: var(--text_faded);
 }
 
 #session-avatar{
@@ -402,7 +412,7 @@ html::-webkit-scrollbar-thumb
 
 .login-menu div.active
 {
-  background: var(--pri);
+  background: var(--hover);
 }
 
 .login-con
@@ -411,7 +421,7 @@ html::-webkit-scrollbar-thumb
   margin: 20 auto;
   padding: 20px 30px;
   background: var(--bg);
-  border: 1px solid var(--pri);
+  box-shadow: 0px 0px 8px black;
 }
 
 .user-menu{
@@ -421,7 +431,7 @@ html::-webkit-scrollbar-thumb
   top: 50px;
   width: 200px;
   background: var(--bg);
-  border: 1px solid var(--pri);
+  box-shadow: 0px 0px 3px var(--shadow);
 }
 
 .user-menu div{
@@ -464,7 +474,7 @@ html::-webkit-scrollbar-thumb
   position: fixed;
   bottom: 10;
   right: 10;
-  width: 320px;
+  width: 340px;
   z-index: 200;
 }
 
@@ -472,59 +482,66 @@ html::-webkit-scrollbar-thumb
 {
   margin-bottom: 4px;
   background: var(--bg);
-  border: 1px solid var(--pri);
+  color: white;
 }
 
 .notification-text
 {
-  width: 85%;
+  width: 260px;
   font-size: 18px;
   padding: 6px 20px;
   padding-right: 0px;
   display: inline-block;
   margin-right: -4px;
   line-height: 30px;
-  height: 42px;
+  height: 30px;
 }
 
 .notification-icon
 {
   display: inline-block;
   margin-right: -4px;
-  width: 15%;
+  width: 40px;
+  padding-right: 20px;
   height: 30px;
   font-size: 18px;
   text-align: center;
   vertical-align: text-top;
 }
 
-.fa-check
-{
-  color: #0f0;
+.notification-success {
+  background: #16b401;
 }
 
-.fa-exclamation{
-  color: orange;
+.notification-warning {
+  background: #ff5a01;
 }
 
-.fa-exclamation-triangle{
-  color: #f00;
+.notification-error {
+  background: #e41920;
 }
 
-.notification-close:hover{
-  color: var(--pri);
+.notification-default {
+  background: var(--pri);
 }
 
 /*-------------- Post --------------*/
 .banner
 {
-  width: 100%;
+  width: 1920px;
   height: 440px;
+  overflow:hidden;
+  box-shadow: 0px 2px 6px var(--shadow);
+}
+
+.banner img{
+  width: 100%;
+  min-height: 100%;
 }
 
 .creator
 {
-  height: 58px;
+  height: 48px;
   width: 800px;
   margin: 40px auto;
   padding: 4px 20px;
@@ -533,16 +550,15 @@ html::-webkit-scrollbar-thumb
 }
 
 .creator-avatar{
-  border: 1px solid var(--pri);
   overflow: hidden;
   width: 90px;
-  height: 100%;
+  height: 48px;
   display: inline-block;
 }
 
 .creator-avatar img{
   width: 100%;
-  height: 100%;
+  height: 48px;
 }
 
 .creator-name

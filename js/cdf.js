@@ -476,7 +476,7 @@ function login(){
         loadSession();
       }
       else{
-        notification("Login details were incorrect", "error", 8);
+        notification("Login details were incorrect", "error", 28);
       }
     }).fail(function() {
       //console.log( "connection failed" );
@@ -582,12 +582,13 @@ function genLoginModal(){
               {
                 tag:"div",
                 id:"login-existing",
-                class:"active",
+                class:"btn active",
                 con: "Login",
               },
               {
                 tag:"div",
                 id:"login-newuser",
+                class:"btn",
                 con :"Register"
               }
             ]
@@ -608,21 +609,19 @@ function genLoginModal(){
                     placeholder:"Password",
                     children:[
                       {
-                        tag:"br",
+                        tag:"br"
+                      },
+                      {
+                        tag:"input",
+                        type:"button",
+                        id:"submit-login",
+                        value:"Submit",
                         children:[
                           {
                             tag:"input",
                             type:"button",
-                            id:"submit-login",
-                            value:"Submit",
-                            children:[
-                              {
-                                tag:"input",
-                                type:"button",
-                                id:"hide-login",
-                                value:"Cancel"
-                              }
-                            ]
+                            id:"hide-login",
+                            value:"Cancel"
                           }
                         ]
                       }
@@ -654,9 +653,12 @@ function genHtmlFromRaw(raw){
   var bannerSrc = lines[0].substr(index);
 
   var banner = {
-    tag : "img",
-    class : "banner",
-    src : bannerSrc
+    tag:"div",
+    class:"banner",
+    children:[{
+      tag : "img",
+      src : bannerSrc
+    }]
   };
 
   //$(".post-preview").html(banner.get());
@@ -961,6 +963,10 @@ function notification(text, type, duration){
     case "error" : cls += "fa-exclamation-triangle"; break;
   }
 
+  if(type==""){
+    type="default";
+  }
+
   var id = "note-"+genUID();
 
   if($(".notification-con").length == 0){
@@ -972,7 +978,7 @@ function notification(text, type, duration){
   $(".notification-con").prepend(bwe.build({
     tag : "div",
     id : id,
-    class : "notification",
+    class : "notification notification-"+type,
     children : [
       {
         tag : "div",
