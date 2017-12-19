@@ -852,16 +852,17 @@ footer{
 {
   position: fixed;
   top: 50px;
-  float: right;
-  right: 50%;
+  width: 100%;
+  background: var(--nav_bg);
+  box-shadow: 0px 0px 3px var(--shadow);
 }
 
 .post-toolbar-inner
 {
   width: 1170px;
-  margin-left: 50%;
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
+  margin: 0 auto;
+  background: var(--nav_bg);
+
 }
 
 .toolbar-mode
@@ -875,29 +876,32 @@ footer{
 .toolbar-btn
 {
   display: inline-block;
-  border: 1px solid var(--pri);
   border-top: none;
-  line-height: 39px;
+  line-height: 40px;
   width: 100px;
   text-align: center;
   height: 40px;
-  margin-bottom: -1px;
+  padding-top: 5px;
   cursor: pointer;
+  border-bottom: 3px solid transparent;
 }
 
 .toolbar-btn:hover{
   background: var(--hover);
+  border-color: var(--pri);
 }
 
 .toolbar-btn-sm
 {
   width: 50px;
+  height: 39px;
   margin-right: -4px;
 }
 
 .toolbar-mode.active, .toolbar-modal-btn.active
 {
-  background-color: var(--pri);
+  background-color: var(--hover);
+  border-color: var(--pri);
 }
 
 .toolbar-btn-right{
@@ -912,7 +916,7 @@ footer{
 {
   position: fixed;
   float: right;
-  top: 90px;
+  top: 100px;
   right: 50%;
   z-index: 10;
 }
@@ -921,7 +925,7 @@ footer{
 {
   margin-left: 50%;
   background: var(--card_bg);
-  border: 1px solid var(--pri);
+  box-shadow: 0px 0px 3px var(--shadow);
   border-top: 0px;
   width: 1170px;
   padding: 10px 210px;
