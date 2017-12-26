@@ -23,6 +23,7 @@ $(document).ready(function() {
         $(this).removeClass('active');
       });
       $(this).addClass('active');
+      disableScroll();
     }
   });
 
@@ -30,6 +31,7 @@ $(document).ready(function() {
     var type = $(this).data("type");
     closeToolModals();
     $("#post-tool-" + type).show();
+
     loadModal(type);
   });
 
@@ -156,6 +158,7 @@ function closeToolModals(){
   });
 
   $(".img-viewer-thumb.active").removeClass('active');
+  enableScroll();
 }
 
 //opens the a tool option

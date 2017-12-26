@@ -3,9 +3,9 @@
   --text:       #000;
   --hover:      #f6f6f6;
   --card_bg:    #fff;
-  --bg:         #fdfdfd;
+  --bg:         #fefefe;
   --text_faded: #ddd;
-  --border:     #333;
+  --border:     #999;
   --nav_bg:     #fff;
   --shadow:     #aaa;
 }
@@ -23,6 +23,13 @@ footer{
   width: 100%;
 }
 
+.noscript{
+  font-size: 50px;
+  padding-top: 80px;
+  margin-bottom: -80px;
+  text-align: center;
+}
+
 button, input[type="button"]
 {
   background: var(--bg);
@@ -37,6 +44,8 @@ button:hover, input[type="button"]:hover,
 button:focus, input[type="button"]:focus
 {
   box-shadow: 0px 0px 3px var(--shadow);
+  background: var(--pri);
+  color: var(--bg);
 }
 
 label{
@@ -50,6 +59,8 @@ textarea
   border: 1px solid var(--border);
   margin-bottom: 10px;
   resize: vertical;
+  padding: 5px 6px;
+  font-size: 16px;
 }
 
 select
@@ -61,6 +72,8 @@ select
 
 option, select{
   background-color: var(--bg);
+  padding: 5px;
+  font-size: 16px;
 }
 
 .progress{
@@ -100,8 +113,8 @@ input[type="password"]
   display: block;
   margin-bottom: 8px;
   width: 100%;
+  padding: 5px 6px;
   font-size: 16px;
-  padding: 2px 6px;
 }
 
 input[type="file"]
@@ -838,7 +851,6 @@ footer{
   background-color: var(--bg);
   min-width: 100%;
   max-width: 100%;
-  padding: 6px 10px;
   margin-bottom: 20px;
 }
 
@@ -884,6 +896,8 @@ footer{
   padding-top: 5px;
   cursor: pointer;
   border-bottom: 3px solid transparent;
+  -webkit-user-select: none;
+  -moz-user-select: none;
 }
 
 .toolbar-btn:hover{
@@ -927,9 +941,15 @@ footer{
   background: var(--card_bg);
   box-shadow: 0px 0px 3px var(--shadow);
   border-top: 0px;
-  width: 1170px;
-  padding: 10px 210px;
+  width: 700px;
+  padding: 10px 100px;
   display: none;
+}
+
+.post-tool-modal input[type="button"]
+{
+  margin-top: 20px;
+  margin-bottom: 6px;
 }
 
 .post-tool-modal textarea{
@@ -967,7 +987,7 @@ footer{
   display: block;
   background: var(--hover);
   padding: 0px 30px;
-  width: 100%;
+  width: 640px;
   line-height: 49px;
   height: 50px;
   list-style: none;
@@ -979,7 +999,8 @@ footer{
 }
 
 .post-tool-modal li:hover{
-  background: var(--border);
+  background: var(--pri);
+  color: var(--bg);
 }
 
 .post-tool-modal li .fa{
@@ -989,12 +1010,11 @@ footer{
 .image-viewer
 {
   height: 600px;
-  width: 840px;
+  width: 860px;
   margin: 0 -20px;
-  padding: 6px 8px;
+  margin-left: -100px;
+  padding: 6px 20px;
   overflow-y: scroll;
-  border: 1px solid var(--border);
-  background: var(--bg);
   margin-bottom: 15px;
 }
 
@@ -1002,13 +1022,14 @@ footer{
   width: 260px;
   height: 146px;
   display: inline-block;
-  border: 3px solid var(--border);
-  margin: 4px 2px;
+  margin: 4px 6px;
   cursor: pointer;
+  border: 2px solid var(--border);
 }
 
 .img-viewer-thumb:hover{
   border-color: var(--pri);
+  box-shadow: 0px 0px 4px black;
 }
 
 .img-viewer-thumb.active{
@@ -1023,4 +1044,14 @@ footer{
 #post-editor-game{
   width: 90%;
   margin-bottom: 8px;
+}
+
+#post-tool-help table{
+  width: 700px;
+  margin: 0 auto;
+}
+
+#upload{
+  width: 660px !important;
+  margin: 0 auto;
 }

@@ -24,8 +24,7 @@ Post Editor
 -links to external website open in new tab
 -validate posts
 -banner image selection
--tag selector
--preview post after viewing
+-preview post after publishing
 
 CMS
 -----------------
@@ -33,4 +32,5 @@ CMS
 -files are renamed to the uid
 -image-upload should be array and not single request each time
 -sort table for select queries
+-image compression and resizing
 -queries use html special character and decode them too
