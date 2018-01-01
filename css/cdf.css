@@ -5,7 +5,7 @@
   --card_bg:    #fff;
   --bg:         #fefefe;
   --text_faded: #ddd;
-  --border:     #999;
+  --border:     #ccc;
   --nav_bg:     #fff;
   --shadow:     #aaa;
 }
@@ -1054,4 +1054,19 @@ footer{
 #upload{
   width: 660px !important;
   margin: 0 auto;
+}
+
+#post-editor-banner{
+  margin: 10px 0px;
+}
+
+#post-editor-title{
+  font-size: 18px;
+}
+
+#banner-set-checkbox{
+  margin-left: 10px;
+  margin-right: 20px;
+  font-size: 20px;
+  color: var(--border);
 }

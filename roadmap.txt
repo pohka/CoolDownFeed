@@ -1,0 +1,37 @@
+Overall
+-----------------
+* tracking page views
+* remove dependency on fontawesome with custom icons
+
+Pages
+-----------------
+* About
+* profile
+* my posts
+* edit post
+* popular
+
+
+Post Editor
+-----------------
+* parse markdown for:
+  * code
+  * image alt tags
+* preview for mobile
+* publish in future
+* no images upload yet
+* once an image is uploaded open the cloud modal
+* uploaded images search
+* links to external website open in new tab
+* validate posts
+* banner image selection
+* preview post after publishing
+
+CMS
+-----------------
+* files upload to user id folder
+* files are renamed to the uid
+* image upload should be array and not single request each time
+* sort table for select queries
+* image compression and resizing
+* queries use html special character and decode them too
