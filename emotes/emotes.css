@@ -1,0 +1,69 @@
+#emotes-table{
+  margin: auto;
+}
+
+h1{
+  text-align: center;
+}
+
+#emotes-table, #emotes-table th, #emotes-table td{
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+
+#emotes-table tr:hover{
+  background: #ccc;
+  cursor: pointer;
+}
+
+#emotes-table td,
+#emotes-table th
+{
+  width: 120px;
+  padding: 4px 10px;
+}
+
+.emote-img img{
+  height: 32px;
+}
+
+.emote-img{
+  text-align: center;
+}
+
+body{
+  font-family: 'Open Sans', sans-serif;
+}
+
+.input{
+  text-align: center;
+  margin:30px;
+}
+
+.input input[type="text"]{
+  width: 300px;
+  padding: 4px;
+  font-size: 20px;
+}
+
+#hidden-field{
+  position: fixed;
+  top: -1000;
+}
+
+.notifications{
+  position: fixed;
+  left: 20;
+  bottom: 20;
+
+}
+
+.notifications div{
+  background: #333;
+  height: 30px;
+  line-height: 30px;
+  color: white;
+  width: 200px;
+  padding: 6px 14px;
+  margin-top: 4px;
+}
