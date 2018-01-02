@@ -57,19 +57,6 @@ $(document).ready(function() {
     $("#post-editor").focus();
   });
 
-  //validate file from directory (max is 2MB)
-  $(':file').on('change', function(event) {
-    var file = this.files[0];
-    if (file.size > 1024 * 1024 * 2) {
-        alert('max upload size is 2MB')
-        $(this).val("");
-    }
-    else{
-      var files = event.target.files;
-      upload(files);
-    }
-  });
-
   //sets an image being viewed to active
   $(document).on("click", ".img-viewer-thumb", function(){
     $(".img-viewer-thumb").each(function(){
@@ -88,6 +75,31 @@ $(document).ready(function() {
     if(validate()){
       save(false);
     }
+  });
+
+  //drag and drop
+  $(document).on("dragenter dragstart", ".drop", function (e) {
+    e.preventDefault();
+    $(this).addClass('dragenter');
+  });
+
+  $(document).on("dragend dragleave", ".drop", function (e) {
+    e.preventDefault();
+    $(this).removeClass('dragenter');
+  });
+
+  $(document).on("drag dragover", ".drop", function(e){
+    e.preventDefault();
+  });
+
+  $(document).on("drop", ".drop", function (e) {
+    e.preventDefault();
+    upload(e.originalEvent.dataTransfer.files, function(data){
+      console.log(data);
+      closeToolModals();
+      $("#post-tool-cloud").show();
+      loadModal("cloud");
+    });
   });
 });
 
@@ -237,6 +249,7 @@ var modalsLoaded = [];
 function loadModal(type){
   if(type==="cloud"){
     //dont request this modal if there has been no changes
+    disableScroll();
     if(jQuery.inArray(type, modalsLoaded) !== -1) return;
 
     modalsLoaded.push(type);
@@ -254,17 +267,17 @@ function loadModal(type){
               class : "img-viewer-thumb",
               children : []
             };
-            var imgSrc = "/i/" + obj[i]["name"] + "." + obj[i]["extension"];
-            //var imgSrc = data["file"] + data["extension"]; //change to this when file name is uid
+
             var img = {
               tag : "img",
-              src : imgSrc,
+              src : obj[i]["path"],
               alt : obj[i]["tag"]
             };
             div["children"].push(img);
 
             bwe.append(".image-viewer", div);
           }
+
         }
       });
   }
@@ -316,4 +329,55 @@ function save(forNow){
         notification("Server Error", "error", 6);
       }
     });
+}
+
+//uploads files, if success it calls the callback function
+function upload(files, callback){
+  let allowedFormats= ["jpg", "jpeg", "png"];
+  let maxSize = (1024 * 1024) * 2; //2MB
+  for(let i=0; i<files.length; i++){
+    let format = files[i]["name"].split(".").pop();
+    if($.inArray(format, allowedFormats) > -1 ){
+      let name = files[i]["name"];
+      let size = files[i]["size"];
+
+      //img too big
+      if(size >= maxSize){
+        notification("Image must be smaller than 2MB", "error", 8);
+      }
+      else{
+        notification("Uploading...", "default", 10);
+        var formImage = new FormData();
+        formImage.append('image', files[i]);
+        var session = getCookie("session");
+        if(session !== ""){
+          var data = jQuery.parseJSON(session);
+          formImage.append('sid', data["cookie_id"]);
+          $.ajax({
+            url: "/php/upload.php",
+            type: "POST",
+            data: formImage,
+            contentType:false,
+            cache: false,
+            processData: false,
+            success: function(data){
+              clearNotifications("default");
+
+              if(data.substr(0,3) === "/i/"){
+                notification("Uploaded: " + name, "success", 4);
+                callback(data);
+              }
+              else{
+                notification("Upload Error", "error", 8);
+                console.log("Upload Error:"+data);
+              }
+          }});
+        }
+      }
+    }
+    //invalid format
+    else{
+      notification("File format must be png or jpeg", "error", 8);
+    }
+  }
 }

@@ -486,8 +486,8 @@ html::-webkit-scrollbar-thumb
 {
   position: fixed;
   bottom: 10;
-  right: 10;
-  width: 340px;
+  left: 10;
+  width: 400px;
   z-index: 200;
 }
 
@@ -500,7 +500,7 @@ html::-webkit-scrollbar-thumb
 
 .notification-text
 {
-  width: 260px;
+  width: 330px;
   font-size: 18px;
   padding: 6px 20px;
   padding-right: 0px;
@@ -515,7 +515,7 @@ html::-webkit-scrollbar-thumb
   display: inline-block;
   margin-right: -4px;
   width: 40px;
-  padding-right: 20px;
+  padding-right: 10px;
   height: 30px;
   font-size: 18px;
   text-align: center;
@@ -1051,11 +1051,6 @@ footer{
   margin: 0 auto;
 }
 
-#upload{
-  width: 660px !important;
-  margin: 0 auto;
-}
-
 #post-editor-banner{
   margin: 10px 0px;
 }
@@ -1069,4 +1064,18 @@ footer{
   margin-right: 20px;
   font-size: 20px;
   color: var(--border);
+}
+
+.drop
+{
+  width: 100%;
+  text-align: center;
+  padding: 70px 0px;
+  border: 2px dashed var(--border);
+  cursor: default;
+}
+
+.dragenter{
+  border-color: var(--pri);
+  background: var(--hover);
 }

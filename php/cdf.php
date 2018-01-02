@@ -26,16 +26,6 @@ switch($_POST["type"]){
       "WHERE cards.published = 1 " .
       "ORDER BY cards.publish_time DESC";
       break;
-   case "image-upload" :
-      $userID = getUserID($_POST['cookieid'], $con);
-      $name = $_POST['name'];
-      $ext = $_POST['ext'];
-      $uid = $_POST['uid'];
-      $sql =
-        "INSERT INTO `images` (`id`, `userid`, `name`, `extension`, `file`, `tag`) " .
-        "VALUES (NULL, '" . $userID ."', '" . $name . "', '" . $ext . "', '" . $uid . "', '')";
-      echo $sql;
-      break;
     case "user-images" :
       $sql = "SELECT * FROM `images` WHERE `userid`= '" . getUserID($_POST['userid'], $con) . "'";
       break;

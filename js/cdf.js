@@ -1000,8 +1000,17 @@ function notification(text, type, duration){
     duration*1000);
 }
 
-function clearNotifications(){
-  $(".notification").each(function(){ $(this).hide(); });
+function clearNotifications(filter){
+  if(filter !== undefined){
+    $(".notification").each(function(){
+      if($(this).hasClass('notification-' + filter)){
+        $(this).hide();
+      }
+    });
+  }
+  else{
+    $(".notification").each(function(){ $(this).hide(); });
+  }
 }
 
 function toggleUserMenu(){
