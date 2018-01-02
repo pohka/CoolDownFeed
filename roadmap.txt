@@ -29,9 +29,12 @@ Post Editor
 
 CMS
 -----------------
-* files upload to user id folder
-* files are renamed to the uid
-* image upload should be array and not single request each time
 * sort table for select queries
 * image compression and resizing
 * queries use html special character and decode them too
+
+CSS
+----------------
+* Responsive mobile version
+  * Home
+  * Posts
