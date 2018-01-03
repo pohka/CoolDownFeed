@@ -63,10 +63,14 @@ function loadPage(){
     else if(path.startsWith("/p/")){
       pageType = "post-view";
     }
+    else{
+      pageType = path.substr(1, path.length-1);
+    }
 
     switch(pageType){
       case "cards-home" : genHome(pageType); break;
       case "post-view"  : genPost(pageType, path); break;
+      case "my-posts"   : genMyPosts(); break;
     }
   }
   genFooter();
@@ -1048,6 +1052,58 @@ function genUserMenu(){
 function userMenuAction(action){
   switch(action){
     case "log-out" : endSession(); break;
+    case "my-posts" : window.open("/my-posts","_self"); break;
+  }
+}
+
+//generate my-posts page
+function genMyPosts(){
+  for(let i=0; i<5; i++){
+    bwe.append(".post-list", {
+      tag : "div",
+      class : "post-list-item",
+      data : [{
+        url : "abc"
+      }],
+      children : [
+        {
+          tag : "img",
+          src : "/img/logo_meta.png",
+        },
+        {
+          tag : "div",
+          class : "post-item-info",
+          children :[
+            {
+              tag : "span",
+              con : "title",
+            },
+            {
+              tag : "br",
+            },
+            {
+              tag : "span",
+              con : "publish date"
+            }
+          ]
+        },
+        {
+          tag : "div",
+          class : "post-item-stats",
+          children : [
+            {
+              tag : "div",
+              con : "Views: 0",
+            },
+            {
+              tag : "div",
+              class : "fa fa-comment",
+              con : " 0",
+            }
+          ]
+        }
+      ]
+    });
   }
 }
 

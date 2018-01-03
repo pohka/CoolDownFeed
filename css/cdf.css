@@ -1095,3 +1095,71 @@ svg path,
 svg rect{
   fill: var(--pri);
 }
+
+
+/*-------------- My Posts --------------*/
+.post-list{
+  width: 600px;
+  margin: 0 auto;
+  height: 60px;
+}
+
+.my-posts-con{
+  width: 700px;
+  margin: 0 auto;
+  background: var(--card_bg);
+  display: table;
+  margin-top: 20px;
+  padding-bottom: 80px;
+  box-shadow: 0px 0px 2px var(--shadow);
+}
+
+.post-list img{
+  height: 60px;
+  width: 105px;
+}
+
+.post-list-item{
+  width: 600px;
+  padding: 6px 0px;
+  border-bottom: 1px solid var(--border);
+}
+
+.post-list-item:hover{
+  background: var(--hover);
+  cursor: pointer;
+}
+
+.post-item-info{
+  vertical-align: top;
+  display: inline-block;
+  margin-left: 20px;
+}
+
+.post-item-stats{
+  display: inline-block;
+  width: 150px;
+  float: right;
+  text-align: right;
+  margin-right: 10px;
+}
+
+.post-nav{
+  width: 600px;
+  text-align: left;
+  margin: 0 auto;
+  margin-top: -40px;
+  border-bottom: 2px solid var(--border);
+}
+
+.post-nav h2{
+  text-align: left;
+  margin-bottom: 0px;
+}
+
+.my-posts-sort{
+  text-align: right;
+  margin-bottom: 10px;
+  line-height: 20px;
+  margin-top: -20px;
+}

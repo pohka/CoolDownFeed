@@ -19,7 +19,6 @@ Post Editor
   * image alt tags
 * preview for mobile
 * publish in future
-* uploaded images search
 * links to external website open in new tab
 * validate posts
 * banner image selection
@@ -28,7 +27,6 @@ Post Editor
 
 CMS
 -----------------
-* sort table for select queries
 * image compression and resizing
 * queries use html special character and decode them too
 
