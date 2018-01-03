@@ -137,10 +137,13 @@ function genHome(pageType){
       if(data !== "") {
         var obj = JSON.parse(data);
         for(var i in obj){
-
+          let img = obj[i]["thumbnail"];
+          if(img === ""){
+            img = "/temp/esl_ham.png";
+          }
           var card = genCard({
             id : obj[i]["id"],
-            img : "/temp/esl_ham.png",
+            img : img,
             title : obj[i]["title"],
             desc : obj[i]["description"],
             author : obj[i]["author"],
@@ -1056,56 +1059,123 @@ function userMenuAction(action){
   }
 }
 
+//returns the data from the url in a json object
+function getUrlValues(){
+  let str = window.location.search;
+  if(str.charAt(0)=="?"){
+    str = str.substr(1, str.length-1);
+  }
+  let variables = str.split("&");
+  let data = {};
+  for(let i = 0; i<variables.length; i++){
+    if(variables[i]!==""){
+      let item = variables[i].split("=");
+      data[item[0]] = item[1];
+    }
+  }
+
+  return data;
+}
+
+//set or change a value in the url variables
+function setUrlValue(key, val){
+  let data = getUrlValues();
+  data[key] = val;
+  let str = "?";
+  for(let key in data){
+    str += key + "=" + data[key] + "&";
+  }
+  str = str.substr(0,str.length-1);
+  window.location = window.origin + window.location.pathname + str;
+}
+
 //generate my-posts page
 function genMyPosts(){
-  for(let i=0; i<5; i++){
-    bwe.append(".post-list", {
-      tag : "div",
-      class : "post-list-item",
-      data : [{
-        url : "abc"
-      }],
-      children : [
-        {
-          tag : "img",
-          src : "/img/logo_meta.png",
-        },
-        {
-          tag : "div",
-          class : "post-item-info",
-          children :[
-            {
-              tag : "span",
-              con : "title",
-            },
-            {
-              tag : "br",
-            },
-            {
-              tag : "span",
-              con : "publish date"
-            }
-          ]
-        },
-        {
-          tag : "div",
-          class : "post-item-stats",
-          children : [
-            {
-              tag : "div",
-              con : "Views: 0",
-            },
-            {
-              tag : "div",
-              class : "fa fa-comment",
-              con : " 0",
-            }
-          ]
-        }
-      ]
-    });
+  let urlData = getUrlValues();
+  let page = urlData["page"];
+  if(page==undefined){
+    page = 0;
   }
+  let cookie = getCookie("session");
+  let cjson = JSON.parse(cookie);
+  let sid = cjson["cookie_id"];
+  $(".post-list").html("");
+  $.ajax(
+    {
+    url: "/php/cdf.php",
+    type: "POST",
+    data: {
+      type : "my-posts",
+      page : page,
+      sid : sid,
+    },
+    success: function(data){
+      if(data !== ""){
+        let json = JSON.parse(data);
+        //console.log(json);
+        for(let i=0; i<json.length; i++){
+          let img = json[i]["thumbnail"];
+          if(img === ""){
+            img = "/temp/esl_ham.png";
+          }
+          bwe.append(".post-list", {
+            tag : "div",
+            class : "post-list-item",
+            data : [{
+              url : json[i]["id"]
+            }],
+            children : [
+              {
+                tag : "img",
+                src : img,
+              },
+              {
+                tag : "div",
+                class : "post-item-info",
+                children :[
+                  {
+                    tag : "span",
+                    con : json[i]["title"],
+                  },
+                  {
+                    tag : "br",
+                  },
+                  {
+                    tag : "span",
+                    con : json[i]["publish_time"]
+                  }
+                ]
+              },
+              {
+                tag : "div",
+                class : "post-item-stats",
+                children : [
+                  {
+                    tag : "div",
+                    con : "Views: 0",
+                  },
+                  {
+                    tag : "div",
+                    class : "fa fa-comment",
+                    con : " 0",
+                  }
+                ]
+              }
+            ]
+          });
+        }
+      }
+    }
+  });
 }
+
+$(document).on("click", "#my-posts-next", function(){
+  let page = getUrlValues()["page"];
+  if(page === undefined){
+    page = 0;
+  }
+  setUrlValue("page", Number(page)+1);
+});
 
 //Enable/Disable scolling
 //--------------------------------------------------

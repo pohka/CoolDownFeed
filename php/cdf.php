@@ -21,7 +21,7 @@ switch($_POST["type"]){
   case "cards-home" :
     $sql =
       "SELECT cards.id, cards.title, cards.description, " .
-      "users.username as author, cards.publish_time, cards.tags " .
+      "users.username as author, cards.publish_time, cards.tags, cards.thumbnail " .
       "FROM cards JOIN users ON users.id = cards.userid " .
       "WHERE cards.published = 1 " .
       "ORDER BY cards.publish_time DESC";
@@ -72,6 +72,16 @@ switch($_POST["type"]){
       "FROM `cards` INNER JOIN posts ON posts.id = cards.id ".
       "INNER JOIN users ON cards.userid = users.id ".
       "WHERE cards.id = '" . $id ."'";
+      break;
+    case "my-posts" :
+      $sid = $_POST['sid'];
+      $page = $_POST['page'];
+      $itemsPerPage = 25;
+      $offset = $itemsPerPage * $page;
+      $sql =
+        "SELECT * FROM `cards` join sessions on cards.userid = sessions.user_id ".
+        "WHERE sessions.session_id = '{$sid}' " .
+        "ORDER BY `cards`.`publish_time` DESC LIMIT {$offset},{$itemsPerPage}";
       break;
 }
 
