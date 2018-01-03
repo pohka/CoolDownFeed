@@ -94,11 +94,13 @@ $(document).ready(function() {
 
   $(document).on("drop", ".drop", function (e) {
     e.preventDefault();
+    $(this).removeClass('dragenter');
     upload(e.originalEvent.dataTransfer.files, function(data){
-      console.log(data);
+      //todo progress bar
       closeToolModals();
       $("#post-tool-cloud").show();
       loadModal("cloud");
+
     });
   });
 });
@@ -143,6 +145,9 @@ function toggleToolMode(selector){
   $(".toolbar-mode").each(function(){
     if($(this).hasClass('active')){
       $(this).removeClass('active');
+    }
+    if($(selector).attr("id") === "mode-preview"){
+      genPreview();
     }
   });
   $(selector).addClass('active');
@@ -248,11 +253,9 @@ function getFieldsForModalType(type){
 var modalsLoaded = [];
 function loadModal(type){
   if(type==="cloud"){
-    //dont request this modal if there has been no changes
     disableScroll();
-    if(jQuery.inArray(type, modalsLoaded) !== -1) return;
-
     modalsLoaded.push(type);
+    $("#cloud-spinner").show();
 
     $.post( "php/cdf.php", {
       type : "user-images",
@@ -260,6 +263,7 @@ function loadModal(type){
       }).done(function( data ) {
         if(data != "") {
           var obj = JSON.parse(data);
+          $(".image-viewer").html("");
 
           for(var i in obj){
             var div = {
@@ -275,9 +279,9 @@ function loadModal(type){
             };
             div["children"].push(img);
 
-            bwe.append(".image-viewer", div);
+            $(".image-viewer").append(bwe.build(div));
+            $("#cloud-spinner").hide();
           }
-
         }
       });
   }

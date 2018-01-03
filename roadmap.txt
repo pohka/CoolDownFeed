@@ -19,13 +19,12 @@ Post Editor
   * image alt tags
 * preview for mobile
 * publish in future
-* no images upload yet
-* once an image is uploaded open the cloud modal
 * uploaded images search
 * links to external website open in new tab
 * validate posts
 * banner image selection
 * preview post after publishing
+* upload progress bar
 
 CMS
 -----------------

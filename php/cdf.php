@@ -27,7 +27,7 @@ switch($_POST["type"]){
       "ORDER BY cards.publish_time DESC";
       break;
     case "user-images" :
-      $sql = "SELECT * FROM `images` WHERE `userid`= '" . getUserID($_POST['userid'], $con) . "'";
+      $sql = "SELECT * FROM `images` WHERE `userid`= '" . getUserID($_POST['userid'], $con) . "' ORDER BY timestamp DESC";
       break;
     case "add-post" :
       $text  = htmlspecialchars($_POST['text'], ENT_QUOTES);
