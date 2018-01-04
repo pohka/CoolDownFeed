@@ -1089,12 +1089,51 @@ function setUrlValue(key, val){
   window.location = window.origin + window.location.pathname + str;
 }
 
+//changes sql date string to d-mmm-yyyy-hh-mm format
+function dateToString(datestr){
+  let els = datestr.split(" ");
+  let date = els[0].split("-");
+  let time = els[1].split(":");
+
+  let hr = Number(time[0]);
+  let mode = "AM";
+  if(hr >= 12){
+    mode = "PM";
+  }
+  hr = hr%12;
+  if(hr==0){
+    hr = 12;
+  }
+  let min = Number(time[1]);
+  if(min < 10){
+    min = "0" + min;
+  }
+
+  let monthStrs = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  let day = Number(date[2]);
+  switch(day%10){
+    case 1 : day+="st"; break;
+    case 2 : day+="nd"; break;
+    case 3 : day+="rd"; break;
+    default: day+="th"; break;
+  }
+  let month = monthStrs[Number(date[1])-1];
+
+  let str = day + " " + month + ", " + date[0] + " " + hr + ":" + min + " " + mode;
+  return str;
+}
+
 //generate my-posts page
 function genMyPosts(){
   let urlData = getUrlValues();
   let page = urlData["page"];
   if(page==undefined){
     page = 0;
+  }
+  if(page == 0){
+    $("#my-posts-prev").hide();
   }
   let cookie = getCookie("session");
   let cjson = JSON.parse(cookie);
@@ -1112,11 +1151,14 @@ function genMyPosts(){
     success: function(data){
       if(data !== ""){
         let json = JSON.parse(data);
-        //console.log(json);
+
         for(let i=0; i<json.length; i++){
           let img = json[i]["thumbnail"];
           if(img === ""){
             img = "/temp/esl_ham.png";
+          }
+          if(json[i]["title"] === ""){
+            json[i]["title"] = "Untitled";
           }
           bwe.append(".post-list", {
             tag : "div",
@@ -1134,15 +1176,14 @@ function genMyPosts(){
                 class : "post-item-info",
                 children :[
                   {
-                    tag : "span",
+                    tag : "h3",
+                    class : "post-item-title",
                     con : json[i]["title"],
                   },
                   {
-                    tag : "br",
-                  },
-                  {
-                    tag : "span",
-                    con : json[i]["publish_time"]
+                    tag : "div",
+                    class : "post-item-date",
+                    con : dateToString(json[i]["publish_time"])
                   }
                 ]
               },
@@ -1175,6 +1216,13 @@ $(document).on("click", "#my-posts-next", function(){
     page = 0;
   }
   setUrlValue("page", Number(page)+1);
+});
+
+$(document).on("click", "#my-posts-prev", function(){
+  let page = getUrlValues()["page"];
+  if(page !== undefined && page > 0){
+    setUrlValue("page", Number(page)-1);
+  }
 });
 
 //Enable/Disable scolling

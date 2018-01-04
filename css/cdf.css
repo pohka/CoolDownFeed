@@ -1173,3 +1173,16 @@ svg rect{
 #my-posts-next{
   float: right;
 }
+
+.post-item-title{
+  font-size: 16px;
+  padding: 0px;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
+.post-item-date{
+  font-size: 14px;
+}
