@@ -19,7 +19,7 @@
     $id = md5($salt1.$user.$salt2);
 
     $data = array(
-      "cookie_id" => $id,
+      "session" => $id,
       "user_name" => $row[1],
       "user_avatar" => $row[2]
     );

@@ -256,10 +256,11 @@ function loadModal(type){
     disableScroll();
     modalsLoaded.push(type);
     $("#cloud-spinner").show();
-
+    let sid = getCookie("session");
+    if(sid === "") return;
     $.post( "php/cdf.php", {
       type : "user-images",
-      userid : getUserCookieID()
+      userid : sid
       }).done(function( data ) {
         if(data != "") {
           var obj = JSON.parse(data);
@@ -293,7 +294,7 @@ function validate(){
 }
 
 function save(forNow){
-  var cookieID = getUserCookieID();
+  var cookieID = getCookie("session");
   if(cookieID == undefined){
     notification("Not Logged In", "error", 6);
     return;
@@ -355,8 +356,7 @@ function upload(files, callback){
         formImage.append('image', files[i]);
         var session = getCookie("session");
         if(session !== ""){
-          var data = jQuery.parseJSON(session);
-          formImage.append('sid', data["cookie_id"]);
+          formImage.append('sid', session);
           $.ajax({
             url: "/php/upload.php",
             type: "POST",

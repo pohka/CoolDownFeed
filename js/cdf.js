@@ -85,7 +85,7 @@ function deniedCallback(){
       {
         tag : "div",
         class : "conceal-msg",
-        con : "Denied!"
+        con : "Permission Denied"
       }
     ]
   });
@@ -110,14 +110,12 @@ function checkPrivilages(callbackIfDenied){
   }
   else
   {
-    var json = JSON.parse(cookie);
-    var cookieID = json["cookie_id"];
     $.ajax(
       {
         url: "/php/privilages.php",
         type: "POST",
         data: {
-          session_id : cookieID,
+          session_id : cookie,
           page: path
         },
         success : function(data){
@@ -479,7 +477,9 @@ function login(){
         toggleLoginModal();
         $("#login-user").val("");
         $("#login-pass").val("");
-        document.cookie = "session=" + data + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
+        for(let key in json){
+          document.cookie = key + "=" + json[key] + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
+        }
         loadSession();
       }
       else{
@@ -494,7 +494,9 @@ function login(){
 function loadSession(){
   var session = getCookie("session");
   if(session !== ""){
-    var data = jQuery.parseJSON(session);
+    let avatar = getCookie("user_avatar");
+    let userName = getCookie("user_name");
+
     $("#login").hide();
     bwe.append(".cdf-nav-info", {
       tag : "div",
@@ -507,14 +509,14 @@ function loadSession(){
             {
               tag : "img",
               id  : "session-avatar",
-              src : data["user_avatar"]
+              src : avatar
             }
           ]
         },
         {
           tag : "span",
           id  : "session-username",
-          con : data["user_name"]
+          con : userName
         },
         {
           tag : "div",
@@ -530,13 +532,23 @@ function loadSession(){
 function endSession(){
   var session = getCookie("session");
   if(session !== ""){
-    var cookie = "session=;expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-    document.cookie = cookie;
+    clearCookie("session");
+    clearCookie("user_avatar");
+    clearCookie("user_name");
+
     $(".session-con").remove();
     $("#login").show();
     $(".user-menu").hide();
+    setTimeout(function(){
+      location.reload();
+    }, 2000);
     notification("Logged Out", "", 3);
   }
+}
+
+//clears a cookie by its key name
+function clearCookie(cname){
+  document.cookie = cname + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;";
 }
 
 //gets the cookie by they key value
@@ -952,15 +964,6 @@ function genUID() {
     return firstPart + secondPart;
 }
 
-//gets the current user id
-function getUserCookieID(){
-  var session = getCookie("session");
-  if(session !== ""){
-    var data = jQuery.parseJSON(session);
-    return data["cookie_id"];
-  }
-}
-
 //shows a notification at the top right
 function notification(text, type, duration){
   var cls = "fa ";
@@ -1135,10 +1138,11 @@ function genMyPosts(){
   if(page == 0){
     $("#my-posts-prev").hide();
   }
-  let cookie = getCookie("session");
-  let cjson = JSON.parse(cookie);
-  let sid = cjson["cookie_id"];
+  let sid = getCookie("session");
   $(".post-list").html("");
+  if(sid === ""){
+    return;
+  }
   $.ajax(
     {
     url: "/php/cdf.php",
