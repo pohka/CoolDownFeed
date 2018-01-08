@@ -307,7 +307,8 @@ class Post extends Comp{
     " and even this was wrriten on a new line\n\n" +
     "this is a new paragraph [link2](www.test.com) wow\n"+
     "#my heading\n"+
-    "the next paragraph \n\n\n\nIm trying to it\n\n\n\n#another heading";
+    "the next paragraph \n\n\n\nIm trying to it\n\n\n\n#another heading\nbefore imgh\n"+
+    "i#[/temp/ff.png](description)\nafter this image";
     //let els = parseMarkdown(fields.text);.
     let els = parseMarkdown(sample); //for testing markdown
     console.log(els);
@@ -388,9 +389,14 @@ function quasLoadPage(){
   @return {JSON[]}
 
   makrdown:
-  - #heading
-  - [text](link)
-  - \n\n is  anew paragraph
+  - #heading              - heading
+  - [text](link)          - link with text
+  - \n\n is               - new paragraph
+  - i#[src](desc)         - image
+  - > my quote            - quote
+  - * item 1              - list item
+  - m#youtube             - media embded (youtube/cooldownfeed/gyfcat)
+  - ```LANG\n my code```  - code
 */
 function parseMarkdown(text){
   let els = [];
@@ -401,52 +407,77 @@ function parseMarkdown(text){
   let temp;
   for(let i=0; i<lines.length; i++){
     //ignore banner
-    if(lines[i].substr(0,2) !== "#b"){
-      //paragraph += lines[i];
-
-      //paragraphs and links
-      if(lines[i].charAt(0) === "#" || lines[i] === "" || i == lines.length - 1){
-        if(!(lines[i].charAt(0) === "#"))
-          paragraph += lines[i];
-        let reg  = new RegExp("\\[.*?\\]\\(.*?\\)","g");
-        let links = paragraph.match(reg);
-        let pEl = {
-          tag : "p",
-          children : []
-        }
-        for(let a in links){
-          let linkIndex = paragraph.indexOf(links[a]);
-          pEl.children.push({txt : paragraph.substr(0, linkIndex)});
-          paragraph = paragraph.substr(linkIndex+links[a].length);
-          let linkKV = links[a].substr(1,links[a].length-2).split("](");
-          pEl.children.push({
-            tag : "a",
-            txt : linkKV[0],
-            href : linkKV[1]
-          });
-        }
-        if(paragraph !== ""){
-          pEl.children.push({txt : paragraph});
-        }
-        if(pEl.children.length> 0){
-          els.push(pEl);
-        }
-        paragraph="";
-      }
-      else{
+    if(lines[i].substr(0,2) === "#b"){
+      i++;
+    }
+    //paragraphs and links
+    if((lines[i].charAt(0) === "#" || lines[i].substr(0,2) === "i#") ||
+        lines[i] === "" || i == lines.length - 1){
+      if(!(lines[i].charAt(0) === "#"  || lines[i].substr(0,2) === "i#")){
         paragraph += lines[i];
       }
+      let pEl = parseStrForLinks(paragraph);
+      if(pEl.children.length > 0){
+        els.push(pEl);
+      }
+      paragraph="";
+    }
+    else{
+      paragraph += lines[i];
+    }
 
-      //heading
-      if(lines[i].charAt(0) === "#"){
+    //heading
+    if(lines[i].charAt(0) === "#"){
+      els.push({
+        tag : "h2",
+        txt : lines[i].substr(1)
+      });
+    }
+
+    //image
+    else if(lines[i].substr(0,2) === "i#"){
+      let reg  = new RegExp("i#\\[.*?\\]\\(.*?\\)","g");
+      let res = lines[i].match(reg)
+      if(res !== null){
+        let kv = lines[i].substr(3, lines[i].length-4).split("](");
         els.push({
-          tag : "h2",
-          txt : lines[i].substr(1)
+          tag : "div",
+          class : "post-img",
+          children : [{
+            tag : "img",
+            src : kv[0],
+            alt : kv[1]
+          }]
         });
       }
     }
   }
   return els;
+}
+
+//parses the link markdown out of string and returns a json object
+function parseStrForLinks(paragraph){
+  let reg  = new RegExp("\\[.*?\\]\\(.*?\\)","g");
+  let links = paragraph.match(reg);
+  let pEl = {
+    tag : "p",
+    children : []
+  }
+  for(let a in links){
+    let linkIndex = paragraph.indexOf(links[a]);
+    pEl.children.push({txt : paragraph.substr(0, linkIndex)});
+    paragraph = paragraph.substr(linkIndex+links[a].length);
+    let linkKV = links[a].substr(1,links[a].length-2).split("](");
+    pEl.children.push({
+      tag : "a",
+      txt : linkKV[0],
+      href : linkKV[1]
+    });
+  }
+  if(paragraph !== ""){
+    pEl.children.push({txt : paragraph});
+  }
+  return pEl;
 }
 
 $(document).ready(function() {
