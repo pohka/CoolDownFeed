@@ -308,7 +308,8 @@ class Post extends Comp{
     "this is a new paragraph [link2](www.test.com) wow\n"+
     "#my heading\n"+
     "the next paragraph \n\n\n\nIm trying to it\n\n\n\n#another heading\nbefore imgh\n"+
-    "i#[/temp/ff.png](description)\nafter this image";
+    "i#[/temp/ff.png](description)\nafter this image\n"+
+    "> this is the quoote\nafter the quote";
     //let els = parseMarkdown(fields.text);.
     let els = parseMarkdown(sample); //for testing markdown
     console.log(els);
@@ -406,14 +407,16 @@ function parseMarkdown(text){
   let ignore = false; //should ignore
   let temp;
   for(let i=0; i<lines.length; i++){
+    let stub = lines[i].substr(0,2);
+
     //ignore banner
     if(lines[i].substr(0,2) === "#b"){
       i++;
     }
     //paragraphs and links
-    if((lines[i].charAt(0) === "#" || lines[i].substr(0,2) === "i#") ||
+    if((lines[i].charAt(0) === "#" || stub === "i#" || stub === "> ") ||
         lines[i] === "" || i == lines.length - 1){
-      if(!(lines[i].charAt(0) === "#"  || lines[i].substr(0,2) === "i#")){
+      if(!(lines[i].charAt(0) === "#"  || stub === "i#" || stub === "> ")){
         paragraph += lines[i];
       }
       let pEl = parseStrForLinks(paragraph);
@@ -450,6 +453,15 @@ function parseMarkdown(text){
           }]
         });
       }
+    }
+
+    //quote
+    else if(stub === "> "){
+      els.push({
+        tag : "div",
+        class : "quote",
+        txt : lines[i].substr(2)
+      });
     }
   }
   return els;
