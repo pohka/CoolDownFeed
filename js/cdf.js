@@ -88,18 +88,16 @@ class NavItem extends Comp{
 
 class Card extends Comp{
   constructor(fields){
-    // let data = {
-    //   fields.img,
-    //   fields.title,
-    //   fields.url,
-    //   fields.author,
-    //   fields.time,
-    // }
     super({
       tag : "div",
       class : "card link",
       data : {
         url : fields.url,
+      },
+      on : {
+        click : function(){
+          location.pathname = "/p/"+fields.url;
+        }
       },
       children : [
         {
@@ -142,6 +140,74 @@ class Card extends Comp{
   }
 }
 
+class Footer extends Comp{
+  constructor(fields){
+    super({
+      tag : "div",
+      class : "footer-con",
+      children : [
+        {
+          tag : "div",
+          class : "footer-logo btn",
+          children : [
+            {
+              tag : "img",
+              src : "/img/logo_sm.png",
+            },
+            {
+              tag : "div",
+              class : "footer-logo-text",
+              txt : "CoolDownFeed.com",
+            },
+          ]
+        },
+        {
+          tag : "div",
+          class : "footer-filter-con",
+          children : [
+            {
+              tag : "div",
+              class : "footer-filter btn",
+              id : "footer-about",
+              children : [
+                {
+                  tag : "div",
+                  txt : "About",
+                }
+              ]
+            }
+          ]
+        },
+        {
+          tag : "div",
+          class : "footer-contact",
+          children : [
+            {
+              tag : "div",
+              class : "fa fa-youtube-play footer-social btn",
+            },
+            {
+              tag : "div",
+              class : "fa fa-twitter footer-social btn",
+            },
+            {
+              tag : "div",
+              class :"footer-email",
+              children : [
+                {
+                  tag : "span",
+                  class : "email",
+                  txt : "moc.liamg@01akhop",
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    });
+  }
+}
+
 Quas.start = function(){
   let nav = new Navbar();
   nav.render(".cdf-nav");
@@ -153,6 +219,7 @@ Quas.start = function(){
     time : "2 Days ago",
   });
   card.render(".card-con");
+  new Footer().render("footer");
 }
 
 $(document).ready(function() {
