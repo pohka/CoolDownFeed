@@ -86,9 +86,73 @@ class NavItem extends Comp{
   }
 }
 
+class Card extends Comp{
+  constructor(fields){
+    // let data = {
+    //   fields.img,
+    //   fields.title,
+    //   fields.url,
+    //   fields.author,
+    //   fields.time,
+    // }
+    super({
+      tag : "div",
+      class : "card link",
+      data : {
+        url : fields.url,
+      },
+      children : [
+        {
+          tag : "div",
+          class : "card-thumb",
+          children : [{
+            tag : "img",
+            src : fields.img
+          }]
+        },
+        {
+          tag : "div",
+          class : "card-info",
+          children : [
+            {
+              tag : "div",
+              class : "card-title-and-desc",
+              children : [
+                {
+                  tag : "div",
+                  class : "card-title",
+                  txt : fields.title,
+                }
+              ]
+            },
+            {
+              tag : "div",
+              class : "card-author",
+              txt : fields.author,
+            },
+            {
+              tag : "div",
+              class : "card-time",
+              txt : fields.time,
+            }
+          ]
+        }
+      ]
+    });
+  }
+}
+
 Quas.start = function(){
   let nav = new Navbar();
   nav.render(".cdf-nav");
+  let card = new Card({
+    url : "2363c1",
+    img : "/temp/esl_ham.png",
+    title : "My Title",
+    author : "Pohka",
+    time : "2 Days ago",
+  });
+  card.render(".card-con");
 }
 
 $(document).ready(function() {
