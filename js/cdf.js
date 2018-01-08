@@ -302,7 +302,15 @@ class Post extends Comp{
 
     this.bannerSrc = "/temp/esl_ham.png";
 
-    let els = parseMarkdown(fields.text);
+    let sample =
+    "i am some text [link](http://www.google.com) and some more\n" +
+    " and even this was wrriten on a new line\n\n" +
+    "this is a new paragraph [link2](www.test.com) wow\n"+
+    "#my heading\n"+
+    "the next paragraph \n\n\n\nIm trying to it\n\n\n\n#another heading";
+    //let els = parseMarkdown(fields.text);.
+    let els = parseMarkdown(sample); //for testing markdown
+    console.log(els);
     for(let i in els){
       this.addChild(els[i]);
     }
@@ -328,7 +336,6 @@ Quas.start = function(){
   let nav = new Navbar();
   nav.render(".cdf-nav");
   quasLoadPage();
-
   new Footer().render("footer");
 }
 
@@ -368,23 +375,8 @@ function quasLoadPage(){
       },
       success : function(res){
         let data = JSON.parse(res);
+        console.log(data[0]);
         new Post(data[0]).render();
-        // let con  = Quas.getEl(".container");
-        // con.addChild({
-        //   tag : "p",
-        //   txt : "hello ",
-        //   children : [
-        //     {
-        //       tag : "a",
-        //       href : "/",
-        //       txt : "the link",
-        //     },
-        //     {
-        //       txt : " world"
-        //     }
-        //   ]
-        // });
-
       }
     });
   }
@@ -394,13 +386,66 @@ function quasLoadPage(){
   convert text markdown to component data
   @param {String} text - raw string
   @return {JSON[]}
+
+  makrdown:
+  - #heading
+  - [text](link)
+  - \n\n is  anew paragraph
 */
 function parseMarkdown(text){
   let els = [];
-  els.push({
-    tag : "p",
-    txt : text
-  });
+  let lines = text.split("\n");
+
+  let paragraph = ""; //raw text for the current paragraph
+  let ignore = false; //should ignore
+  let temp;
+  for(let i=0; i<lines.length; i++){
+    //ignore banner
+    if(lines[i].substr(0,2) !== "#b"){
+      //paragraph += lines[i];
+
+      //paragraphs and links
+      if(lines[i].charAt(0) === "#" || lines[i] === "" || i == lines.length - 1){
+        if(!(lines[i].charAt(0) === "#"))
+          paragraph += lines[i];
+        let reg  = new RegExp("\\[.*?\\]\\(.*?\\)","g");
+        let links = paragraph.match(reg);
+        let pEl = {
+          tag : "p",
+          children : []
+        }
+        for(let a in links){
+          let linkIndex = paragraph.indexOf(links[a]);
+          pEl.children.push({txt : paragraph.substr(0, linkIndex)});
+          paragraph = paragraph.substr(linkIndex+links[a].length);
+          let linkKV = links[a].substr(1,links[a].length-2).split("](");
+          pEl.children.push({
+            tag : "a",
+            txt : linkKV[0],
+            href : linkKV[1]
+          });
+        }
+        if(paragraph !== ""){
+          pEl.children.push({txt : paragraph});
+        }
+        if(pEl.children.length> 0){
+          els.push(pEl);
+        }
+        paragraph="";
+      }
+      else{
+        paragraph += lines[i];
+      }
+
+      //heading
+      if(lines[i].charAt(0) === "#"){
+        els.push({
+          tag : "h2",
+          txt : lines[i].substr(1)
+        });
+      }
+    }
+  }
   return els;
 }
 
