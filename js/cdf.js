@@ -1,4 +1,98 @@
+class Navbar extends Comp{
+  constructor(){
+    super({
+      tag : "div",
+      class : "cdf-nav-con",
+      children : [
+        {
+          tag : "div",
+          class : "cdf-nav-logo skew-con noselect",
+          children : [
+            {
+              tag : "img",
+              class : "skew",
+              src : "/img/logo_sm.png"
+            }
+          ]
+        },
+        {
+          tag : "div",
+          class : "cdf-nav-filters",
+        },
+        {
+          tag : "div",
+          class : "cdf-nav-info",
+          children :[
+            {
+              tag : "a",
+              class : "fa fa-twitter btn",
+              href : "https://twitter.com/PohkaDota",
+              id : "twitter",
+              target : "_blank"
+            },
+            {
+              tag : "a",
+              class : "fa fa-youtube-play btn",
+              href : "https://www.youtube.com/c/pohka",
+              id : "twitter",
+              target : "_blank"
+            },
+            {
+              tag : "div",
+              class : "btn",
+              id : "login",
+              txt : "Login",
+            }
+          ]
+        },
+      ]
+    });
+  }
+
+  render(sel){
+    super.render(sel);
+    Quas.makeCompsAndRender(NavItem, ".cdf-nav-filters", [
+      {
+        text : "Home",
+        link : "/",
+        active : (Quas.path === "" || Quas.path === "index"),
+      },
+      {
+        text : "Discover",
+        link : "post-example",
+        active : (Quas.path == "post-example"),
+      },
+      {
+        text : "New Post",
+        link : "new-post",
+        active : (Quas.path == "new-post"),
+      }
+    ]);
+  }
+}
+
+class NavItem extends Comp{
+  constructor(fields){
+    let data = {
+      tag : "a",
+      txt : fields.text,
+      href : fields.link,
+      class : "btn"
+    };
+    if(fields.active){
+      data["class"] += " active";
+    }
+    super(data);
+  }
+}
+
+Quas.start = function(){
+  let nav = new Navbar();
+  nav.render(".cdf-nav");
+}
+
 $(document).ready(function() {
+  return;
   loadPage();
   loadSession();
   checkPrivilages(deniedCallback);
@@ -53,6 +147,7 @@ $(document).ready(function() {
 //generates the content for each page
 function loadPage(){
   genNavbar();
+  return;
   var pageType = "";
   var path = window.location.pathname;
   var allowed = true;
@@ -1228,40 +1323,3 @@ $(document).on("click", "#my-posts-prev", function(){
     setUrlValue("page", Number(page)-1);
   }
 });
-
-//Enable/Disable scolling
-//--------------------------------------------------
-var keys = {37: 1, 38: 1, 39: 1, 40: 1};
-
-function preventDefault(e) {
- e = e || window.event;
- if (e.preventDefault)
-     e.preventDefault();
- e.returnValue = false;
-}
-
-function preventDefaultForScrollKeys(e) {
-   if (keys[e.keyCode]) {
-       preventDefault(e);
-       return false;
-   }
-}
-
-function disableScroll() {
- if (window.addEventListener) // older FF
-     window.addEventListener('DOMMouseScroll', preventDefault, false);
- window.onwheel = preventDefault; // modern standard
- window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
- window.ontouchmove  = preventDefault; // mobile
- document.onkeydown  = preventDefaultForScrollKeys;
-}
-
-function enableScroll() {
-   if (window.removeEventListener)
-       window.removeEventListener('DOMMouseScroll', preventDefault, false);
-   window.onmousewheel = document.onmousewheel = null;
-   window.onwheel = null;
-   window.ontouchmove = null;
-   document.onkeydown = null;
-}
-//------------------------------------------------
