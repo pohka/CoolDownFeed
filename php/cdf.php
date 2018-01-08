@@ -17,7 +17,7 @@ function getUserID($cookie, $con) {
 
 date_default_timezone_set('UTC');
 $sql = "";
-switch($_POST["type"]){
+switch($_REQUEST["type"]){
   case "cards-home" :
     $sql =
       "SELECT cards.id, cards.title, cards.description, " .

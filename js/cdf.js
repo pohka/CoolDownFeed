@@ -292,16 +292,31 @@ class LoginModal extends Comp{
 Quas.start = function(){
   let nav = new Navbar();
   nav.render(".cdf-nav");
-  let card = new Card({
-    url : "2363c1",
-    img : "/temp/esl_ham.png",
-    title : "My Title",
-    author : "Pohka",
-    time : "2 Days ago",
-  });
-  card.render(".card-con");
-  new Footer().render("footer");
 
+  Quas.ajax({
+    url : "/php/cdf.php",
+    type : "POST",
+    data : {
+      type : "cards-home"
+    },
+    success : function(result){
+      let data  = JSON.parse(result);
+      for(let i in data){
+        let img = data[i].thumbnail;
+        if(img === ""){
+          img = "/temp/esl_ham.png";
+        }
+        new Card({
+          url : data[i].id,
+          img : img,
+          title : data[i].title,
+          author : data[i].author,
+          time : timeSinceString(data[i].publish_time),
+        }).render(".card-con");
+      }
+    }
+  });
+  new Footer().render("footer");
 }
 
 $(document).ready(function() {
