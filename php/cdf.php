@@ -67,7 +67,7 @@ switch($_REQUEST["type"]){
       break;
 
     case "post-view" :
-      $id = $_POST['id'];
+      $id = $_REQUEST['id'];
       $sql = "SELECT cards.title, users.username, users.avatar, cards.publish_time, posts.text " .
       "FROM `cards` INNER JOIN posts ON posts.id = cards.id ".
       "INNER JOIN users ON cards.userid = users.id ".

@@ -313,6 +313,11 @@ class Quas{
       return;
     }
 
+    if(d.tag === undefined){
+      var textnode = document.createTextNode(d.txt);
+      s.appendChild(textnode);
+      return;
+    }
     let el = document.createElement(d.tag);
     if(d.txt !== undefined){
       let c = document.createTextNode(d["txt"]);
@@ -352,7 +357,9 @@ class Quas{
     }
     else{
       if(type === "set"){
-        s.innerHTML = "";
+        while(s.firstChild) {
+          s.removeChild(s.firstChild);
+        }
       }
       s.appendChild(el);
     }
@@ -646,6 +653,6 @@ Quas.scrollKeys = {37: 1, 38: 1, 39: 1, 40: 1};
 
 Quas.path;
 window.onload = function(){
-  Quas.path = location.pathname.slice(1,0);
+  Quas.path = location.pathname.substr(1);
   Quas.start();
 }

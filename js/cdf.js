@@ -70,12 +70,12 @@ class Navbar extends Comp{
       },
       {
         text : "Discover",
-        link : "post-example",
+        link : "/post-example",
         active : (Quas.path == "post-example"),
       },
       {
         text : "New Post",
-        link : "new-post",
+        link : "/new-post",
         active : (Quas.path == "new-post"),
       }
     ]);
@@ -289,34 +289,119 @@ class LoginModal extends Comp{
   }
 }
 
+class Post extends Comp{
+  constructor(fields){
+    super({
+      tag : "div",
+      class : "post-con",
+      children : [{
+          tag : "h1",
+          txt : fields.title,
+      }]
+    });
+
+    this.bannerSrc = "/temp/esl_ham.png";
+
+    let els = parseMarkdown(fields.text);
+    for(let i in els){
+      this.addChild(els[i]);
+    }
+  }
+
+  render(){
+    super.render(".container");
+    let banner = new Comp({
+      tag : "div",
+      class : "banner",
+      children : [{
+        tag : "img",
+        src : "/temp/esl_ham.png"
+      }]
+    });
+    banner.render(".container", "prepend");
+  }
+}
+
+
+
 Quas.start = function(){
   let nav = new Navbar();
   nav.render(".cdf-nav");
+  quasLoadPage();
 
-  Quas.ajax({
-    url : "/php/cdf.php",
-    type : "POST",
-    data : {
-      type : "cards-home"
-    },
-    success : function(result){
-      let data  = JSON.parse(result);
-      for(let i in data){
-        let img = data[i].thumbnail;
-        if(img === ""){
-          img = "/temp/esl_ham.png";
-        }
-        new Card({
-          url : data[i].id,
-          img : img,
-          title : data[i].title,
-          author : data[i].author,
-          time : timeSinceString(data[i].publish_time),
-        }).render(".card-con");
-      }
-    }
-  });
   new Footer().render("footer");
+}
+
+function quasLoadPage(){
+  if(Quas.path === "" || Quas.path === "index"){
+    Quas.ajax({
+      url : "/php/cdf.php",
+      type : "POST",
+      data : {
+        type : "cards-home"
+      },
+      success : function(res){
+        let data = JSON.parse(res);
+        for(let i in data){
+          let img = data[i].thumbnail;
+          if(img === ""){
+            img = "/temp/esl_ham.png";
+          }
+          new Card({
+            url : data[i].id,
+            img : img,
+            title : data[i].title,
+            author : data[i].author,
+            time : timeSinceString(data[i].publish_time),
+          }).render(".card-con");
+        }
+      }
+    });
+  }
+  else if(Quas.path.indexOf("p/") == 0){
+    Quas.ajax({
+      url : "/php/cdf.php",
+      type : "POST",
+      data : {
+        type : "post-view",
+        id : Quas.path.substr(2),
+      },
+      success : function(res){
+        let data = JSON.parse(res);
+        new Post(data[0]).render();
+        // let con  = Quas.getEl(".container");
+        // con.addChild({
+        //   tag : "p",
+        //   txt : "hello ",
+        //   children : [
+        //     {
+        //       tag : "a",
+        //       href : "/",
+        //       txt : "the link",
+        //     },
+        //     {
+        //       txt : " world"
+        //     }
+        //   ]
+        // });
+
+      }
+    });
+  }
+}
+
+/**
+  convert text markdown to component data
+  @param {String} text - raw string
+  @return {JSON[]}
+*/
+function parseMarkdown(text){
+  let els = [];
+  els.push({
+    tag : "p",
+    txt : text
+  });
+  return els;
 }
 
 $(document).ready(function() {
