@@ -402,7 +402,6 @@ html::-webkit-scrollbar-thumb
 /*-------------- Login Modal --------------*/
 .login-modal
 {
-  display: none;
   position: fixed;
   top: 50;
   height: 100vh;

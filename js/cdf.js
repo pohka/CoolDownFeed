@@ -42,6 +42,17 @@ class Navbar extends Comp{
               class : "btn",
               id : "login",
               txt : "Login",
+              on : {
+                click : function(){
+                  let el = Quas.getEl(".login-modal");
+                  if(el === undefined){
+                    new LoginModal().render("body");
+                  }
+                  else{
+                    Quas.getEl(".login-modal").visible(true);
+                  }
+                }
+              }
             }
           ]
         },
@@ -208,6 +219,76 @@ class Footer extends Comp{
   }
 }
 
+class LoginModal extends Comp{
+  constructor(){
+    super({
+      tag : "div",
+      class : "login-modal",
+      children : [
+        {
+          tag : "div",
+          class : "login-con",
+          children : [
+            {
+              tag : "div",
+              class : "login-menu",
+              children : [
+                {
+                  tag : "div",
+                  class : "btn active",
+                  id : "login-existing",
+                  txt : "Login",
+                },
+                {
+                  tag : "div",
+                  class : "btn",
+                  id : "login-new-user",
+                  txt : "Register",
+                },
+              ]
+            },
+            {
+              tag : "input",
+              id : "login-user",
+              placeholder : "Username",
+              type : "text",
+            },
+            {
+              tag : "br"
+            },
+            {
+              tag : "input",
+              id : "login-pass",
+              placeholder : "Password",
+              type : "password",
+            },
+            {
+              tag :"br"
+            },
+            {
+              tag : "input",
+              id : "submit-login",
+              type : "button",
+              value : "Submit"
+            },
+            {
+              tag : "input",
+              id : "hide-login",
+              type : "button",
+              value : "Cancel",
+              on : {
+                click : function(){
+                  Quas.getEl(".login-modal").visible(false);
+                }
+              }
+            }
+          ]
+        }
+      ]
+    });
+  }
+}
+
 Quas.start = function(){
   let nav = new Navbar();
   nav.render(".cdf-nav");
@@ -220,6 +301,7 @@ Quas.start = function(){
   });
   card.render(".card-con");
   new Footer().render("footer");
+
 }
 
 $(document).ready(function() {
