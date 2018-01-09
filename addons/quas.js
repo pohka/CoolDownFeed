@@ -382,6 +382,7 @@ class Quas{
       data : {
         key : "value"
       },
+      return : "json",
       success : function(result){},
       error : function(errorMsg, errorCode){}
     }
@@ -390,8 +391,20 @@ class Quas{
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-          if(req.success!==undefined)
-            req.success(this.responseText);
+          if(req.success!==undefined){
+            let result;
+            if(req.return === undefined){
+              result = this.responseText;
+            }
+            else{
+              let returnType = req.return.toLowerCase();
+              switch(returnType){
+                case "json" : result = JSON.parse(this.responseText); break;
+              }
+            }
+
+            req.success(result);
+          }
         }
         else if(this.readyState == 4){
           if(req.error !== undefined){
@@ -405,6 +418,8 @@ class Quas{
       str += key + "=" + req.data[key] + "&"
     }
     xmlhttp.open(req.type, str.slice(0,-1), true);
+  //xmlhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
+
     xmlhttp.send();
   }
 
@@ -432,6 +447,128 @@ class Quas{
       version: M[1],
       isMobile : /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
     };
+  }
+
+  /*
+    convert html string to json object
+    todo:
+      -nested attributtes
+      -spacing in attributes
+      -text after nested element
+      -multiple depth
+  */
+  static convert(html){
+    let els = [];
+    let reg = new RegExp(/\<.*?\>/g,"");
+    let flag = true;
+    let el = null;
+    let depth =0;
+
+      while(flag){
+        let match = html.match(reg);
+        if(match != null){
+          let tagEls = match[0].substr(1,match[0].length-2).split(" ");
+          //closing tag
+          if(tagEls[0].charAt(0) === "/"){
+            //let text = html.substr(0,match.index);
+            //target == parent
+            let target = el;
+            for(let d=0; d<depth; d++){
+              if(d == depth -1){
+                let text = html.substr(0,match.index);;
+                target.children[target.children.length-1].txt = text;
+              }
+              else{
+                target = target.children[target.children.length-1];
+              }
+            }
+            depth--;
+            if(depth==0){
+              els.push(el);
+              el = null;
+            }
+          }
+          else{
+            if(el == null){
+              el = {
+                 tag : tagEls[0],
+                 children : []
+              };
+            }
+            else{
+              depth++;
+
+              //target == parent
+              let target = el;
+              for(let d=0; d<depth; d++){
+                if(d == depth -1){
+                  target.children.push({
+                    tag : tagEls[0],
+                    children : []
+                  });
+                }
+              }
+              target.txt = html.substr(0,match.index);
+            }
+            tagEls.shift();
+
+            //find and set the attributtes of this tag
+            for(let i in tagEls){
+              let attr = tagEls[i].split("=");
+              if(attr.length == 1){
+                attr.push("");
+              }
+              let target = el;
+              for(let d=0; d<=depth; d++){
+                if(d == depth){
+                  target[attr[0]] = attr[1].substr(1,attr[1].length-2);
+                }
+                else{
+                  target = target.children[target.children.length-1];
+                }
+              }
+            }
+
+          }
+          html = html.substr(match.index + match[0].length);
+        }
+        else{
+          flag = false;
+        }
+        //console.log(html.substr(match.index + match[0].length));
+        //html = html.substr(match.index + match[0].length);
+      }
+
+      console.log(JSON.stringify(els));
+
+    //   for(let m in matches){
+    //     let tagEls = match[0].substr(1,match[0].length-2).split(" ");
+    //     let el = {
+    //        tag : tagEls[0]
+    //     };
+    //     tagEls.shift();
+    //
+    //     //find and set the attributtes of this tag
+    //     for(let i in tagEls){
+    //       let attr = tagEls[i].split("=");
+    //       if(attr.length == 1){
+    //         attr.push("");
+    //       }
+    //       el[attr[0]] = attr[1].substr(1,attr[1].length-2);
+    //     }
+    //
+    //     let index = html.indexOf(match[1]) + match[0].length;
+    //     html = html.substr(index);
+    //     console.log(match);
+    //     console.log(el);
+    //   }
+    //   else{
+    //     flag=false;
+    //   }
+    //   flag = false;
+    // }
+  //  console.log(res);
+    return els;
   }
 
   /**
