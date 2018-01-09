@@ -309,8 +309,11 @@ class Post extends Comp{
     "#my heading\n"+
     "the next paragraph \n\n\n\nIm trying to it\n\n\n\n#another heading\nbefore imgh\n"+
     "i#[/temp/ff.png](description)\nafter this image\n"+
-    "> this is the quoote\nafter the quote";
+    "> this is the quoote\nafter the quote\n"+
+    "* item 1\n*  item 2 \n*  item 3\n* item 4\n* item 5\n*  item 6\n* item 7\nmore text" +
+    "\n\n* another list\n*  child\n* not child\n";
     //let els = parseMarkdown(fields.text);.
+    "";
     let els = parseMarkdown(sample); //for testing markdown
     console.log(els);
     for(let i in els){
@@ -406,6 +409,7 @@ function parseMarkdown(text){
   let paragraph = ""; //raw text for the current paragraph
   let ignore = false; //should ignore
   let temp;
+  let list = [];
   for(let i=0; i<lines.length; i++){
     let stub = lines[i].substr(0,2);
 
@@ -413,16 +417,46 @@ function parseMarkdown(text){
     if(lines[i].substr(0,2) === "#b"){
       i++;
     }
-    //paragraphs and links
-    if((lines[i].charAt(0) === "#" || stub === "i#" || stub === "> ") ||
-        lines[i] === "" || i == lines.length - 1){
-      if(!(lines[i].charAt(0) === "#"  || stub === "i#" || stub === "> ")){
+
+    //list item
+    if(stub === "* "){
+      //nested list
+      if(lines[i].charAt(2) === " "){
+        //add child list
+        if(list.length > 0 && list[list.length-1].constructor === String){
+          list.push([lines[i].substr(3)]);
+        }
+        //append to child list
+        else if(list.length > 0){
+          list[list.length-1].push(lines[i].substr(3));
+        }
+      }
+      //append to root list
+      else
+        list.push(lines[i].substr(2));
+    }
+
+    //new line or a markdown which ends a paragraph or last line
+    if((lines[i].charAt(0) === "#" || stub === "i#" || stub === "> " || stub === "* ") ||
+        lines[i] === "" || i == lines.length - 1 || (list.length > 0 && stub !== "* ")){
+      if(!(lines[i].charAt(0) === "#"  || stub === "i#" || stub === "> " || stub === "* ")){
         paragraph += lines[i];
       }
+      //list
+      if(list.length > 0 && stub !== "* "){
+        els.push({
+          tag : "ul",
+          children : Quas.genList(list)
+        });
+        list = [];
+      }
+
+      //links and paragraphs
       let pEl = parseStrForLinks(paragraph);
       if(pEl.children.length > 0){
         els.push(pEl);
       }
+
       paragraph="";
     }
     else{

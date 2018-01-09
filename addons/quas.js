@@ -462,10 +462,18 @@ class Quas{
   static genList(items){
     let list = [];
     for(let i in items){
-      list.push({
-        tag : "li",
-        txt : items[i]
-      });
+      if(items[i].constructor === Array){
+        list.push({
+          tag : "ul",
+          children : Quas.genList(items[i])
+        })
+      }
+      else{
+        list.push({
+          tag : "li",
+          txt : items[i]
+        });
+      }
     }
     return list;
   }
