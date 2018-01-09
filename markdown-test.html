@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <!-- font awesome -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Barlow|Open+Sans" rel="stylesheet">
+
+    <!-- Quas.js -->
+    <script src="/addons/quas.js"></script>
+
+    <link rel="shortcut icon" type="image/ico" href="/img/favicon.ico"/>
+    <script src="/js/cdf.js"></script>
+    <script>
+      //test for markdown
+      Quas.start= function(){
+      let p = new Post({
+        avatar : "/temp/profile.png",
+        publish_time : "2017-12-17 04:09:59",
+        text :
+          "i am some text [link](http://www.google.com) and some more\n" +
+          " and even this was wrriten on a new line\n\n" +
+          "this is a new paragraph [link2](www.test.com) wow\n"+
+          "#my heading\n"+
+          "the next paragraph \n\n\n\nIm trying to it\n\n\n\n#another heading\nbefore imgh\n"+
+          "i#[/temp/ff.png](description)\nafter this image\n"+
+          "> this is the quoote\nafter the quote\n"+
+          "* item 1 [link](www.xyz.com)\n*  item 2 \n*  item 3 [link](www.abc.com) after\n* item 4\n* item 5\n*  item 6\n* item 7\nmore text" +
+          "\n\n* another list\n*  child\n* not child\n" +
+          "youtube:\nm#https://www.youtube.com/watch?v=QOzXRpLD-XU" +
+          "\nyout.be:\nm#https://youtu.be/QOzXRpLD-XU" +
+          "\nimgur img:\nm#https://i.imgur.com/gctK5q2.jpg" +
+          "\n\nimgur gifv: \nm#https://i.imgur.com/sxGIYaO.gifv" +
+          "\ngyfycat: \nm#https://gfycat.com/gifs/detail/ChiefBreakableGrebe" +
+          "\ntwitter: \nm#https://twitter.com/PohkaDota/status/950501419068600322" +
+           "\ntwitch: \nm#https://clips.twitch.tv/SaltyFantasticSheepPeanutButterJellyTime"+
+          "",
+        title : "checking to see if this works",
+        username : "Pohka",
+      });
+      p.render(".container");
+      console.log(p);
+    }
+    </script>
+    <link rel="stylesheet" type="text/css" href="/css/cdf.css">
+    <title>CoolDownFeed</title>
+  </head>
+  <body>
+    <nav class="cdf-nav"></nav>
+
+    <div class="container">
+    </div>
+
+    <footer></footer>
+  </body>
+<html>

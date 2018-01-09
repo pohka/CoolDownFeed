@@ -301,27 +301,7 @@ class Post extends Comp{
     });
 
     this.bannerSrc = "/temp/esl_ham.png";
-
-    let sample =
-    "i am some text [link](http://www.google.com) and some more\n" +
-    " and even this was wrriten on a new line\n\n" +
-    "this is a new paragraph [link2](www.test.com) wow\n"+
-    "#my heading\n"+
-    "the next paragraph \n\n\n\nIm trying to it\n\n\n\n#another heading\nbefore imgh\n"+
-    "i#[/temp/ff.png](description)\nafter this image\n"+
-    "> this is the quoote\nafter the quote\n"+
-    "* item 1 [link](www.xyz.com)\n*  item 2 \n*  item 3 [link](www.abc.com) after\n* item 4\n* item 5\n*  item 6\n* item 7\nmore text" +
-    "\n\n* another list\n*  child\n* not child\n" +
-    "youtube:\nm#https://www.youtube.com/watch?v=QOzXRpLD-XU" +
-    "\nyout.be:\nm#https://youtu.be/QOzXRpLD-XU" +
-    "\nimgur img:\nm#https://i.imgur.com/gctK5q2.jpg" +
-    "\n\nimgur gifv: \nm#https://i.imgur.com/sxGIYaO.gifv" +
-    "\ngyfycat: \nm#https://gfycat.com/gifs/detail/ChiefBreakableGrebe" +
-    "\ntwitter: \nm#https://twitter.com/PohkaDota/status/950501419068600322" +
-     "\ntwitch: \nm#https://clips.twitch.tv/SaltyFantasticSheepPeanutButterJellyTime"+
-    "";
-    let els = parseMarkdown(sample); //for testing markdown
-    console.log(els);
+    let els = parseMarkdown(fields.text);
     for(let i in els){
       this.addChild(els[i]);
     }
@@ -383,10 +363,10 @@ function quasLoadPage(){
         type : "post-view",
         id : Quas.path.substr(2),
       },
+      return : "json",
       success : function(res){
-        let data = JSON.parse(res);
-        console.log(data[0]);
-        new Post(data[0]).render();
+        console.log(res[0]);
+        new Post(res[0]).render();
       }
     });
   }
@@ -578,7 +558,7 @@ function parseStrForLinks(paragraph){
   }
   return pEl;
 }
-
+/*
 $(document).ready(function() {
   return;
   loadPage();
@@ -993,6 +973,7 @@ function genCard(data){
   };
   bwe.append(".card-con", json);
 }
+*/
 
 //generates string for time since posted e.g. 2 days ago
 function timeSinceString(time){
@@ -1826,7 +1807,7 @@ function genMyPosts(){
     }
   });
 }
-
+/*
 $(document).on("click", "#my-posts-next", function(){
   let page = getUrlValues()["page"];
   if(page === undefined){
@@ -1841,3 +1822,4 @@ $(document).on("click", "#my-posts-prev", function(){
     setUrlValue("page", Number(page)-1);
   }
 });
+*/
