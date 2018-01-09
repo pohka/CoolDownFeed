@@ -136,7 +136,7 @@ class Element{
       state = !this.hasCls(a);
     }
 
-    if(state) this.addCls(a);
+    if(state && !this.hasCls(a)) this.addCls(a);
     else      this.delCls(a);
   }
 

@@ -8,6 +8,7 @@
   --border:     #ccc;
   --nav_bg:     #fff;
   --shadow:     #aaa;
+  --icon:       #222;
 }
 
 body{
@@ -348,18 +349,12 @@ html::-webkit-scrollbar-thumb
   border-radius: 2em;
 }
 
-.cdf-nav-info .fa{
-  font-size: 20px;
+.cdf-nav-info .ico{
+  font-size: 18px;
   width: 60px;
 }
 
-.fa-twitter:hover{
-  color: var(--pri);
-}
 
-.fa-youtube-play:hover{
-  color: red;
-}
 
 .session-con
 {
@@ -1094,7 +1089,7 @@ footer{
 
 svg path,
 svg rect{
-  fill: var(--pri);
+  /* fill: var(--pri); */
 }
 
 
@@ -1186,4 +1181,23 @@ svg rect{
 
 .post-item-date{
   font-size: 14px;
+}
+
+/*--------- Icons --------*/
+.ico-icon
+{
+  height: 100%;
+  display: block;
+  margin: auto;
+  fill : var(--icon);
+}
+
+.ico-con-twitter:hover svg
+{
+  fill: var(--pri);
+}
+
+.ico-con-youtube:hover svg
+{
+  fill: red;
 }
