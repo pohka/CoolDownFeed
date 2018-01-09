@@ -311,7 +311,14 @@ class Post extends Comp{
     "i#[/temp/ff.png](description)\nafter this image\n"+
     "> this is the quoote\nafter the quote\n"+
     "* item 1 [link](www.xyz.com)\n*  item 2 \n*  item 3 [link](www.abc.com) after\n* item 4\n* item 5\n*  item 6\n* item 7\nmore text" +
-    "\n\n* another list\n*  child\n* not child\n";
+    "\n\n* another list\n*  child\n* not child\n" +
+    "youtube:\nm#https://www.youtube.com/watch?v=QOzXRpLD-XU" +
+    "\nyout.be:\nm#https://youtu.be/QOzXRpLD-XU" +
+    "\nimgur img:\nm#https://i.imgur.com/gctK5q2.jpg" +
+    "\n\nimgur gifv: \nm#https://i.imgur.com/sxGIYaO.gifv" +
+    "\ngyfycat: \nm#https://gfycat.com/gifs/detail/ChiefBreakableGrebe" +
+    // "\ntwitter: \nm#" +
+    // "\ntwitch: \nm#"
     //let els = parseMarkdown(fields.text);.
     "";
     let els = parseMarkdown(sample); //for testing markdown
@@ -334,7 +341,6 @@ class Post extends Comp{
     banner.render(".container", "prepend");
   }
 }
-
 
 
 Quas.start = function(){
@@ -399,7 +405,7 @@ function quasLoadPage(){
   - i#[src](desc)         - image
   - > my quote            - quote
   - * item 1              - list item
-  - m#youtube             - media embded (youtube/cooldownfeed/gyfcat)
+  - m#youtube             - media embded (youtube/cooldownfeed/gyfcat/twitch)
   - ```LANG\n my code```  - code
 */
 function parseMarkdown(text){
@@ -410,6 +416,8 @@ function parseMarkdown(text){
   let ignore = false; //should ignore
   let temp;
   let list = [];
+  let media;
+  let breakParagraph = false;
   for(let i=0; i<lines.length; i++){
     let stub = lines[i].substr(0,2);
 
@@ -420,6 +428,7 @@ function parseMarkdown(text){
 
     //list item
     if(stub === "* "){
+      breakParagraph = true;
       //nested list
       if(lines[i].charAt(2) === " "){
         //add child list
@@ -436,12 +445,28 @@ function parseMarkdown(text){
         list.push(lines[i].substr(2));
     }
 
-    //new line or a markdown which ends a paragraph or last line
-    if((lines[i].charAt(0) === "#" || stub === "i#" || stub === "> " || stub === "* ") ||
-        lines[i] === "" || i == lines.length - 1 || (list.length > 0 && stub !== "* ")){
-      if(!(lines[i].charAt(0) === "#"  || stub === "i#" || stub === "> " || stub === "* ")){
+    //check if makrdown on this link breaks the paragraph
+    if(lines[i].charAt(0) === "#" || stub === "i#" || stub === "> " || stub === "m#"){
+      //check if media embed is valid
+      if(stub === "m#"){
+        media = genMediaEmbed(lines[i].substr(2));
+        breakParagraph = media !== undefined;
+      }
+      else{
+        breakParagraph = true;
+      }
+    }
+
+    //end of paragraph
+    if(
+      breakParagraph ||                             //markdown breaks the paragraph
+      lines[i] === "" || i == lines.length - 1 ||   //new paragraph or last line
+      (list.length > 0 && stub !== "* ")            //end of list
+    ){
+      if(!breakParagraph){
         paragraph += lines[i];
       }
+      breakParagraph=false;
 
       //list
       if(list.length > 0 && stub !== "* "){
@@ -481,6 +506,8 @@ function parseMarkdown(text){
 
       paragraph="";
     }
+
+    //normal line
     else{
       paragraph += lines[i];
     }
@@ -494,7 +521,7 @@ function parseMarkdown(text){
     }
 
     //image
-    else if(lines[i].substr(0,2) === "i#"){
+    else if(stub === "i#"){
       let reg  = new RegExp("i#\\[.*?\\]\\(.*?\\)","g");
       let res = lines[i].match(reg)
       if(res !== null){
@@ -518,6 +545,11 @@ function parseMarkdown(text){
         class : "quote",
         txt : lines[i].substr(2)
       });
+    }
+
+    //media embed
+    else if(stub === "m#" && media !== undefined){
+        els.push(media);
     }
   }
   return els;
@@ -1395,7 +1427,7 @@ function parseLinks(line){
 
 //generates media links into html
 function genMediaEmbed(content){
-  var mediaObj = null;
+  var mediaObj;
   var url = content.replace("http://", "");
   url = url.replace("https://", "");
   url = url.replace("www.", "");
@@ -1467,7 +1499,7 @@ function genMediaEmbed(content){
     };
   }
   else if(type == "imgur img" || type == "img"){
-
+    return undefined;
     var mediaSrc;
     if(type == "imgur img"){
       mediaSrc = "https://i.imgur.com/" + mediaID;
