@@ -310,7 +310,7 @@ class Post extends Comp{
     "the next paragraph \n\n\n\nIm trying to it\n\n\n\n#another heading\nbefore imgh\n"+
     "i#[/temp/ff.png](description)\nafter this image\n"+
     "> this is the quoote\nafter the quote\n"+
-    "* item 1\n*  item 2 \n*  item 3\n* item 4\n* item 5\n*  item 6\n* item 7\nmore text" +
+    "* item 1 [link](www.xyz.com)\n*  item 2 \n*  item 3 [link](www.abc.com) after\n* item 4\n* item 5\n*  item 6\n* item 7\nmore text" +
     "\n\n* another list\n*  child\n* not child\n";
     //let els = parseMarkdown(fields.text);.
     "";
@@ -413,7 +413,7 @@ function parseMarkdown(text){
   for(let i=0; i<lines.length; i++){
     let stub = lines[i].substr(0,2);
 
-    //ignore banner
+    //temp : ignore banner
     if(lines[i].substr(0,2) === "#b"){
       i++;
     }
@@ -442,17 +442,39 @@ function parseMarkdown(text){
       if(!(lines[i].charAt(0) === "#"  || stub === "i#" || stub === "> " || stub === "* ")){
         paragraph += lines[i];
       }
+
       //list
       if(list.length > 0 && stub !== "* "){
-        els.push({
+        //genList
+        let listEl = {
           tag : "ul",
           children : Quas.genList(list)
-        });
+        };
+
+        //parse the links out of each list item
+        for(let c in listEl.children){
+          let item = listEl.children[c];
+          if(item.tag === "li"){
+            let itemEl = parseStrForLinks(item.txt);
+            itemEl.tag = "li";
+            listEl.children[c] = itemEl;
+          }
+          else if(item.tag === "ul"){
+            let nestedItems = item.children;
+            for(let cc in nestedItems){
+              let itemEl = parseStrForLinks(nestedItems[cc].txt);
+              itemEl.tag = "li";
+              listEl.children[c].children[cc] = itemEl;
+            }
+          }
+        }
+        els.push(listEl);
         list = [];
       }
 
       //links and paragraphs
       let pEl = parseStrForLinks(paragraph);
+      pEl.tag = "p";
       if(pEl.children.length > 0){
         els.push(pEl);
       }
@@ -506,7 +528,7 @@ function parseStrForLinks(paragraph){
   let reg  = new RegExp("\\[.*?\\]\\(.*?\\)","g");
   let links = paragraph.match(reg);
   let pEl = {
-    tag : "p",
+    //tag : "p",
     children : []
   }
   for(let a in links){
