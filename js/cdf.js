@@ -317,9 +317,8 @@ class Post extends Comp{
     "\nimgur img:\nm#https://i.imgur.com/gctK5q2.jpg" +
     "\n\nimgur gifv: \nm#https://i.imgur.com/sxGIYaO.gifv" +
     "\ngyfycat: \nm#https://gfycat.com/gifs/detail/ChiefBreakableGrebe" +
-    // "\ntwitter: \nm#" +
-    // "\ntwitch: \nm#"
-    //let els = parseMarkdown(fields.text);.
+    "\ntwitter: \nm#https://twitter.com/PohkaDota/status/950501419068600322" +
+     "\ntwitch: \nm#https://clips.twitch.tv/SaltyFantasticSheepPeanutButterJellyTime"+
     "";
     let els = parseMarkdown(sample); //for testing markdown
     console.log(els);
@@ -1460,16 +1459,45 @@ function genMediaEmbed(content){
       type = "imgur img";
     }
   }
-  else if(domain == ""){
-    var fileName = els[els.length-1];
-    var fileEls = fileName.split(".");
-    var fileType = fileEls[1];
-
-    mediaID = els.join("/");
-
-    if(fileType == "png" || fileType == "jpeg" || fileType == "jpg"){
-      type = "img"
+  else if(domain == "clips.twitch.tv"){
+    let mediaSrc = "https://clips.twitch.tv/embed?clip=" + url.replace("clips.twitch.tv/","") + "&autoplay=false&tt_medium=clips_embed";
+    mediaObj = {
+      tag : "iframe",
+      class : "video",
+      src : mediaSrc,
+      frameborder : "0",
+      scrolling : "no",
+      allowfullscreen : "true"
     }
+  }
+  else if(domain == "twitter.com"){
+    //todo twiter embed
+    return undefined;
+    mediaObj = {
+      tag : "div",
+      class : "tweet-con",
+    }
+
+    let tweetURL = "https://publish.twitter.com/oembed?url=https://" + url;
+    Quas.ajax({
+      url : "/php/tweet.php",
+      type : "GET",
+      data :{
+        tweet : tweetURL
+      },
+      return : "json",
+      success : function(res){
+        console.log(res);
+        let author = res.author_name;
+        let authorUrl = res.author_url;
+        let tweetUrl = res.url;
+        let html = res.html;
+        Quas.getEl(".tweet-con").el.innerHTML = html;
+      }
+    });
+  }
+  else if(domain == ""){
+    //self domain for future
   }
 
   if(type=="youtube"){
@@ -1500,6 +1528,7 @@ function genMediaEmbed(content){
   }
   else if(type == "imgur img" || type == "img"){
     return undefined;
+    //disabled img hosting from imgur
     var mediaSrc;
     if(type == "imgur img"){
       mediaSrc = "https://i.imgur.com/" + mediaID;
