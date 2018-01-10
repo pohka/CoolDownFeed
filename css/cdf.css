@@ -385,7 +385,14 @@ html::-webkit-scrollbar-thumb
   float: right;
   width: 30px;
   padding-left: 10px;
-  color: var(--text_faded);
+}
+
+#session-down-icon svg{
+  fill: var(--text_faded);
+}
+
+#session-down-icon.active svg{
+  fill : var(--pri);
 }
 
 #session-avatar{
@@ -434,11 +441,10 @@ html::-webkit-scrollbar-thumb
 }
 
 .user-menu{
-  display: none;
   position: fixed;
   right: 0;
   top: 50px;
-  width: 200px;
+  width: 220px;
   background: var(--bg);
   box-shadow: 0px 0px 3px var(--shadow);
 }

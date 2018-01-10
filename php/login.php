@@ -5,8 +5,8 @@
     echo "Failed to connect to MySQL: " . mysqli_connect_error();
   }
 
-  $pass = htmlspecialchars($_POST["password"]);
-  $user = htmlspecialchars($_POST["username"]);
+  $pass = htmlspecialchars($_REQUEST["password"]);
+  $user = htmlspecialchars($_REQUEST["username"]);
   $sql = "SELECT * FROM users WHERE username = '" . $user ."' AND password = '" . $pass ."'";
   $result = mysqli_query($con, $sql);
   $rowcount = mysqli_num_rows($result);
@@ -24,6 +24,10 @@
       "user_avatar" => $row[2]
     );
     echo json_encode($data);
+  }
+  else{
+    $myObj->name = "John";
+    echo json_encode($myObj);
   }
 
   mysqli_close($con);

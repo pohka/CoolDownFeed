@@ -239,7 +239,7 @@ class Element{
     if(val === undefined){
       return this.el[key];
     }
-    else this.el[key] = val;
+    this.el[key] = val;
   }
 
   /**
@@ -256,29 +256,41 @@ class Element{
     return this.el.textContent;
   }
 
+  val(val){
+    if(val===undefined){
+      return this.prop("value");
+    }
+    this.prop("value", val);
+  }
+
   /**
     Returns or set the visibility of an element
-    If show is undefined then the visibility will be toggled
+    use Quas.is
     Otherwise the visibility will be set to show
     @param {Boolean} show - (optional)
   */
   visible(show){
-    let v = this.el.style.visibility;
     //return value
     if(show === undefined){
-      return (v === "" || v === "visible");
+      let v = window.getComputedStyle(this.el).display;
+      return (v !== "none");
     }
     //set value
     else{
       if(show){
-        this.el.style.visibility = "visible";
+        this.el.style.display = "";
       }
       else{
-        this.el.style.visibility = "hidden";
+        this.el.style.display = "none";
       }
     }
   }
+
+  toggleVisible(){
+    this.visible(!this.visible());
+  }
 }
+
 
 /**
   Static class for library functions
@@ -399,7 +411,13 @@ class Quas{
             else{
               let returnType = req.return.toLowerCase();
               switch(returnType){
-                case "json" : result = JSON.parse(this.responseText); break;
+                case "json" :
+                  try {
+                    result = JSON.parse(this.responseText);
+                  } catch(e){
+                    result = "Failed to parse return text to JSON";
+                  }
+                  break;
               }
             }
 

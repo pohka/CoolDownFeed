@@ -269,7 +269,10 @@ class LoginModal extends Comp{
               tag : "input",
               id : "submit-login",
               type : "button",
-              value : "Submit"
+              value : "Submit",
+              on : {
+                click : login
+              }
             },
             {
               tag : "input",
@@ -327,44 +330,57 @@ Quas.start = function(){
   nav.render(".cdf-nav");
   quasLoadPage();
   new Footer().render("footer");
-  loadIcons();
+  loadSession();
+  loadAllIcons();
 }
 
-function loadIcons(){
+function loadAllIcons(){
   Quas.each(".ico", function(el){
-    let clss = el.attr("class").split(" ");
-    for(let i=0; i<clss.length; i++){
-      if(clss[i].substr(0,4) === "ico-"){
-        let name = clss[i].substr(4);
-        let icon = icons[clss[i].substr(4)];
-        if(icon !== undefined){
-          var span = document.createElement("span");
-          span.textContent = "text";
-          var size = window.getComputedStyle(el.el, null).getPropertyValue('font-size');
-          el.addChild({
-            tag : "i",
-            class : "ico-con ico-con-"+name,
+    loadIcon(el);
+  });
+}
 
-            children : [{
-              tag : "svg",
-              class : "ico-icon",
-              xmlns : "http://www.w3.org/2000/svg",
-              viewBox : icon.box,
-              width : icon.width,
-              children : [
-                {
-                  tag : "path",
-                  d : icon.d,
-                }
-              ]
-            }]
-          });
-          el.el.innerHTML+="";
-          break;
-        }
+function loadIcon(sel){
+  let el
+  if(sel.constructor == String){
+    el = Quas.getEl(sel);
+  }
+  else{
+    el = sel;
+  }
+
+  let clss = el.attr("class").split(" ");
+  for(let i=0; i<clss.length; i++){
+    if(clss[i].substr(0,4) === "ico-"){
+      let name = clss[i].substr(4);
+      let icon = icons[clss[i].substr(4)];
+      if(icon !== undefined){
+        var span = document.createElement("span");
+        span.textContent = "text";
+        var size = window.getComputedStyle(el.el, null).getPropertyValue('font-size');
+        el.addChild({
+          tag : "i",
+          class : "ico-con ico-con-"+name,
+
+          children : [{
+            tag : "svg",
+            class : "ico-icon",
+            xmlns : "http://www.w3.org/2000/svg",
+            viewBox : icon.box,
+            width : icon.width,
+            children : [
+              {
+                tag : "path",
+                d : icon.d,
+              }
+            ]
+          }]
+        }, "set");
+        el.el.innerHTML+="";
+        break;
       }
     }
-  });
+  }
 }
 
 let icons = {
@@ -377,6 +393,11 @@ let icons = {
     box : "0 0 576 512",
     width : "1.2em",
     d : 'M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z'
+  },
+  "caret-down" :{
+    box: "0 0 320 512",
+    width : "0.8em",
+    d : "M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
   }
 };
 
@@ -1076,46 +1097,59 @@ function timeSinceString(time){
 
 //request login user
 function login(){
-  $.ajax({
+  //console.log("val:" + Quas.getEl("#login-user").val());
+  let userEl = Quas.getEl("#login-user");
+  let passEl = Quas.getEl("#login-pass");
+  Quas.ajax({
     url: "/php/login.php",
     type: "POST",
     data: {
-      username: $("#login-user").val(),
-      password: $("#login-pass").val()
-    }
-    }).done(function( data ) {
-      if( data !== ""){
-        var json = jQuery.parseJSON(data);
+      username: userEl.val(),
+      password: passEl.val()
+    },
+    return : "json",
+    success : function(data){
+      if(data.constructor != String){
         //create session
         clearNotifications();
         notification("Logged In", "success", 4);
-        toggleLoginModal();
-        $("#login-user").val("");
-        $("#login-pass").val("");
-        for(let key in json){
-          document.cookie = key + "=" + json[key] + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
+        userEl.val("");
+        passEl.val("");
+        Quas.getEl(".login-modal").visible(false);
+        for(let key in data){
+          document.cookie = key + "=" + data[key] + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
         }
         loadSession();
       }
       else{
         notification("Login details were incorrect", "error", 28);
       }
-    }).fail(function() {
-      //console.log( "connection failed" );
+    }
   });
 }
 
 //sets the session info at the top right
 function loadSession(){
   var session = getCookie("session");
-  if(session !== ""){
+  if(session !== undefined){
     let avatar = getCookie("user_avatar");
     let userName = getCookie("user_name");
+    Quas.getEl("#login").visible(false);
 
-    $("#login").hide();
-    bwe.append(".cdf-nav-info", {
+    Quas.getEl(".cdf-nav-info").addChild({
       tag : "div",
       class : "session-con",
+      on : {
+        mouseenter : function(){
+          Quas.getEl("#session-down-icon").active(true);
+        },
+        mouseleave : function(){
+          Quas.getEl("#session-down-icon").active(false);
+        },
+        click : function(){
+          Quas.getEl(".user-menu").toggleVisible();
+        }
+      },
       children : [
         {
           tag : "div",
@@ -1131,15 +1165,24 @@ function loadSession(){
         {
           tag : "span",
           id  : "session-username",
-          con : userName
+          txt : userName
         },
         {
           tag : "div",
           id : "session-down-icon",
-          class : "fa fa-caret-down"
+          class : "ico ico-caret-down"
         }
       ]
     });
+    let userMenu = new UserMenu({
+      "My Posts" : function(){
+        window.open("/my-posts","_self");
+      },
+      "Log Out" : endSession,
+    });
+    userMenu.render("body");
+    Quas.getEl(".user-menu").visible(false);
+    loadIcon("#session-down-icon");
   }
 }
 
@@ -1151,12 +1194,12 @@ function endSession(){
     clearCookie("user_avatar");
     clearCookie("user_name");
 
-    $(".session-con").remove();
-    $("#login").show();
-    $(".user-menu").hide();
+    Quas.getEl(".session-con").del();
+    Quas.getEl("#login").visible(true);
+    Quas.getEl(".user-menu").visible(false);
     setTimeout(function(){
       location.reload();
-    }, 2000);
+    }, 1000);
     notification("Logged Out", "", 3);
   }
 }
@@ -1180,24 +1223,23 @@ function getCookie(cname) {
             return c.substring(name.length, c.length);
         }
     }
-    return "";
 }
 
-function toggleLoginModal(){
-  var sel = ".login-modal"
-  if($(sel).length == 0){
-    genLoginModal();
-  }
-  if($(sel).is(":hidden")){
-    $(".login-modal").show();
-    $("#login-user").focus();
-    disableScroll();
-  }
-  else{
-    $(".login-modal").fadeOut("fast");
-    enableScroll();
-  }
-}
+// function toggleLoginModal(){
+//   var sel = ".login-modal"
+//   if($(sel).length == 0){
+//     genLoginModal();
+//   }
+//   if($(sel).is(":hidden")){
+//     $(".login-modal").show();
+//     $("#login-user").focus();
+//     disableScroll();
+//   }
+//   else{
+//     $(".login-modal").fadeOut("fast");
+//     enableScroll();
+//   }
+// }
 
 //generate the login modal
 function genLoginModal(){
@@ -1623,14 +1665,18 @@ function notification(text, type, duration){
   }
 
   var id = "note-"+genUID();
-
-  if($(".notification-con").length == 0){
-    bwe.append("body", {
+  //let el = Quas.getEl(".notification-con");
+  if(Quas.getEl(".notification-con") === undefined){
+    Quas.getEl("body").addChild({
       tag : "div",
       class : "notification-con"
     });
+    // bwe.append("body", {
+    //   tag : "div",
+    //   class : "notification-con"
+    // });
   }
-  $(".notification-con").prepend(bwe.build({
+  Quas.getEl(".notification-con").addChild({
     tag : "div",
     id : id,
     class : "notification notification-"+type,
@@ -1638,74 +1684,110 @@ function notification(text, type, duration){
       {
         tag : "div",
         class : "notification-text",
-        con : text
+        txt : text
       },
       {
         tag : "div",
         class : "notification-icon " + cls
       }
     ]
-  }));
+  });
+  // $(".notification-con").prepend(bwe.build({
+  //   tag : "div",
+  //   id : id,
+  //   class : "notification notification-"+type,
+  //   children : [
+  //     {
+  //       tag : "div",
+  //       class : "notification-text",
+  //       con : text
+  //     },
+  //     {
+  //       tag : "div",
+  //       class : "notification-icon " + cls
+  //     }
+  //   ]
+  //}));
 
   setTimeout(function(){
-      $("#"+id).fadeOut('fast', function() {
-        $("#"+id).remove();
-      });
+      Quas.getEl("#"+id).del();
     },
     duration*1000);
 }
 
 function clearNotifications(filter){
   if(filter !== undefined){
-    $(".notification").each(function(){
-      if($(this).hasClass('notification-' + filter)){
-        $(this).hide();
+    Quas.each(".notification", function(el){
+      if(el.hasCls('notification-' + filter)){
+        el.visible(false);
       }
     });
   }
   else{
-    $(".notification").each(function(){ $(this).hide(); });
+    Quas.each(".notification", function(el){
+      el.visible(false);
+    });
   }
 }
 
-function toggleUserMenu(){
-  var sel = ".user-menu"
-  if($(sel).length == 0){
-    genUserMenu();
-  }
-  if($(sel).is(":hidden")){
-    $(sel).show();
-  }
-  else{
-    $(sel).hide();
+// function toggleUserMenu(){
+//   var sel = ".user-menu"
+//   if($(sel).length == 0){
+//     genUserMenu();
+//   }
+//   if($(sel).is(":hidden")){
+//     $(sel).show();
+//   }
+//   else{
+//     $(sel).hide();
+//   }
+// }
+
+class UserMenu extends Comp{
+  constructor(items){
+    let data = {
+      tag :"div",
+      class : "user-menu",
+      children : []
+    }
+    for(let key in items){
+      data.children.push({
+        tag : "div",
+        on : {
+          click : items[key]
+        },
+        txt : key
+      });
+    }
+    super(data);
   }
 }
 
-function genUserMenu(){
-  bwe.append("body",{
-    "tag":"div",
-    "class":"user-menu",
-    "children":[
-      {
-        tag:"div",
-        data:[{action : "my-posts"}],
-        con:"My Posts"
-      },
-      {
-        tag:"div",
-        data:[{action : "log-out"}],
-        con:"Log Out"
-      }
-    ]
-  });
-}
+// function genUserMenu(){
+//   bwe.append("body",{
+//     "tag":"div",
+//     "class":"user-menu",
+//     "children":[
+//       {
+//         tag:"div",
+//         data:[{action : "my-posts"}],
+//         con:"My Posts"
+//       },
+//       {
+//         tag:"div",
+//         data:[{action : "log-out"}],
+//         con:"Log Out"
+//       }
+//     ]
+//   });
+// }
 
-function userMenuAction(action){
-  switch(action){
-    case "log-out" : endSession(); break;
-    case "my-posts" : window.open("/my-posts","_self"); break;
-  }
-}
+// function userMenuAction(action){
+//   switch(action){
+//     case "log-out" : endSession(); break;
+//     case "my-posts" : window.open("/my-posts","_self"); break;
+//   }
+// }
 
 //returns the data from the url in a json object
 function getUrlValues(){
