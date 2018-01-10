@@ -337,6 +337,34 @@ function loadAllIcons(){
   });
 }
 
+class Icon extends Comp{
+  constructor(name){
+    let icon = icons[name];
+    super({
+      tag : "i",
+      class : "ico-con ico-con-"+name,
+      children : [{
+        tag : "svg",
+        class : "ico-icon",
+        xmlns : "http://www.w3.org/2000/svg",
+        viewBox : icon.box,
+        width : icon.width,
+        children : [
+          {
+            tag : "path",
+            d : icon.d,
+          }
+        ]
+      }]
+    });
+  }
+
+  render(el, type){
+    super.render(el, type);
+    el.innerHTML+="";
+  }
+}
+
 function loadIcon(sel){
   let el
   if(sel.constructor == String){
@@ -350,30 +378,10 @@ function loadIcon(sel){
   for(let i=0; i<clss.length; i++){
     if(clss[i].substr(0,4) === "ico-"){
       let name = clss[i].substr(4);
-      let icon = icons[clss[i].substr(4)];
+      let icon = icons[name];
       if(icon !== undefined){
-        var span = document.createElement("span");
-        span.textContent = "text";
-        var size = window.getComputedStyle(el.el, null).getPropertyValue('font-size');
-        el.addChild({
-          tag : "i",
-          class : "ico-con ico-con-"+name,
-
-          children : [{
-            tag : "svg",
-            class : "ico-icon",
-            xmlns : "http://www.w3.org/2000/svg",
-            viewBox : icon.box,
-            width : icon.width,
-            children : [
-              {
-                tag : "path",
-                d : icon.d,
-              }
-            ]
-          }]
-        }, "set");
-        el.el.innerHTML+="";
+        let iconEl = new Icon(name);
+        iconEl.render(el.el, "set");
         break;
       }
     }
@@ -809,7 +817,7 @@ function login(){
       if(data.constructor != String){
         //create session
         clearNotifications();
-        notification("Logged In", "success", 4);
+        new Notification("Logged In", 4, "success").render();
         userEl.val("");
         passEl.val("");
         Quas.getEl(".login-modal").visible(false);
@@ -819,7 +827,7 @@ function login(){
         loadSession();
       }
       else{
-        notification("Login details were incorrect", "error", 28);
+        new Notification("Login details were incorrect", 28, "error").render();
       }
     }
   });
@@ -829,11 +837,26 @@ function login(){
 function loadSession(){
   var session = getCookie("session");
   if(session !== undefined){
+    Quas.getEl("#login").visible(false);
+    new NavSession().render(".cdf-nav-info");
+    let userMenu = new UserMenu({
+      "My Posts" : function(){
+        window.open("/my-posts","_self");
+      },
+      "Log Out" : endSession,
+    });
+    userMenu.render("body");
+    Quas.getEl(".user-menu").visible(false);
+    loadIcon("#session-down-icon");
+  }
+}
+
+//user session in the navbar
+class NavSession extends Comp{
+  constructor(){
     let avatar = getCookie("user_avatar");
     let userName = getCookie("user_name");
-    Quas.getEl("#login").visible(false);
-
-    Quas.getEl(".cdf-nav-info").addChild({
+    super({
       tag : "div",
       class : "session-con",
       on : {
@@ -871,15 +894,6 @@ function loadSession(){
         }
       ]
     });
-    let userMenu = new UserMenu({
-      "My Posts" : function(){
-        window.open("/my-posts","_self");
-      },
-      "Log Out" : endSession,
-    });
-    userMenu.render("body");
-    Quas.getEl(".user-menu").visible(false);
-    loadIcon("#session-down-icon");
   }
 }
 
@@ -897,7 +911,7 @@ function endSession(){
     setTimeout(function(){
       location.reload();
     }, 1000);
-    notification("Logged Out", "", 3);
+    new Notification("Logged Out", 3).render();
   }
 }
 
@@ -920,197 +934,6 @@ function getCookie(cname) {
             return c.substring(name.length, c.length);
         }
     }
-}
-
-//generate the login modal
-function genLoginModal(){
-  bwe.append("body", {
-    tag:"div",
-    class:"login-modal",
-    children:[
-      {
-        tag:"div",
-        class:"login-con",
-        children:[
-          {
-            tag:"div",
-            class:"login-menu",
-            children:[
-              {
-                tag:"div",
-                id:"login-existing",
-                class:"btn active",
-                con: "Login",
-              },
-              {
-                tag:"div",
-                id:"login-newuser",
-                class:"btn",
-                con :"Register"
-              }
-            ]
-          },
-          {
-            tag:"input",
-            type:"text",
-            id:"login-user",
-            placeholder:"Username",
-            children:[
-              {
-                tag:"br",
-                children:[
-                  {
-                    tag:"input",
-                    type:"password",
-                    id:"login-pass",
-                    placeholder:"Password",
-                    children:[
-                      {
-                        tag:"br"
-                      },
-                      {
-                        tag:"input",
-                        type:"button",
-                        id:"submit-login",
-                        value:"Submit",
-                        children:[
-                          {
-                            tag:"input",
-                            type:"button",
-                            id:"hide-login",
-                            value:"Cancel"
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  });
-}
-
-//post markdown converter
-function genHtmlFromRaw(raw){
-  var markdown = {
-    banner : "b#",
-    heading1 : "t#",
-    heading2 : "#",
-    quote : ">",
-    media : "m#"
-  }
-
-  var lines = raw.split("\n");
-
-  var index = lines[0].indexOf(markdown["banner"]) + markdown["banner"].length;
-  var bannerSrc = lines[0].substr(index);
-
-  var banner = {
-    tag:"div",
-    class:"banner",
-    children:[{
-      tag : "img",
-      src : bannerSrc
-    }]
-  };
-
-  //$(".post-preview").html(banner.get());
-
-  var post = {
-    tag : "div",
-    class : "post-con",
-    children : [
-      banner
-    ]
-  };
-
-  var curParagraph = "";
-  var lists = getListsFromLines(lines);
-
-  for(var i=1; i<lines.length; i++){
-    //parses lists
-     for(var a in lists){
-       if(lists[a][0] == i){
-         lists[a].splice(0, 1)
-         var listObj = bwe.genList({}, lists[a]);
-         i += lists[a].length;
-         post["children"].push(listObj);
-       }
-     }
-
-    lines[i] = lines[i].trim();
-    if(lines[i] !== ""){
-      var foundKey = false;
-      for(var key in markdown){
-        var index = lines[i].indexOf(markdown[key]);
-        if(index == 0){
-          foundKey = true;
-          var content = lines[i].substr(index + markdown[key].length);
-          var data = null;
-          if(key == "heading1"){
-            data = {
-              tag : "h1",
-              con : content
-            };
-          }
-          else if(key == "heading2"){
-            data = {
-              tag : "h2",
-              con : content
-            };
-          }
-          else if(key == "quote"){
-            data = {
-              tag : "div",
-              class : "quote",
-              con : content
-            };
-          }
-          else if(key == "media"){
-            var mediaObj = genMediaEmbed(content);
-            if(mediaObj != null){
-              post["children"].push(mediaObj);
-            }
-          }
-
-          //paragraph from markdown
-          if(curParagraph !== ""){
-            post["children"].push({
-              tag : "p",
-              con : curParagraph
-            });
-            curParagraph = "";
-          }
-
-          if(data != null){
-            post["children"].push(data);
-          }
-        }
-      }
-      if(!foundKey){
-        //end of paragraph from new markdown
-        var html = parseLinks(lines[i]);
-        curParagraph += html;
-      }
-    }
-
-    //end of paragraph
-    if(lines[i] === "" || i == lines.length -1){
-      if(curParagraph !== ""){
-        post["children"].push({
-          tag : "p",
-          con : curParagraph
-        });
-        curParagraph = "";
-      }
-    }
-  }
-
-  return post;
 }
 
 //returns 2 array with index 0 of each array containing the line number
@@ -1332,48 +1155,46 @@ function genUID() {
     return firstPart + secondPart;
 }
 
-//shows a notification at the top right
-function notification(text, type, duration){
-  var cls = "fa ";
-  switch(type){
-    case "success" : cls += "fa-check"; break;
-    case "warning" : cls += "fa-exclamation"; break;
-    case "error" : cls += "fa-exclamation-triangle"; break;
-  }
-
-  if(type==""){
-    type="default";
-  }
-
-  var id = "note-"+genUID();
-  //let el = Quas.getEl(".notification-con");
-  if(Quas.getEl(".notification-con") === undefined){
-    Quas.getEl("body").addChild({
+class Notification extends Comp{
+  constructor(text, duration, type){
+    if(type === undefined || type === ""){
+      type="default";
+    }
+    super({
       tag : "div",
-      class : "notification-con"
+      id : "note-"+genUID(),
+      class : "notification notification-"+type,
+      children : [
+        {
+          tag : "div",
+          class : "notification-text",
+          txt : text
+        },
+        {
+          tag : "div",
+          class : "notification-icon"
+        }
+      ]
     });
-  }
-  Quas.getEl(".notification-con").addChild({
-    tag : "div",
-    id : id,
-    class : "notification notification-"+type,
-    children : [
-      {
-        tag : "div",
-        class : "notification-text",
-        txt : text
-      },
-      {
-        tag : "div",
-        class : "notification-icon " + cls
-      }
-    ]
-  });
+    this.duration = duration;
 
-  setTimeout(function(){
-      Quas.getEl("#"+id).del();
-    },
-    duration*1000);
+    if(Quas.getEl(".notification-con") === undefined){
+      Quas.getEl("body").addChild({
+        tag : "div",
+        class : "notification-con"
+      });
+    }
+  }
+
+  render(){
+    super.render(".notification-con");
+    let id = this.data.id;
+    setTimeout(
+      function(){
+        Quas.getEl("#"+id).del();
+      },
+      this.duration*1000);
+  }
 }
 
 function clearNotifications(filter){
@@ -1477,6 +1298,69 @@ function dateToString(datestr){
   return str;
 }
 
+class MyPostsItem extends Comp{
+  constructor(data){
+    super({
+      tag : "div",
+      class : "post-list-item",
+      data : {
+        url : data.id
+      },
+      children : [
+        {
+          tag : "img",
+          src : data.img,
+        },
+        {
+          tag : "div",
+          class : "post-item-info",
+          children :[
+            {
+              tag : "h3",
+              class : "post-item-title",
+              txt : data.title,
+            },
+            {
+              tag : "div",
+              class : "post-item-date",
+              txt : dateToString(data.publish_time)
+            }
+          ]
+        },
+        {
+          tag : "div",
+          class : "post-item-stats",
+          children : [
+            {
+              tag : "div",
+              txt : "",
+              class : "ico-post-item ico ico-chart-bar",
+            },
+            {
+              tag : "div",
+              class : "ico-post-item-val",
+              txt : "0"
+            },
+            {
+              tag : "br",
+            },
+            {
+              tag : "div",
+              id : "",
+              class : "ico-post-item ico ico-comment",
+            },
+            {
+              tag : "div",
+              class : "ico-post-item-val",
+              txt : "0"
+            }
+          ]
+        }
+      ]
+    });
+  }
+}
+
 //generate my-posts page
 function genMyPosts(){
   let urlData = Quas.getUrlValues();
@@ -1514,70 +1398,13 @@ function genMyPosts(){
             json[i]["title"] = "Untitled";
           }
 
-          postList.addChild({
-            tag : "div",
-            class : "post-list-item",
-            data : {
-              url : json[i]["id"]
-            },
-            children : [
-              {
-                tag : "img",
-                src : img,
-              },
-              {
-                tag : "div",
-                class : "post-item-info",
-                children :[
-                  {
-                    tag : "h3",
-                    class : "post-item-title",
-                    txt : json[i]["title"],
-                  },
-                  {
-                    tag : "div",
-                    class : "post-item-date",
-                    txt : dateToString(json[i]["publish_time"])
-                  }
-                ]
-              },
-              {
-                tag : "div",
-                class : "post-item-stats",
-                children : [
-                  {
-                    tag : "div",
-                    txt : "",
-                    class : "ico-post-item ico ico-chart-bar",
-                  },
-                  {
-                    tag : "div",
-                    class : "ico-post-item-val",
-                    txt : "0"
-                  },
-                  {
-                    tag : "br",
-                  },
-                  {
-                    tag : "div",
-                    id : "",
-                    class : "ico-post-item ico ico-comment",
-                  },
-                  {
-                    tag : "div",
-                    class : "ico-post-item-val",
-                    txt : "0"
-                  }
-                ]
-              }
-            ]
-          });
+          json[i].img = img;
+          new MyPostsItem(json[i]).render(postList);
         }
       }
       loadAllIcons();
     }
   });
-
 }
 
 //set page or use "prev" or "next" to increment and decrement

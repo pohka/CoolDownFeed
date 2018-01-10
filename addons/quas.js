@@ -99,12 +99,15 @@ class Comp{
     append: adds HTML to the end
     prepend : adds HTML to the start
     set : overwrites the HTML
-    @param {String} sel - See Quas.sel()
+    @param {String|Element|HTMLElement} sel - See Quas.sel()
     @param {String} type - (optional) append/prepend/set
   */
   render(sel, type){
     let el;
-    if(sel.constructor !== String)
+    if(sel.constructor === Element){
+      el = sel.el;
+    }
+    else if(sel.constructor !== String)
       el = sel;
     else
       el = Quas.sel(sel);
