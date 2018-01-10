@@ -1,3 +1,4 @@
+//navbar
 class Navbar extends Comp{
   constructor(){
     super({
@@ -83,6 +84,7 @@ class Navbar extends Comp{
   }
 }
 
+//man navigation items navbar
 class NavItem extends Comp{
   constructor(fields){
     let data = {
@@ -98,6 +100,7 @@ class NavItem extends Comp{
   }
 }
 
+//card on the home page
 class Card extends Comp{
   constructor(fields){
     super({
@@ -148,6 +151,7 @@ class Card extends Comp{
   }
 }
 
+//footer
 class Footer extends Comp{
   constructor(fields){
     super({
@@ -216,6 +220,7 @@ class Footer extends Comp{
   }
 }
 
+//Login modal
 class LoginModal extends Comp{
   constructor(){
     super({
@@ -289,6 +294,7 @@ class LoginModal extends Comp{
   }
 }
 
+//post
 class Post extends Comp{
   constructor(fields){
     super({
@@ -321,22 +327,7 @@ class Post extends Comp{
   }
 }
 
-
-Quas.start = function(){
-  let nav = new Navbar();
-  nav.render(".cdf-nav");
-  quasLoadPage();
-  new Footer().render("footer");
-  loadSession();
-  loadAllIcons();
-}
-
-function loadAllIcons(){
-  Quas.each(".ico", function(el){
-    loadIcon(el);
-  });
-}
-
+//an icon
 class Icon extends Comp{
   constructor(name){
     let icon = icons[name];
@@ -362,29 +353,6 @@ class Icon extends Comp{
   render(el, type){
     super.render(el, type);
     el.innerHTML+="";
-  }
-}
-
-function loadIcon(sel){
-  let el
-  if(sel.constructor == String){
-    el = Quas.getEl(sel);
-  }
-  else{
-    el = sel;
-  }
-
-  let clss = el.attr("class").split(" ");
-  for(let i=0; i<clss.length; i++){
-    if(clss[i].substr(0,4) === "ico-"){
-      let name = clss[i].substr(4);
-      let icon = icons[name];
-      if(icon !== undefined){
-        let iconEl = new Icon(name);
-        iconEl.render(el.el, "set");
-        break;
-      }
-    }
   }
 }
 
@@ -415,6 +383,238 @@ let icons = {
     d : "M500 400c6.6 0 12 5.4 12 12v24c0 6.6-5.4 12-12 12H12c-6.6 0-12-5.4-12-12V76c0-6.6 5.4-12 12-12h24c6.6 0 12 5.4 12 12v324h452zm-356-60v-72c0-6.6-5.4-12-12-12h-24c-6.6 0-12 5.4-12 12v72c0 6.6 5.4 12 12 12h24c6.6 0 12-5.4 12-12zm96 0V140c0-6.6-5.4-12-12-12h-24c-6.6 0-12 5.4-12 12v200c0 6.6 5.4 12 12 12h24c6.6 0 12-5.4 12-12zm96 0V204c0-6.6-5.4-12-12-12h-24c-6.6 0-12 5.4-12 12v136c0 6.6 5.4 12 12 12h24c6.6 0 12-5.4 12-12zm96 0V108c0-6.6-5.4-12-12-12h-24c-6.6 0-12 5.4-12 12v232c0 6.6 5.4 12 12 12h24c6.6 0 12-5.4 12-12z"
   }
 };
+
+//permission denied overlap
+class ConcealOverlay extends Comp{
+  constructor(msg){
+    super({
+      tag : "div",
+      class : "conceal",
+      children :[
+        {
+          tag : "div",
+          class : "conceal-msg",
+          txt : "Permission Denied\n"+msg
+        }
+      ]
+    });
+  }
+}
+
+//user session in the navbar
+class NavSession extends Comp{
+  constructor(){
+    let avatar = getCookie("user_avatar");
+    let userName = getCookie("user_name");
+    super({
+      tag : "div",
+      class : "session-con",
+      on : {
+        mouseenter : function(){
+          Quas.getEl("#session-down-icon").active(true);
+        },
+        mouseleave : function(){
+          Quas.getEl("#session-down-icon").active(false);
+        },
+        click : function(){
+          Quas.getEl(".user-menu").toggleVisible();
+        }
+      },
+      children : [
+        {
+          tag : "div",
+          class : "session-avatar-con",
+          children : [
+            {
+              tag : "img",
+              id  : "session-avatar",
+              src : avatar
+            }
+          ]
+        },
+        {
+          tag : "span",
+          id  : "session-username",
+          txt : userName
+        },
+        {
+          tag : "div",
+          id : "session-down-icon",
+          class : "ico ico-caret-down"
+        }
+      ]
+    });
+  }
+}
+
+//notification in the bottom left
+class Notification extends Comp{
+  constructor(text, duration, type){
+    if(type === undefined || type === ""){
+      type="default";
+    }
+    super({
+      tag : "div",
+      id : "note-"+genUID(),
+      class : "notification notification-"+type,
+      children : [
+        {
+          tag : "div",
+          class : "notification-text",
+          txt : text
+        },
+        {
+          tag : "div",
+          class : "notification-icon"
+        }
+      ]
+    });
+    this.duration = duration;
+
+    if(Quas.getEl(".notification-con") === undefined){
+      Quas.getEl("body").addChild({
+        tag : "div",
+        class : "notification-con"
+      });
+    }
+  }
+
+  render(){
+    super.render(".notification-con");
+    let id = this.data.id;
+    setTimeout(
+      function(){
+        Quas.getEl("#"+id).del();
+      },
+      this.duration*1000);
+  }
+}
+
+//list item for posts in my-post page
+class MyPostsItem extends Comp{
+  constructor(data){
+    super({
+      tag : "div",
+      class : "post-list-item",
+      data : {
+        url : data.id
+      },
+      children : [
+        {
+          tag : "img",
+          src : data.img,
+        },
+        {
+          tag : "div",
+          class : "post-item-info",
+          children :[
+            {
+              tag : "h3",
+              class : "post-item-title",
+              txt : data.title,
+            },
+            {
+              tag : "div",
+              class : "post-item-date",
+              txt : dateToString(data.publish_time)
+            }
+          ]
+        },
+        {
+          tag : "div",
+          class : "post-item-stats",
+          children : [
+            {
+              tag : "div",
+              txt : "",
+              class : "ico-post-item ico ico-chart-bar",
+            },
+            {
+              tag : "div",
+              class : "ico-post-item-val",
+              txt : "0"
+            },
+            {
+              tag : "br",
+            },
+            {
+              tag : "div",
+              id : "",
+              class : "ico-post-item ico ico-comment",
+            },
+            {
+              tag : "div",
+              class : "ico-post-item-val",
+              txt : "0"
+            }
+          ]
+        }
+      ]
+    });
+  }
+}
+
+//user menu in the top right
+class UserMenu extends Comp{
+  constructor(items){
+    let data = {
+      tag :"div",
+      class : "user-menu",
+      children : []
+    }
+    for(let key in items){
+      data.children.push({
+        tag : "div",
+        on : {
+          click : items[key]
+        },
+        txt : key
+      });
+    }
+    super(data);
+  }
+}
+
+//start
+Quas.start = function(){
+  let nav = new Navbar();
+  nav.render(".cdf-nav");
+  quasLoadPage();
+  new Footer().render("footer");
+  loadSession();
+  loadAllIcons();
+}
+
+//refreshes all of the icons
+function loadAllIcons(){
+  Quas.each(".ico", function(el){
+    loadIcon(el);
+  });
+}
+
+//loads the icon onto the page
+function loadIcon(sel){
+  let el
+  if(sel.constructor == String){
+    el = Quas.getEl(sel);
+  }
+  else{
+    el = sel;
+  }
+
+  let clss = el.attr("class").split(" ");
+  for(let i=0; i<clss.length; i++){
+    if(clss[i].substr(0,4) === "ico-"){
+      let name = clss[i].substr(4);
+      let icon = icons[name];
+      if(icon !== undefined){
+        let iconEl = new Icon(name);
+        iconEl.render(el.el, "set");
+        break;
+      }
+    }
+  }
+}
 
 function quasLoadPage(){
   if(Quas.path === "" || Quas.path === "index"){
@@ -670,21 +870,7 @@ function parseStrForLinks(paragraph){
   return pEl;
 }
 
-class ConcealPage extends Comp{
-  constructor(msg){
-    super({
-      tag : "div",
-      class : "conceal",
-      children :[
-        {
-          tag : "div",
-          class : "conceal-msg",
-          txt : "Permission Denied\n"+msg
-        }
-      ]
-    });
-  }
-}
+
 /*
 $(document).ready(function() {
 
@@ -851,51 +1037,7 @@ function loadSession(){
   }
 }
 
-//user session in the navbar
-class NavSession extends Comp{
-  constructor(){
-    let avatar = getCookie("user_avatar");
-    let userName = getCookie("user_name");
-    super({
-      tag : "div",
-      class : "session-con",
-      on : {
-        mouseenter : function(){
-          Quas.getEl("#session-down-icon").active(true);
-        },
-        mouseleave : function(){
-          Quas.getEl("#session-down-icon").active(false);
-        },
-        click : function(){
-          Quas.getEl(".user-menu").toggleVisible();
-        }
-      },
-      children : [
-        {
-          tag : "div",
-          class : "session-avatar-con",
-          children : [
-            {
-              tag : "img",
-              id  : "session-avatar",
-              src : avatar
-            }
-          ]
-        },
-        {
-          tag : "span",
-          id  : "session-username",
-          txt : userName
-        },
-        {
-          tag : "div",
-          id : "session-down-icon",
-          class : "ico ico-caret-down"
-        }
-      ]
-    });
-  }
-}
+
 
 //logs the user out of their current session
 function endSession(){
@@ -1155,48 +1297,6 @@ function genUID() {
     return firstPart + secondPart;
 }
 
-class Notification extends Comp{
-  constructor(text, duration, type){
-    if(type === undefined || type === ""){
-      type="default";
-    }
-    super({
-      tag : "div",
-      id : "note-"+genUID(),
-      class : "notification notification-"+type,
-      children : [
-        {
-          tag : "div",
-          class : "notification-text",
-          txt : text
-        },
-        {
-          tag : "div",
-          class : "notification-icon"
-        }
-      ]
-    });
-    this.duration = duration;
-
-    if(Quas.getEl(".notification-con") === undefined){
-      Quas.getEl("body").addChild({
-        tag : "div",
-        class : "notification-con"
-      });
-    }
-  }
-
-  render(){
-    super.render(".notification-con");
-    let id = this.data.id;
-    setTimeout(
-      function(){
-        Quas.getEl("#"+id).del();
-      },
-      this.duration*1000);
-  }
-}
-
 function clearNotifications(filter){
   if(filter !== undefined){
     Quas.each(".notification", function(el){
@@ -1209,26 +1309,6 @@ function clearNotifications(filter){
     Quas.each(".notification", function(el){
       el.visible(false);
     });
-  }
-}
-
-class UserMenu extends Comp{
-  constructor(items){
-    let data = {
-      tag :"div",
-      class : "user-menu",
-      children : []
-    }
-    for(let key in items){
-      data.children.push({
-        tag : "div",
-        on : {
-          click : items[key]
-        },
-        txt : key
-      });
-    }
-    super(data);
   }
 }
 
@@ -1296,69 +1376,6 @@ function dateToString(datestr){
 
   let str = day + " " + month + ", " + date[0] + " " + hr + ":" + min + " " + mode;
   return str;
-}
-
-class MyPostsItem extends Comp{
-  constructor(data){
-    super({
-      tag : "div",
-      class : "post-list-item",
-      data : {
-        url : data.id
-      },
-      children : [
-        {
-          tag : "img",
-          src : data.img,
-        },
-        {
-          tag : "div",
-          class : "post-item-info",
-          children :[
-            {
-              tag : "h3",
-              class : "post-item-title",
-              txt : data.title,
-            },
-            {
-              tag : "div",
-              class : "post-item-date",
-              txt : dateToString(data.publish_time)
-            }
-          ]
-        },
-        {
-          tag : "div",
-          class : "post-item-stats",
-          children : [
-            {
-              tag : "div",
-              txt : "",
-              class : "ico-post-item ico ico-chart-bar",
-            },
-            {
-              tag : "div",
-              class : "ico-post-item-val",
-              txt : "0"
-            },
-            {
-              tag : "br",
-            },
-            {
-              tag : "div",
-              id : "",
-              class : "ico-post-item ico ico-comment",
-            },
-            {
-              tag : "div",
-              class : "ico-post-item-val",
-              txt : "0"
-            }
-          ]
-        }
-      ]
-    });
-  }
 }
 
 //generate my-posts page
