@@ -1,7 +1,9 @@
 Overall
 -----------------
 * tracking page views
-* remove dependency on fontawesome with custom icons
+* checkPrivilages
+* login menu
+* post doesn't exist
 
 Pages
 -----------------

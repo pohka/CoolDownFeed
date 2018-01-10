@@ -5,7 +5,8 @@ class Navbar extends Comp{
       class : "cdf-nav-con",
       children : [
         {
-          tag : "div",
+          tag : "a",
+          href : "/",
           class : "cdf-nav-logo skew-con noselect",
           children : [
             {
@@ -100,15 +101,11 @@ class NavItem extends Comp{
 class Card extends Comp{
   constructor(fields){
     super({
-      tag : "div",
+      tag : "a",
+      href : "/p/"+fields.url,
       class : "card link",
       data : {
         url : fields.url,
-      },
-      on : {
-        click : function(){
-          location.pathname = "/p/"+fields.url;
-        }
       },
       children : [
         {
@@ -664,105 +661,25 @@ function parseStrForLinks(paragraph){
   }
   return pEl;
 }
+
+class ConcealPage extends Comp{
+  constructor(msg){
+    super({
+      tag : "div",
+      class : "conceal",
+      children :[
+        {
+          tag : "div",
+          class : "conceal-msg",
+          txt : "Permission Denied\n"+msg
+        }
+      ]
+    });
+  }
+}
 /*
 $(document).ready(function() {
-  return;
-  loadPage();
-  loadSession();
-  checkPrivilages(deniedCallback);
 
-  $(".footer-filter").click(function(){
-      switch($(this).attr("id"))
-      {
-        case "footer-about" :     window.open("/", "_self"); break;
-        case "footer-discover":   window.open("/", "_self"); break;
-      }
-  });
-
-  $(document).on("mouseover", ".card", function(){
-    var id = "#tags-" + $(this).data("url");
-    $(id).slideDown('fast')
-  });
-
-  $(document).on("mouseleave", ".card", function(){
-    var id = "#tags-" + $(this).data("url");
-    $(id).hide();
-  });
-
-  $(document).on("click", ".cdf-nav-logo", function(){
-    window.open("/", "_self");
-  });
-
-  $(document).on("click", ".login-menu div", function(){
-    if($(this).hasClass('active') == false){
-      $(".login-menu div.active").removeClass('active');
-      $(this).addClass('active');
-    }
-  })
-
-  $(document).on("click", "#submit-login", login);
-  $(document).on("click", "#login, #hide-login", toggleLoginModal);
-  $(document).on("click", ".session-con", toggleUserMenu);
-
-  $(document).on("click", ".user-menu div", function(){
-    userMenuAction($(this).data("action"));
-  })
-
-  //clicking on cards
-  $(document).on("mousedown", ".link", function(e){
-    var id = $(this).data("url");
-    switch(e.which){
-      case 1 : window.open("/p/"+id, "_self"); break;
-      case 2 : window.open("/p/"+id, "_blank"); break;
-    }
-  });
-});
-
-//generates the content for each page
-function loadPage(){
-  genNavbar();
-  return;
-  var pageType = "";
-  var path = window.location.pathname;
-  var allowed = true;
-  if(allowed){
-    if(path === "/" || path === "/index" || path === "/index.html"){
-      pageType = "cards-home";
-    }
-    else if(path.startsWith("/p/")){
-      pageType = "post-view";
-    }
-    else{
-      pageType = path.substr(1, path.length-1);
-    }
-
-    switch(pageType){
-      case "cards-home" : genHome(pageType); break;
-      case "post-view"  : genPost(pageType, path); break;
-      case "my-posts"   : genMyPosts(); break;
-    }
-  }
-  genFooter();
-}
-
-//conceals the page, displats privilage msg and redirects to the home page
-function deniedCallback(){
-  bwe.append("body",{
-    tag : "div",
-    class : "conceal",
-    children :[
-      {
-        tag : "div",
-        class : "conceal-msg",
-        con : "Permission Denied"
-      }
-    ]
-  });
-  disableScroll();
-  setTimeout(function(){
-    window.open("/", "_self");
-  }, 2000);
-}
 
 //calls the callback function if the user doesn't have privilage to view the current page
 function checkPrivilages(callbackIfDenied){
@@ -796,288 +713,34 @@ function checkPrivilages(callbackIfDenied){
   }
 }
 
-//generates content for home
-function genHome(pageType){
-  $.post( "php/cdf.php", {
-    type : pageType
-    }).done(function( data ) {
-      if(data !== "") {
-        var obj = JSON.parse(data);
-        for(var i in obj){
-          let img = obj[i]["thumbnail"];
-          if(img === ""){
-            img = "/temp/esl_ham.png";
-          }
-          var card = genCard({
-            id : obj[i]["id"],
-            img : img,
-            title : obj[i]["title"],
-            desc : obj[i]["description"],
-            author : obj[i]["author"],
-            time : obj[i]["publish_time"],
-            tags : obj[i]["tags"],
-          });
-        }
-      }
-  });
-}
-
-//generates content for posts
-function genPost(pageType, path){
-  var postID = path.replace("/p/", "");
-  $.ajax(
-    {
-    url: "/php/cdf.php",
-    type: "POST",
-    data: {
-      type : pageType,
-      id : postID
-    },
-    success: function(data){
-        if(data !== ""){
-        var post = JSON.parse(data)[0];
-        var html = genHtmlFromRaw(post["text"]);
-        var time = timeSinceString(post["publish_time"]);
-        bwe.append(".container", html);
-
-        //add creator div
-        $("h1").after(bwe.build({
+    //add creator div
+    $("h1").after(bwe.build({
+      tag : "div",
+      class : "creator",
+      children : [
+        {
           tag : "div",
-          class : "creator",
+          class : "creator-avatar",
           children : [
             {
-              tag : "div",
-              class : "creator-avatar",
-              children : [
-                {
-                  tag : "img",
-                  src : post["avatar"]
-                }
-              ]
-            },
-            {
-              tag : "div",
-              class : "creator-name",
-              con: post["username"]
-            },
-            {
-              tag : "div",
-              class : "creator-date",
-              con : time
+              tag : "img",
+              src : post["avatar"]
             }
           ]
-        }));
-      }
-      //post link doesn't exist
-      else{
-        bwe.append(".container", {
-          tag : "h1",
-          con : "Zoinks! That link doesn't exist"
-        });
-      }
-    }
-  });
-}
-
-//generate navbar
-function genNavbar(){
-  $("nav").html("");
-  bwe.pages = [
-    {
-      name : "Home",
-      page : "/"
-    },
-    {
-      name : "Trending",
-      page : "/post-example"
-    },
-    {
-      name : "Discover",
-      page : "/new-post"
-    }
-  ];
-
-  bwe.append("nav",{
-    tag : "div",
-    class : "cdf-nav-filters",
-    children : [
-      {
-        tag : "div",
-        class : "cdf-nav-logo skew-con noselect",
-        children : [
-          {
-            tag : "img",
-            class : "skew",
-            src : "/img/logo_sm.png"
-          }
-        ]
-      }
-    ]
-  });
-
-  bwe.append("nav",{
-    tag : "div",
-    class : "cdf-nav-filters",
-    children : bwe.genNavItems(
-      {
-        class : "nav-item btn"
-      }
-    )
-  });
-
-  bwe.append("nav",{
-    tag : "div",
-    class : "cdf-nav-info",
-    children : [
-      {
-        tag : "a",
-        href : "https://twitter.com/PohkaDota",
-        target : "_blank",
-        id : "twitter",
-        class : "fa fa-twitter btn"
-      },
-      {
-        tag : "a",
-        href : "https://www.youtube.com/c/pohka",
-        target : "_blank",
-        id : "youtube",
-        class : "fa fa-youtube-play btn"
-      },
-      {
-        tag : "div",
-        class : "btn",
-        id : "login",
-        con : "Login"
-      },
-      {
-        tag : "div",
-        id : "start",
-        con : "Get Started"
-      }
-    ]
-  });
-}
-
-//generate footer
-function genFooter(){
-  bwe.append("footer", {
-    tag:"div",
-    class:"footer-con",
-    children:[
-      {
-        tag:"div",
-        class:"footer-logo btn",
-        children:[
-          {
-            tag:"img",
-            src:"/img/logo_sm.png",
-          },
-          {
-            tag:"div",
-            class:"footer-logo-text",
-            con:"CoolDownFeed.com"
-          }
-        ]
-      },
-      {
-        tag:"div",
-        class:"footer-filter-con",
-        children:[
-          {
-            tag:"div",
-            class:"footer-filter noselect btn",
-            id:"footer-about",
-            children:[
-              {
-                tag:"div",
-                con:"About"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        tag:"div",
-        class:"footer-contact",
-        children:[
-          {
-            tag:"div",
-            class:"fa fa-youtube-play footer-social btn"
-          },
-          {
-            tag:"div",
-            class:"fa fa-twitter footer-social btn"
-          },
-          {
-            tag:"div",
-            class:"footer-email",
-            children:[
-              {
-                tag:"span",
-                children:[
-                  {
-                    tag: "span",
-                    class: "email",
-                    con:"moc.liamg@01akhop"
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  });
-}
-
-//generates a card from data with bwe
-//id, img, title, desc, author, time, tags
-function genCard(data){
-  var json = {
-    tag : "div",
-    class : "card link",
-    data : [{ url : data["id"] }],
-    children : [
-      {
-        tag : "div",
-        class : "card-thumb",
-        children : [
-          {
-            tag : "img",
-            src : data["img"]
-          }
-        ]
-      },
-      {
-        tag : "div",
-        class : "card-info",
-        children : [
-          {
-            tag : "div",
-            class : "card-title-and-desc",
-            children : [
-              {
-                tag : "div",
-                class : "card-title",
-                con : data["title"]
-              }
-            ]
-          },
-          {
-            tag : "div",
-            class : "card-author",
-            con : data["author"]
-          },
-          {
-            tag : "div",
-            class : "card-time",
-            con : timeSinceString(data["time"])
-          }
-        ]
-      }
-    ]
-  };
-  bwe.append(".card-con", json);
+        },
+        {
+          tag : "div",
+          class : "creator-name",
+          con: post["username"]
+        },
+        {
+          tag : "div",
+          class : "creator-date",
+          con : time
+        }
+      ]
+    }));
+  }
 }
 */
 
@@ -1258,22 +921,6 @@ function getCookie(cname) {
         }
     }
 }
-
-// function toggleLoginModal(){
-//   var sel = ".login-modal"
-//   if($(sel).length == 0){
-//     genLoginModal();
-//   }
-//   if($(sel).is(":hidden")){
-//     $(".login-modal").show();
-//     $("#login-user").focus();
-//     disableScroll();
-//   }
-//   else{
-//     $(".login-modal").fadeOut("fast");
-//     enableScroll();
-//   }
-// }
 
 //generate the login modal
 function genLoginModal(){
@@ -1705,10 +1352,6 @@ function notification(text, type, duration){
       tag : "div",
       class : "notification-con"
     });
-    // bwe.append("body", {
-    //   tag : "div",
-    //   class : "notification-con"
-    // });
   }
   Quas.getEl(".notification-con").addChild({
     tag : "div",
@@ -1726,22 +1369,6 @@ function notification(text, type, duration){
       }
     ]
   });
-  // $(".notification-con").prepend(bwe.build({
-  //   tag : "div",
-  //   id : id,
-  //   class : "notification notification-"+type,
-  //   children : [
-  //     {
-  //       tag : "div",
-  //       class : "notification-text",
-  //       con : text
-  //     },
-  //     {
-  //       tag : "div",
-  //       class : "notification-icon " + cls
-  //     }
-  //   ]
-  //}));
 
   setTimeout(function(){
       Quas.getEl("#"+id).del();
@@ -1764,19 +1391,6 @@ function clearNotifications(filter){
   }
 }
 
-// function toggleUserMenu(){
-//   var sel = ".user-menu"
-//   if($(sel).length == 0){
-//     genUserMenu();
-//   }
-//   if($(sel).is(":hidden")){
-//     $(sel).show();
-//   }
-//   else{
-//     $(sel).hide();
-//   }
-// }
-
 class UserMenu extends Comp{
   constructor(items){
     let data = {
@@ -1796,32 +1410,6 @@ class UserMenu extends Comp{
     super(data);
   }
 }
-
-// function genUserMenu(){
-//   bwe.append("body",{
-//     "tag":"div",
-//     "class":"user-menu",
-//     "children":[
-//       {
-//         tag:"div",
-//         data:[{action : "my-posts"}],
-//         con:"My Posts"
-//       },
-//       {
-//         tag:"div",
-//         data:[{action : "log-out"}],
-//         con:"Log Out"
-//       }
-//     ]
-//   });
-// }
-
-// function userMenuAction(action){
-//   switch(action){
-//     case "log-out" : endSession(); break;
-//     case "my-posts" : window.open("/my-posts","_self"); break;
-//   }
-// }
 
 //returns the data from the url in a json object
 function getUrlValues(){
@@ -2007,19 +1595,3 @@ function setPageNumber(pageNum){
 
   Quas.setUrlValues({"page" : pageNum});
 }
-/*
-$(document).on("click", "#my-posts-next", function(){
-  let page = getUrlValues()["page"];
-  if(page === undefined){
-    page = 0;
-  }
-  setUrlValue("page", Number(page)+1);
-});
-
-$(document).on("click", "#my-posts-prev", function(){
-  let page = getUrlValues()["page"];
-  if(page !== undefined && page > 0){
-    setUrlValue("page", Number(page)-1);
-  }
-});
-*/
