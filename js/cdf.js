@@ -84,7 +84,7 @@ class Navbar extends Comp{
   }
 }
 
-//man navigation items navbar
+//main navigation item in the navbar
 class NavItem extends Comp{
   constructor(fields){
     let data = {
