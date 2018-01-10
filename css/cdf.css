@@ -1,7 +1,7 @@
 :root{
   --pri:        #0384d6;
   --text:       #000;
-  --hover:      #f6f6f6;
+  --hover:      #fbfbfb;
   --card_bg:    #fff;
   --bg:         #fefefe;
   --text_faded: #ddd;
@@ -209,12 +209,14 @@ a:hover{
 html::-webkit-scrollbar-track
 {
 	background-color: var(--card_bg);
+  border-left: 1px solid var(--shadow);
 }
 
 html::-webkit-scrollbar
 {
-	width: 4px;
+	width: 6px;
 	background-color: var(--card_bg);
+
 }
 
 html::-webkit-scrollbar-thumb
@@ -225,9 +227,9 @@ html::-webkit-scrollbar-thumb
 /*-------------- Navbar --------------*/
 .cdf-nav
 {
+  border-bottom: 2px solid var(--pri);
   height: 50px;
   position: fixed;
-  background: var(--nav_bg);
   width: 100%;
   z-index : 900;
   background: var(--nav_bg);
@@ -261,7 +263,6 @@ html::-webkit-scrollbar-thumb
   font-size: 20px;
   line-height: 50px;
   margin-left: -3px;
-
 }
 
 .btn
@@ -277,6 +278,7 @@ html::-webkit-scrollbar-thumb
 .btn:hover, .btn.active
 {
   border-bottom-color: var(--pri);
+  background-color: var(--hover);
   padding-bottom: 0px;
 }
 
@@ -291,12 +293,16 @@ html::-webkit-scrollbar-thumb
   background: var(--nav_bg);
   box-shadow: 1px 1px 3px var(--shadow);
   position: relative;
+  border: 1px solid transparent;
+  border-top: none;
+  border-left: none;
   z-index: 901;
 }
 
 .cdf-nav-logo:hover
 {
   box-shadow: 1px 1px 3px #066cad;
+  border-color: var(--pri);
   cursor: pointer;
 }
 
