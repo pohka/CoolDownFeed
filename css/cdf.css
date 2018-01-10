@@ -1189,6 +1189,18 @@ svg rect{
   font-size: 14px;
 }
 
+.ico-post-item{
+  height: 16px;
+  padding-right: 8px;
+  margin-top: 2px;
+  display: inline-block;
+}
+
+.ico-post-item-val{
+  display: inline-block;
+  vertical-align: top;
+}
+
 /*--------- Icons --------*/
 .ico-icon
 {
