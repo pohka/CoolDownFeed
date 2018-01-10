@@ -443,6 +443,27 @@ function quasLoadPage(){
     });
   }
   else if(Quas.path == "my-posts"){
+    let nav = Quas.getEl(".my-posts-page-nav");
+    nav.addChild({
+      tag : "button",
+      id : "my-posts-prev",
+      txt : "Prev Page",
+      on : {
+        click : function(){
+          setPageNumber("prev");
+        }
+      }
+    });
+    nav.addChild({
+      tag : "button",
+      id : "my-posts-next",
+      txt : "Next Page",
+      on : {
+        click : function(){
+          setPageNumber("next");
+        }
+      }
+    });
     genMyPosts();
   }
 }
@@ -1943,6 +1964,22 @@ function genMyPosts(){
       }
     }
   });
+}
+
+//set page or use "prev" or "next" to increment and decrement
+function setPageNumber(pageNum){
+  let curPage = Quas.getUrlValues()["page"];
+  if(curPage === undefined)
+    curPage = 0;
+
+  if(pageNum === "next"){
+    pageNum = Number(curPage)+1;
+  }
+  else if(pageNum === "prev"){
+    pageNum = Number(curPage)-1;
+  }
+
+  Quas.setUrlValues({"page" : pageNum});
 }
 /*
 $(document).on("click", "#my-posts-next", function(){
