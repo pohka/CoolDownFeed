@@ -153,6 +153,11 @@ class Element{
     c.render(this.el, type);
   }
 
+  clearChildren(){
+    while(this.el.hasChildNodes())
+      this.el.removeChild(this.el.childNodes[0])
+  }
+
   /**
     Adds a class to this element
     @param {String} cls
@@ -415,7 +420,7 @@ class Quas{
                   try {
                     result = JSON.parse(this.responseText);
                   } catch(e){
-                    result = "Failed to parse return text to JSON";
+                    result = "Failed to parse return text to JSON:\n" + this.responseText;
                   }
                   break;
               }

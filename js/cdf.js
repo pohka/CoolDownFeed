@@ -442,6 +442,9 @@ function quasLoadPage(){
       }
     });
   }
+  else if(Quas.path == "my-posts"){
+    genMyPosts();
+  }
 }
 
 /**
@@ -1857,20 +1860,19 @@ function dateToString(datestr){
 
 //generate my-posts page
 function genMyPosts(){
-  let urlData = getUrlValues();
+  let urlData = Quas.getUrlValues();
   let page = urlData["page"];
   if(page==undefined){
     page = 0;
   }
   if(page == 0){
-    $("#my-posts-prev").hide();
+    Quas.getEl("#my-posts-prev").visible(false);
   }
   let sid = getCookie("session");
-  $(".post-list").html("");
   if(sid === ""){
     return;
   }
-  $.ajax(
+  Quas.ajax(
     {
     url: "/php/cdf.php",
     type: "POST",
@@ -1879,10 +1881,11 @@ function genMyPosts(){
       page : page,
       sid : sid,
     },
-    success: function(data){
-      if(data !== ""){
-        let json = JSON.parse(data);
-
+    return : "json",
+    success: function(json){
+      if(json.constructor != String){
+        let postList = Quas.getEl(".post-list");
+        postList.clearChildren();
         for(let i=0; i<json.length; i++){
           let img = json[i]["thumbnail"];
           if(img === ""){
@@ -1891,12 +1894,13 @@ function genMyPosts(){
           if(json[i]["title"] === ""){
             json[i]["title"] = "Untitled";
           }
-          bwe.append(".post-list", {
+
+          postList.addChild({
             tag : "div",
             class : "post-list-item",
-            data : [{
+            data : {
               url : json[i]["id"]
-            }],
+            },
             children : [
               {
                 tag : "img",
@@ -1909,12 +1913,12 @@ function genMyPosts(){
                   {
                     tag : "h3",
                     class : "post-item-title",
-                    con : json[i]["title"],
+                    txt : json[i]["title"],
                   },
                   {
                     tag : "div",
                     class : "post-item-date",
-                    con : dateToString(json[i]["publish_time"])
+                    txt : dateToString(json[i]["publish_time"])
                   }
                 ]
               },
@@ -1924,12 +1928,12 @@ function genMyPosts(){
                 children : [
                   {
                     tag : "div",
-                    con : "Views: 0",
+                    txt : "Views: 0",
                   },
                   {
                     tag : "div",
                     class : "fa fa-comment",
-                    con : " 0",
+                    txt : " 0",
                   }
                 ]
               }

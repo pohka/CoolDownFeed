@@ -74,8 +74,8 @@ switch($_REQUEST["type"]){
       "WHERE cards.id = '" . $id ."'";
       break;
     case "my-posts" :
-      $sid = $_POST['sid'];
-      $page = $_POST['page'];
+      $sid = $_REQUEST['sid'];
+      $page = $_REQUEST['page'];
       $itemsPerPage = 25;
       $offset = $itemsPerPage * $page;
       $sql =
