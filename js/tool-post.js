@@ -297,9 +297,14 @@ class Toolbar extends Comp{
     //help btn
     super.addChild({
       tag : "div",
-      class : "toolbar-btn toolbar-btn-right toolbar-modal-btn",
+      class : "toolbar-btn toolbar-btn-sm toolbar-modal-btn",
       id : "post-add-help",
       txt : "Help",
+      on : {
+        click : function(){
+          Toolbar.toggleToolbarModal("help");
+        }
+      }
     });
   }
 
@@ -312,8 +317,10 @@ class Toolbar extends Comp{
         el.visible(false);
       });
     }
-    //toggle visibility
-    Quas.getEl("#post-tool-"+btn).toggleVisible();
+    //toggle visibility and scrollable
+    let modal = Quas.getEl("#post-tool-"+btn);
+    modal.toggleVisible();
+    Quas.scrollable(!modal.visible());
 
     //set active btn
     Quas.each(".toolbar-btn-sm",function(el){
@@ -401,15 +408,13 @@ function toggleToolMode(selector){
 
 //closes all the modals
 function closeToolModals(){
-  $(".post-tool-modal").each(function(){
-    $(this).hide();
-  });
-  $(".toolbar-modal-btn").each(function(){
-    $(this).removeClass('active');
+  Quas.each(".post-tool-modal", function(el){
+    el.visible(false);
   });
 
-  $(".img-viewer-thumb.active").removeClass('active');
-  enableScroll();
+  Quas.each(".toolbar-modal-btn", function(el){
+    el.active(false);
+  });
 }
 
 //opens the a tool option

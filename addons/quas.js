@@ -281,7 +281,6 @@ class Element{
     //return value
     if(show === undefined){
       let v = window.getComputedStyle(this.el).display;
-      console.log("cureent:"+v);
       return (v !== "none");
     }
     //set value
