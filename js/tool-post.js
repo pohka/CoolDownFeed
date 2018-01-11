@@ -1,6 +1,7 @@
 var cursorPosition=0;
 var postID = genUID()
 
+/*
 $(document).ready(function() {
   //track cursor postion
   $("#post-editor").on("click keyup paste change", function(){
@@ -104,18 +105,144 @@ $(document).ready(function() {
     });
   });
 });
+*/
 
 //alerts the user before the close the window if they haven't saved their draft
-window.onbeforeunload = function(){
-  if($("#post-editor").val().length > 0 && window.location.hostname !== "cdf2")
-    return 'Any unsaved changes will not be saved?';
-};
+// window.onbeforeunload = function(){
+//   if($("#post-editor").val().length > 0 && window.location.hostname !== "cdf2")
+//     return 'Any unsaved changes will not be saved?';
+// };
+
+function toggleToolbarModal(btn){
+  let id = "post-add-"+btn;
+  //if opening a new modal, then clear the existing modals
+  if(Quas.getEl("#"+id).hasCls("active") == false){
+    Quas.each(".post-tool-modal", function(el){
+      el.visible(false);
+    });
+  }
+  //toggle visibility
+  Quas.getEl("#post-tool-"+btn).toggleVisible();
+
+  //set active btn
+  Quas.each(".toolbar-btn-sm",function(el){
+    if(el.attr("id") !== id)
+      el.active(false);
+    else
+      el.active();
+  });
+}
+
+class Toolbar extends Comp{
+  constructor(){
+    let toolbar = Quas.getEl(".post-toolbar-inner");
+    let modes = ["Editor", "Preview"];
+
+    for(let i in modes){
+      let active = "";
+      if(i == 0){
+        active = " active";
+      }
+      toolbar.addChild({
+        tag : "div",
+        class : "toolbar-mode toolbar-btn" + active,
+        id : "mode-" + modes[i].toLowerCase().replace(" ", "-"),
+        txt : modes[i]
+      });
+    }
+
+    let btns = [
+      "file",
+      "media",
+      "link",
+      "heading",
+      "code",
+      "list",
+      "quote",
+      "more",
+    ];
+
+    for(let i in btns){
+      let id = "post-add-" + btns[i];
+      toolbar.addChild({
+        tag : "div",
+        class : "toolbar-btn toolbar-btn-sm toolbar-modal-btn",
+        id : "post-add-" + btns[i],
+        txt : "a",
+        on : {
+          click : function(){
+            Toolbar.toggleToolbarModal(btns[i]);
+          }
+        }
+      });
+    }
+
+    let savebtns = [
+      "Publish",
+      "Save Draft",
+    ];
+
+    for(let i in savebtns){
+      toolbar.addChild({
+        tag : "div",
+        class : "toolbar-btn toolbar-btn-right",
+        id : savebtns[i].toLowerCase().replace(" ", "-"),
+        txt : savebtns[i]
+      });
+    }
+
+    toolbar.addChild({
+      tag : "div",
+      class : "toolbar-btn toolbar-btn-right toolbar-modal-btn",
+      id : "post-add-help",
+      txt : "Help",
+    });
+  }
+
+  static toggleToolbarModal(btn){
+    let id = "post-add-"+btn;
+    //if opening a new modal, then clear the existing modals
+    if(Quas.getEl("#"+id).hasCls("active") == false){
+      Quas.each(".post-tool-modal", function(el){
+        el.visible(false);
+      });
+    }
+    //toggle visibility
+    Quas.getEl("#post-tool-"+btn).toggleVisible();
+
+    //set active btn
+    Quas.each(".toolbar-btn-sm",function(el){
+      if(el.attr("id") !== id)
+        el.active(false);
+      else
+        el.active();
+    });
+  }
+}
+
+function genPostTool(){
+  Quas.each(".post-tool-modal", function(el){
+    el.visible(false);
+  });
+
+  let gameEl = Quas.getEl("#post-editor-game");
+  let games = ["Dota 2", "IRL"];
+  for(let i in games){
+    gameEl.addChild({
+      tag : "option",
+      value : games[i].toLowerCase().replace(" ", "-"),
+      txt : games[i]
+    });
+  }
+
+  new Toolbar();
+}
 
 //generate the preview
 function genPreview(){
-  var html = genHtmlFromRaw(getRaw());
-  $(".post-preview").html("");
-  bwe.append(".post-preview", html);
+  //var html = genHtmlFromRaw(getRaw());
+  Quas.getEl(".post-preview").clearChildren();
+  //bwe.append(".post-preview", html);
 }
 
 function getRaw(){

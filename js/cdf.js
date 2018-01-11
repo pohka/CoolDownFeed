@@ -657,7 +657,7 @@ function quasLoadPage(){
       }
     });
   }
-  else if(Quas.path == "my-posts"){
+  else if(Quas.path === "my-posts"){
     let nav = Quas.getEl(".my-posts-page-nav");
     nav.addChild({
       tag : "button",
@@ -680,6 +680,9 @@ function quasLoadPage(){
       }
     });
     genMyPosts();
+  }
+  else if(Quas.path === "new-post"){
+    genPostTool();
   }
 }
 
