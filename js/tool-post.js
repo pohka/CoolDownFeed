@@ -135,15 +135,19 @@ function toggleToolbarModal(btn){
 
 class Toolbar extends Comp{
   constructor(){
-    let toolbar = Quas.getEl(".post-toolbar-inner");
-    let modes = ["Editor", "Preview"];
+    super({
+      tag :"div",
+      class : "post-toolbar-inner"
+    });
 
+    //btns for the mode of the post tool
+    let modes = ["Editor", "Preview"];
     for(let i in modes){
       let active = "";
       if(i == 0){
         active = " active";
       }
-      toolbar.addChild({
+      super.addChild({
         tag : "div",
         class : "toolbar-mode toolbar-btn" + active,
         id : "mode-" + modes[i].toLowerCase().replace(" ", "-"),
@@ -151,6 +155,8 @@ class Toolbar extends Comp{
       });
     }
 
+
+    //small buttons for the markdow
     let btns = [
       "file",
       "media",
@@ -164,7 +170,7 @@ class Toolbar extends Comp{
 
     for(let i in btns){
       let id = "post-add-" + btns[i];
-      toolbar.addChild({
+      super.addChild({
         tag : "div",
         class : "toolbar-btn toolbar-btn-sm toolbar-modal-btn",
         id : "post-add-" + btns[i],
@@ -177,13 +183,14 @@ class Toolbar extends Comp{
       });
     }
 
+    //btns for saving and publishing
     let savebtns = [
       "Publish",
       "Save Draft",
     ];
 
     for(let i in savebtns){
-      toolbar.addChild({
+      super.addChild({
         tag : "div",
         class : "toolbar-btn toolbar-btn-right",
         id : savebtns[i].toLowerCase().replace(" ", "-"),
@@ -191,7 +198,8 @@ class Toolbar extends Comp{
       });
     }
 
-    toolbar.addChild({
+    //help btn
+    super.addChild({
       tag : "div",
       class : "toolbar-btn toolbar-btn-right toolbar-modal-btn",
       id : "post-add-help",
@@ -199,6 +207,7 @@ class Toolbar extends Comp{
     });
   }
 
+  //toggles the modals with the small btns
   static toggleToolbarModal(btn){
     let id = "post-add-"+btn;
     //if opening a new modal, then clear the existing modals
@@ -225,6 +234,7 @@ function genPostTool(){
     el.visible(false);
   });
 
+  //catagories or game options for this post
   let gameEl = Quas.getEl("#post-editor-game");
   let games = ["Dota 2", "IRL"];
   for(let i in games){
@@ -235,7 +245,7 @@ function genPostTool(){
     });
   }
 
-  new Toolbar();
+  new Toolbar().render(".post-toolbar");
 }
 
 //generate the preview
