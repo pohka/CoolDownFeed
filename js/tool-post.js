@@ -133,6 +133,49 @@ function toggleToolbarModal(btn){
   });
 }
 
+function switchMode(mode){
+  if(mode === "preview"){
+    Quas.getEl(".post-raw-edit").visible(false);
+    let preview = Quas.getEl(".post-preview");
+
+    let title = Quas.getEl("#post-editor-title").val();
+
+    let data = parseMarkdown(Quas.getEl("#post-editor").val());
+    data.unshift({
+      tag : "h1",
+      txt : title
+    });
+    preview.clearChildren();
+    new Comp({
+      tag : "div",
+      class : "banner",
+      children : [{
+        tag : "img",
+        src : "/temp/esl_ham.png"
+      }]
+    }).render(preview);
+    new Comp({
+      tag : "div",
+      class : "post-con",
+      children : data
+    }).render(preview);
+    preview.visible(true);
+  }
+  else if(mode === "editor"){
+    Quas.getEl(".post-raw-edit").visible(true);
+    Quas.getEl(".post-preview").visible(false);
+  }
+
+  Quas.each(".toolbar-mode", function(el){
+    if(el.attr("id") === "mode-"+mode){
+      el.active(true);
+    }
+    else{
+      el.active(false);
+    }
+  });
+}
+
 class Toolbar extends Comp{
   constructor(){
     super({
@@ -151,7 +194,12 @@ class Toolbar extends Comp{
         tag : "div",
         class : "toolbar-mode toolbar-btn" + active,
         id : "mode-" + modes[i].toLowerCase().replace(" ", "-"),
-        txt : modes[i]
+        txt : modes[i],
+        on : {
+          click : function(){
+            switchMode(modes[i].toLowerCase());
+          }
+        }
       });
     }
 
