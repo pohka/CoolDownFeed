@@ -833,6 +833,15 @@ class Quas{
     str = str.slice(0,-1);
     window.location = window.origin + window.location.pathname + str;
   }
+
+  static decodeHtmlSpecialChars(str){
+    str = str.split("&amp;").join("&");
+    str = str.split("&quot;").join('"');
+    str = str.split("&#039;").join("'");
+    str = str.split("&lt;").join("<");
+    str = str.split("&gt;").join(">");
+    return str;
+  }
 }
 /**
   Current state of the users ability to scroll

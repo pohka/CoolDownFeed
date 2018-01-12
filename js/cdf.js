@@ -617,6 +617,26 @@ Quas.start = function(){
   loadSession();
   loadAllIcons();
   checkPrivilages(concealDefault);
+  window.addEventListener("resize", responsiveLayoutCheck);
+}
+
+function finishedLoadingPost(){
+  responsiveLayoutCheck();
+}
+
+function responsiveLayoutCheck(){
+  let mobileW = 900;
+  let w = window.innerWidth;
+  if(w <= 900){
+
+    //keep 16:9 ratio on videos
+    Quas.each(".video", function(el){
+      el.el.style = "height:"+(w*0.5625)+"px;";
+    });
+  }
+  else{
+
+  }
 }
 
 //refreshes all of the icons
@@ -695,6 +715,7 @@ function quasLoadPage(){
       return : "json",
       success : function(res){
         new Post(res[0]).render();
+        finishedLoadingPost();
       }
     });
   }
@@ -744,7 +765,7 @@ function quasLoadPage(){
 */
 function parseMarkdown(text){
   let els = [];
-  let lines = text.split("\n");
+  let lines = Quas.decodeHtmlSpecialChars(text).split("\n");
 
   let paragraph = ""; //raw text for the current paragraph
   let ignore = false; //should ignore
