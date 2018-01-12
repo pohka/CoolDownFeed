@@ -3,12 +3,7 @@ Overall
 * tracking page views
 * meta tags
 * login menu
-* post doesn't exist
-
-Quas convert
----------------
-* check privileges
-* author banner at the top of post
+* post doesn't exist i.e invalid url
 
 Pages
 -----------------

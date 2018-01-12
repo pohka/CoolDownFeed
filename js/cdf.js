@@ -302,6 +302,8 @@ class Post extends Comp{
     });
 
     this.bannerSrc = "/temp/esl_ham.png";
+    let credit = new PostAuthor(fields.username, fields.avatar, fields.publish_time);
+    this.addChild(credit.data);
     let els = parseMarkdown(fields.text);
     for(let i in els){
       this.addChild(els[i]);
@@ -319,6 +321,35 @@ class Post extends Comp{
       }]
     });
     banner.render(".container", "prepend");
+  }
+}
+
+class PostAuthor extends Comp{
+  constructor(author, avatar, time){
+    super({
+      tag : "div",
+      class : "creator",
+      children : [
+        {
+          tag : "div",
+          class : "creator-avatar",
+          children : [{
+            tag : "img",
+            src : avatar
+          }]
+        },
+        {
+          tag : "div",
+          class : "creator-name",
+          txt : author
+        },
+        {
+          tag : "div",
+          class : "creator-date",
+          txt : dateToString(time, false)
+        }
+      ]
+    });
   }
 }
 
@@ -663,7 +694,6 @@ function quasLoadPage(){
       },
       return : "json",
       success : function(res){
-        console.log(res[0]);
         new Post(res[0]).render();
       }
     });
@@ -915,73 +945,6 @@ function checkPrivilages(callbackIfDenied){
   }
 }
 
-/*
-$(document).ready(function() {
-
-
-//calls the callback function if the user doesn't have privilage to view the current page
-function checkPrivilages(callbackIfDenied){
-  var privilagePages = [
-    "/new-post"
-  ];
-  var path = window.location.pathname;
-  if($.inArray(path, privilagePages) == -1){
-    return;
-  }
-  var cookie = getCookie("session");
-  if(cookie === ""){
-    callbackIfDenied();
-  }
-  else
-  {
-    $.ajax(
-      {
-        url: "/php/privilages.php",
-        type: "POST",
-        data: {
-          session_id : cookie,
-          page: path
-        },
-        success : function(data){
-          if(data!=="true"){
-            callbackIfDenied();
-          }
-        }
-      });
-  }
-}
-
-    //add creator div
-    $("h1").after(bwe.build({
-      tag : "div",
-      class : "creator",
-      children : [
-        {
-          tag : "div",
-          class : "creator-avatar",
-          children : [
-            {
-              tag : "img",
-              src : post["avatar"]
-            }
-          ]
-        },
-        {
-          tag : "div",
-          class : "creator-name",
-          con: post["username"]
-        },
-        {
-          tag : "div",
-          class : "creator-date",
-          con : time
-        }
-      ]
-    }));
-  }
-}
-*/
-
 //generates string for time since posted e.g. 2 days ago
 function timeSinceString(time){
   var t = time.split(/[- :]/);
@@ -997,10 +960,20 @@ function timeSinceString(time){
     var diffHours = Math.floor(timeDiff / (1000 * 3600));
 
     if(diffHours == 0){
-      str = diffMins + " mins ago";
+      if(diffMins <= 1){
+        str  = "1 min ago";
+      }
+      else{
+        str = diffMins + " mins ago";
+      }
     }
     else{
-      str = diffHours + " hours ago";
+      if(diffHours == 1){
+        str = "1 hour ago";
+      }
+      else{
+        str = diffHours + " hours ago";
+      }
     }
   }
   else if(diffDays == 1){
@@ -1390,7 +1363,7 @@ function setUrlValue(key, val){
 }
 
 //changes sql date string to d-mmm-yyyy-hh-mm format
-function dateToString(datestr){
+function dateToString(datestr, includeYear){
   let els = datestr.split(" ");
   let date = els[0].split("-");
   let time = els[1].split(":");
@@ -1421,7 +1394,12 @@ function dateToString(datestr){
   }
   let month = monthStrs[Number(date[1])-1];
 
-  let str = day + " " + month + ", " + date[0] + " " + hr + ":" + min + " " + mode;
+  let year = date[0];
+  if(includeYear !== undefined && !includeYear){
+    year = "";
+  }
+
+  let str = day + " " + month + ", " + year + " " + hr + ":" + min + " " + mode;
   return str;
 }
 

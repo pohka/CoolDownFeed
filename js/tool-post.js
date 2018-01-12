@@ -1,62 +1,11 @@
+//todo: get this value from the server
 var postID = genUID()
 
-/*
-$(document).ready(function() {
-
-  //sets an image being viewed to active
-  $(document).on("click", ".img-viewer-thumb", function(){
-    $(".img-viewer-thumb").each(function(){
-      $(this).removeClass('active');
-    });
-    $(this).addClass('active');
-  });
-
-  //save draft or publish button
-  $("#publish").click(function() {
-    if(validate()){
-      save(true);
-    }
-  });
-  $("#draft").click(function() {
-    if(validate()){
-      save(false);
-    }
-  });
-
-  //drag and drop
-  $(document).on("dragenter dragstart", ".drop", function (e) {
-    e.preventDefault();
-    $(this).addClass('dragenter');
-  });
-
-  $(document).on("dragend dragleave", ".drop", function (e) {
-    e.preventDefault();
-    $(this).removeClass('dragenter');
-  });
-
-  $(document).on("drag dragover", ".drop", function(e){
-    e.preventDefault();
-  });
-
-  $(document).on("drop", ".drop", function (e) {
-    e.preventDefault();
-    $(this).removeClass('dragenter');
-    upload(e.originalEvent.dataTransfer.files, function(data){
-      //todo progress bar
-      closeToolModals();
-      $("#post-tool-cloud").show();
-      loadModal("cloud");
-
-    });
-  });
-});
-*/
-
 //alerts the user before the close the window if they haven't saved their draft
-// window.onbeforeunload = function(){
-//   if($("#post-editor").val().length > 0 && window.location.hostname !== "cdf2")
-//     return 'Any unsaved changes will not be saved?';
-// };
+window.onbeforeunload = function(){
+  if(Quas.getEl("#post-editor").val().length > 0)
+    return 'Any unsaved changes will not be saved?';
+};
 
 function toggleToolbarModal(btn){
   let id = "post-add-"+btn;
@@ -583,7 +532,7 @@ function loadModal(type){
   }
 }
 
-//todo validate user input
+//todo validate user input before submitting
 function validate(){
   return true;
 }
