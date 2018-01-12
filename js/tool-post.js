@@ -2,60 +2,6 @@ var postID = genUID()
 
 /*
 $(document).ready(function() {
-  //track cursor postion
-  $("#post-editor").on("click keyup paste change", function(){
-    cursorPosition = $('#post-editor').prop("selectionStart");
-  });
-
-  //toggles between edit and preview mode
-  $(".toolbar-mode").click(function(){
-    toggleToolMode(this);
-  });
-
-  //clicks for toolbar item
-  $(".toolbar-modal-btn").click(function(){
-    if($(this).hasClass('active')){
-      closeToolModals();
-    }
-    else{
-      openToolOption(this);
-      $(".toolbar-modal-btn").each(function(){
-        $(this).removeClass('active');
-      });
-      $(this).addClass('active');
-      disableScroll();
-    }
-  });
-
-  $(".open-modal").click(function(){
-    var type = $(this).data("type");
-    closeToolModals();
-    $("#post-tool-" + type).show();
-
-    loadModal(type);
-  });
-
-  //allows single input fields to be submitted with enter key
-  $(".singleInput").on('keyup', function (e) {
-    if (e.keyCode == 13) {
-        $(this).next().click();
-      }
-  });
-
-  //closes all modals when the escape button is pressed
-  $(document).on("keyup", function(e){
-    if(e.keyCode == 27){
-      closeToolModals();
-    }
-  });
-
-  //button for sumbitting toolbar modal
-  $(".post-tool-submit").click(function(){
-    var type = $(this).data("type");
-    addMarkdownToEditor(type);
-    closeToolModals();
-    $("#post-editor").focus();
-  });
 
   //sets an image being viewed to active
   $(document).on("click", ".img-viewer-thumb", function(){
@@ -183,17 +129,13 @@ class Toolbar extends Comp{
       class : "post-toolbar-inner"
     });
 
-    //listen to the cursor position in the editor
-    let editor = Quas.getEl("#post-editor").el;
-    let events = ["click", "keyup", "paste", "change"];
-    for(let i in events){
-      editor.addEventListener(events[i], function(e){
-        Toolbar.cursorPosition = Quas.getEl('#post-editor').el.selectionStart;
-      });
-    }
+    //track cursor position in editor
+    Quas.on("click keyup paste change", "#post-editor", function(e){
+      Toolbar.cursorPosition = Quas.getEl('#post-editor').el.selectionStart;
+    });
 
     //close modals on escape btn
-    document.documentElement.addEventListener("keyup", function(e){
+    Quas.on("keyup", document.documentElement, function(e){
       if(e.keyCode == 27){
         closeToolModals();
       }
@@ -397,31 +339,6 @@ function getRaw(){
   return raw;
 }
 
-// //toggles the mod of the tools
-// function toggleToolMode(selector){
-//   $(".toolbar-mode").each(function(){
-//     if($(this).hasClass('active')){
-//       $(this).removeClass('active');
-//     }
-//     if($(selector).attr("id") === "mode-preview"){
-//       genPreview();
-//     }
-//   });
-//   $(selector).addClass('active');
-//
-//   var id = $(selector).attr("id");
-//
-//   if(id === "mode-editor"){
-//     $(".post-preview").hide();
-//     $(".post-raw-edit").show();
-//   }
-//   else if(id === "mode-preview"){
-//     $(".post-preview").show();
-//     $(".post-raw-edit").hide();
-//     genPreview();
-//   }
-// }
-
 //closes all the modals
 function closeToolModals(){
   Quas.each(".post-tool-modal", function(el){
@@ -434,19 +351,6 @@ function closeToolModals(){
 
   Quas.scrollable(true);
 }
-
-// //opens the a tool option
-// function openToolOption(thisSel){
-//   var type = $(thisSel).attr("id").replace("post-add-", "");
-//   var selector = "#post-tool-" + type;
-//   if($(selector).length > 0){
-//     closeToolModals();
-//     $(selector).show();
-//
-//     var focus = selector + "-focus";
-//     $(focus).focus();
-//   }
-// }
 
 //returns true if the image exists
 function imageExists(url)

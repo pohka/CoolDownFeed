@@ -475,6 +475,20 @@ class Quas{
     };
   }
 
+  static on(eventsStr, sel, callback){
+    let el;
+    if(sel.constructor === String){
+      el = Quas.getEl(sel).el;
+    }
+    else{
+      el = sel;
+    }
+    let events = eventsStr.split(" ");
+    for(let i in events){
+      el.addEventListener(events[i], callback);
+    }
+  }
+
   /*
     convert html string to json object
     todo:
