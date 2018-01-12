@@ -311,6 +311,7 @@ function genPostTool(){
 
   new Toolbar().render(".post-toolbar");
   loadAllIcons();
+  finishedLoadingPage();
 }
 
 function getRaw(){

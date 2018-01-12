@@ -289,7 +289,7 @@ class Element{
         this.el.style = "display: block !important;";
       }
       else{
-        this.el.style = "displayL none !important;";
+        this.el.style = "display: none !important;";
       }
     }
   }

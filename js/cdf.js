@@ -7,7 +7,7 @@ class Navbar extends Comp{
       children : [
         {
           tag : "a",
-          href : "/",
+          href : "javascript:void(0);",
           class : "cdf-nav-logo skew-con noselect",
           children : [
             {
@@ -622,7 +622,7 @@ Quas.start = function(){
   window.addEventListener("resize", responsiveLayoutCheck);
 }
 
-function finishedLoadingPost(){
+function finishedLoadingPage(){
   responsiveLayoutCheck();
 }
 
@@ -724,6 +724,7 @@ function quasLoadPage(){
             time : timeSinceString(data[i].publish_time),
           }).render(".card-con");
         }
+        finishedLoadingPage();
       }
     });
   }
@@ -738,7 +739,7 @@ function quasLoadPage(){
       return : "json",
       success : function(res){
         new Post(res[0]).render();
-        finishedLoadingPost();
+        finishedLoadingPage();
       }
     });
   }
@@ -1491,6 +1492,7 @@ function genMyPosts(){
         }
       }
       loadAllIcons();
+      finishedLoadingPage();
     }
   });
 }
