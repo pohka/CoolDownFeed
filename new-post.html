@@ -73,8 +73,8 @@
       <div class="post-tool-modal" id="post-tool-media">
         <h3>Add External Media</h3>
         <label>URL</label>
-        <input type="text" id="post-tool-media-focus" class="singleInput add-media" data-field="url" placeholder="YouTube, imgur or gfycat link">
-        <input type="button" class="post-tool-submit" data-type="media" value="Add">
+        <input type="text" id="post-tool-media-focus" class="singleInput add-media" data-field="url" placeholder="YouTube, Twitch clips or gfycat link">
+        <input type="button" class="post-tool-submit"  onclick="addMarkdown('media')" value="Add">
         <input type="button" value="Cancel" onclick="closeToolModals()">
       </div>
 
@@ -85,7 +85,7 @@
         <input type="text" id="post-tool-link-focus" class="add-link" data-field="link">
         <label>Text</label>
         <input type="text" class="add-link" data-field="text">
-        <input type="button" class="post-tool-submit" data-type="link" value="Add">
+        <input type="button" class="post-tool-submit"  onclick="addMarkdown('link')" value="Add">
         <input type="button" value="Cancel" onclick="closeToolModals()">
       </div>
 
@@ -94,7 +94,7 @@
         <h3>Heading</h3>
         <label>Heading</label>
         <input type="text"  class="singleInput add-heading" id="post-tool-heading-focus" data-field="text">
-        <input type="button" class="post-tool-submit" data-type="heading" value="Add">
+        <input type="button" class="post-tool-submit"  onclick="addMarkdown('heading')" value="Add">
         <input type="button" value="Cancel" onclick="closeToolModals()">
       </div>
 
@@ -103,7 +103,7 @@
         <h3>List</h3>
         <label>List items</label>
         <textarea rows="10" id="post-tool-list-focus" class="add-list" data-field="text"></textarea><br>
-        <input type="button" class="post-tool-submit" data-type="list" value="Add">
+        <input type="button" class="post-tool-submit"  onclick="addMarkdown('list')" value="Add">
         <input type="button" value="Cancel" onclick="closeToolModals()">
       </div>
 
@@ -112,7 +112,7 @@
         <h3>Quote</h3>
         <label>Quote</label>
         <input type="text" id="post-tool-quote-focus" data-field="text" class="singleInput add-quote">
-        <input type="button" class="post-tool-submit" data-type="quote" value="Add">
+        <input type="button" class="post-tool-submit"  onclick="addMarkdown('quote')" value="Add">
         <input type="button" value="Cancel" onclick="closeToolModals()">
       </div>
 
@@ -147,7 +147,7 @@
         </div>
         <div class="image-viewer">
         </div>
-        <input type="button" class="post-tool-submit" data-type="img" value="Add">
+        <input type="button" class="post-tool-submit"  onclick="addMarkdown('img')" value="Add">
         <input type="button" value="Cancel" onclick="closeToolModals()">
       </div>
 
@@ -172,7 +172,7 @@
           <option value="css">CSS</option>
         </select>
         <br>
-        <input type="button" class="post-tool-submit" data-type="code" value="Add">
+        <input type="button" class="post-tool-submit"  onclick="addMarkdown('code')" value="Add">
         <input type="button" value="Cancel" onclick="closeToolModals()">
       </div>
 

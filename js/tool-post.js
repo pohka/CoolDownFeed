@@ -1,4 +1,3 @@
-var cursorPosition=0;
 var postID = genUID()
 
 /*
@@ -176,12 +175,22 @@ function switchMode(mode){
   });
 }
 
+
 class Toolbar extends Comp{
   constructor(){
     super({
       tag :"div",
       class : "post-toolbar-inner"
     });
+
+    //listen to the cursor position in the editor
+    let editor = Quas.getEl("#post-editor").el;
+    let events = ["click", "keyup", "paste", "change"];
+    for(let i in events){
+      editor.addEventListener(events[i], function(e){
+        Toolbar.cursorPosition = Quas.getEl('#post-editor').el.selectionStart;
+      });
+    }
 
     //btns for the mode of the post tool
     let modes = ["Editor", "Preview"];
@@ -322,6 +331,16 @@ class Toolbar extends Comp{
     modal.toggleVisible();
     Quas.scrollable(!modal.visible());
 
+    //set focus for first input field
+    if(modal.visible()){
+      let sel = modal.el.querySelector("input[type=text]");
+      if(sel === null){
+        sel = modal.el.getElementsByTagName("textarea")[0];
+      }
+      if(sel !== undefined)
+        sel.focus();
+    }
+
     //set active btn
     Quas.each(".toolbar-btn-sm",function(el){
       if(el.attr("id") !== id)
@@ -331,12 +350,9 @@ class Toolbar extends Comp{
     });
   }
 }
+Toolbar.cursorPosition = 0;
 
 function genPostTool(){
-  Quas.each(".post-tool-modal", function(el){
-    //el.visible(false);
-  });
-
   //catagories or game options for this post
   let gameEl = Quas.getEl("#post-editor-game");
   let games = ["Dota 2", "IRL"];
@@ -350,13 +366,6 @@ function genPostTool(){
 
   new Toolbar().render(".post-toolbar");
   loadAllIcons();
-}
-
-//generate the preview
-function genPreview(){
-  //var html = genHtmlFromRaw(getRaw());
-  Quas.getEl(".post-preview").clearChildren();
-  //bwe.append(".post-preview", html);
 }
 
 function getRaw(){
@@ -381,30 +390,30 @@ function getRaw(){
   return raw;
 }
 
-//toggles the mod of the tools
-function toggleToolMode(selector){
-  $(".toolbar-mode").each(function(){
-    if($(this).hasClass('active')){
-      $(this).removeClass('active');
-    }
-    if($(selector).attr("id") === "mode-preview"){
-      genPreview();
-    }
-  });
-  $(selector).addClass('active');
-
-  var id = $(selector).attr("id");
-
-  if(id === "mode-editor"){
-    $(".post-preview").hide();
-    $(".post-raw-edit").show();
-  }
-  else if(id === "mode-preview"){
-    $(".post-preview").show();
-    $(".post-raw-edit").hide();
-    genPreview();
-  }
-}
+// //toggles the mod of the tools
+// function toggleToolMode(selector){
+//   $(".toolbar-mode").each(function(){
+//     if($(this).hasClass('active')){
+//       $(this).removeClass('active');
+//     }
+//     if($(selector).attr("id") === "mode-preview"){
+//       genPreview();
+//     }
+//   });
+//   $(selector).addClass('active');
+//
+//   var id = $(selector).attr("id");
+//
+//   if(id === "mode-editor"){
+//     $(".post-preview").hide();
+//     $(".post-raw-edit").show();
+//   }
+//   else if(id === "mode-preview"){
+//     $(".post-preview").show();
+//     $(".post-raw-edit").hide();
+//     genPreview();
+//   }
+// }
 
 //closes all the modals
 function closeToolModals(){
@@ -415,20 +424,22 @@ function closeToolModals(){
   Quas.each(".toolbar-modal-btn", function(el){
     el.active(false);
   });
+
+  Quas.scrollable(true);
 }
 
-//opens the a tool option
-function openToolOption(thisSel){
-  var type = $(thisSel).attr("id").replace("post-add-", "");
-  var selector = "#post-tool-" + type;
-  if($(selector).length > 0){
-    closeToolModals();
-    $(selector).show();
-
-    var focus = selector + "-focus";
-    $(focus).focus();
-  }
-}
+// //opens the a tool option
+// function openToolOption(thisSel){
+//   var type = $(thisSel).attr("id").replace("post-add-", "");
+//   var selector = "#post-tool-" + type;
+//   if($(selector).length > 0){
+//     closeToolModals();
+//     $(selector).show();
+//
+//     var focus = selector + "-focus";
+//     $(focus).focus();
+//   }
+// }
 
 //returns true if the image exists
 function imageExists(url)
@@ -436,6 +447,54 @@ function imageExists(url)
    var img = new Image();
    img.src = url;
    return img.height != 0;
+}
+
+function addMarkdown(type){
+  let fields = getFieldsForModalType(type)
+  let res;
+  switch(type){
+    //i#[src](desc)
+    case "img" :
+
+      break;
+    //m#https://www.youtube.com/watch?v=d2daee3
+    case "media" :
+      var url = fields["url"].trim();
+      if(url !== ""){
+        res = "m#" + url;
+      }
+      break;
+    //[text](link)
+    case "link" :
+      res = " [" + fields["text"] + "](" + fields["link"] + ") "; break;
+    //#heading
+    case "heading" :
+      res = "#" + fields["text"] + "\n"; break;
+    //```LANG\n my code```
+    case "code" : break;
+    //* item 1
+    case "list" :
+      res = "* " + fields["text"].split("\n").join("\n* ") + "\n";
+      break;
+    //> quote
+    case "quote" :
+      res = "> " + fields["text"] + "\n";
+    break;
+  }
+
+  if(res !== undefined){
+    let editor = Quas.getEl("#post-editor");
+    let curText = editor.val();
+    var newText =
+      curText.substr(0,Toolbar.cursorPosition) +
+      res + curText.substr(Toolbar.cursorPosition);
+    editor.val(newText);
+    editor.el.focus();
+    closeToolModals();
+  }
+  else{
+    new Notification("Empty fields", 3).render();
+  }
 }
 
 //adds markdown to editor textarea from the fields in the toolbar modal
@@ -479,11 +538,11 @@ function addMarkdownToEditor(type){
 //returns a KV array with each of the fields and also clears the fields for this type
 function getFieldsForModalType(type){
   var fields = {};
-  $(".add-" + type).each(function(){
-    var field = $(this).data("field");
-    var val = $(this).val();
+  Quas.each(".add-" + type, function(el){
+    var field = el.data("field");
+    var val = el.val();
     fields[field] = val;
-    $(this).val("");
+    el.val("");
   });
   return fields;
 }

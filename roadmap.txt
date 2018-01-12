@@ -1,17 +1,18 @@
 Overall
 -----------------
 * tracking page views
+* meta tags
 * login menu
 * post doesn't exist
 
 Quas convert
 ---------------
-* Add markdown from modals
 * cloud images preview
 * upload images to server
 * save post
 * publish post
 * check privileges
+* author banner at the top of post
 
 Pages
 -----------------
@@ -29,7 +30,6 @@ Post Editor
   * image alt tags
 * preview for mobile
 * publish in future
-* links to external website open in new tab
 * validate posts
 * banner image selection
 * preview post after publishing
