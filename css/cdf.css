@@ -207,6 +207,7 @@ a:hover{
 
 
 @media only screen and (max-width: 900px) {
+  /*----------- main (mobile) --------------*/
   html, body{
     width: 100% !important;
     margin: 0 auto;
@@ -232,6 +233,8 @@ a:hover{
     padding: 0 8%;
   }
 
+
+  /*----------- Post (mobile) --------------*/
   .post-con ul{
     margin-left: 8%;
     width: 84% !important;
@@ -282,10 +285,55 @@ a:hover{
     font-size: 12px !important;
     line-height: 32px !important;
   }
+
+  /*----------- Navbar (mobile) --------------*/
+  .cdf-nav-con{
+    margin-top: -4px !important;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .cdf-nav-filters{
+    position: fixed;
+    top: 51px;
+    left: 0px;
+    display: none !important;
+  }
+
+  .cdf-nav-filters a{
+    display: block !important;
+    background: var(--nav_bg);
+    width: 100vw !important;
+    text-align: left !important;
+    border-bottom: 2px  solid var(--border);
+    box-sizing: border-box;
+    font-size: 26px !important;
+    line-height: 40px !important;
+    padding: 0 10%;
+  }
+
+  .cdf-nav-info a{
+    display: none !important;
+    width: 50px !important;
+    min-width: 50px !important;
+  }
+
+  #login{
+    width: 130px !important;
+    height: 53px !important;
+    line-height: 55px !important;
+  }
+
+  .cdf-nav-logo, .cdf-nav-logo img{
+    height: 40px !important;
+  }
+
+  .cdf-nav-logo{
+    width: 110px !important;
+  }
 }
 
 /*-------------- Scrollbar --------------*/
-html::-webkit-scrollbar-track
+/* html::-webkit-scrollbar-track
 {
 	background-color: var(--card_bg);
   border-left: 1px solid var(--shadow);
@@ -301,7 +349,7 @@ html::-webkit-scrollbar
 html::-webkit-scrollbar-thumb
 {
 	background-color: var(--border);
-}
+} */
 
 /*-------------- Navbar --------------*/
 .cdf-nav

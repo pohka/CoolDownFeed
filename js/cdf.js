@@ -608,6 +608,8 @@ class UserMenu extends Comp{
   }
 }
 
+let isResponsiveMobile;
+
 //start
 Quas.start = function(){
   let nav = new Navbar();
@@ -627,16 +629,37 @@ function finishedLoadingPost(){
 function responsiveLayoutCheck(){
   let mobileW = 900;
   let w = window.innerWidth;
-  if(w <= 900){
 
+  //true if changed state
+  let changed = isResponsiveMobile === undefined || isResponsiveMobile != (w <= mobileW);
+  isResponsiveMobile = w <= mobileW;
+
+  //mobile
+  if(isResponsiveMobile){
     //keep 16:9 ratio on videos
     Quas.each(".video", function(el){
-      el.el.style = "height:"+(w*0.5625)+"px;";
+      el.el.style = "height:"+(w*0.55)+"px;";
     });
-  }
-  else{
 
+    //changed state
+    if(changed){
+      let navLogo = Quas.getEl(".cdf-nav-logo");
+      navLogo.attr("href", "javascript:void(0);toggleMobileMenu()");
+    }
   }
+  //PC
+  else{
+    if(changed){
+      let navLogo = Quas.getEl(".cdf-nav-logo");
+      navLogo.attr("href", "/");
+    }
+  }
+}
+
+function toggleMobileMenu(){
+  let menu = Quas.getEl(".cdf-nav-filters");
+  menu.toggleVisible();
+  let navLogo = Quas.getEl(".cdf-nav-logo");
 }
 
 //refreshes all of the icons
@@ -1070,7 +1093,9 @@ function loadSession(){
       "My Posts" : function(){
         window.open("/my-posts","_self");
       },
-      "Log Out" : endSession,
+      "Log Out" : function(){
+        endSession();
+      },
     });
     userMenu.render("body");
     Quas.getEl(".user-menu").visible(false);
@@ -1100,7 +1125,7 @@ function endSession(){
 
 //clears a cookie by its key name
 function clearCookie(cname){
-  document.cookie = cname + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+  document.cookie = cname + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/";
 }
 
 //gets the cookie by they key value

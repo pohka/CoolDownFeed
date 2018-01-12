@@ -286,10 +286,10 @@ class Element{
     //set value
     else{
       if(show){
-        this.el.style.display = "block";
+        this.el.style = "display: block !important;";
       }
       else{
-        this.el.style.display = "none";
+        this.el.style = "displayL none !important;";
       }
     }
   }
