@@ -882,10 +882,9 @@ footer{
 
 .post-toolbar-inner
 {
-  width: 1170px;
+  width: 1000px;
   margin: 0 auto;
   background: var(--nav_bg);
-
 }
 
 .toolbar-mode

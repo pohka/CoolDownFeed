@@ -192,6 +192,13 @@ class Toolbar extends Comp{
       });
     }
 
+    //close modals on escape btn
+    document.documentElement.addEventListener("keyup", function(e){
+      if(e.keyCode == 27){
+        closeToolModals();
+      }
+    });
+
     //btns for the mode of the post tool
     let modes = ["Editor", "Preview"];
     for(let i in modes){
