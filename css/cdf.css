@@ -227,13 +227,12 @@ html::-webkit-scrollbar-thumb
 /*-------------- Navbar --------------*/
 .cdf-nav
 {
-  border-bottom: 2px solid var(--pri);
+  border-bottom: 1px solid var(--border);
   height: 50px;
   position: fixed;
   width: 100%;
   z-index : 900;
   background: var(--nav_bg);
-  box-shadow: 1px 0px 6px var(--shadow);
 }
 
 .cdf-nav li{
@@ -243,7 +242,6 @@ html::-webkit-scrollbar-thumb
 
 .cdf-nav-filters
 {
-
   font-family: 'Barlow', sans-serif;
   display: inline-block;
   vertical-align: top;
@@ -255,19 +253,18 @@ html::-webkit-scrollbar-thumb
 {
   vertical-align: top;
   display: inline-block;
-  height: 47px;
+  height: 48px;
   width: 150px;
   color: var(--text);
   text-decoration: none;
   text-align: center;
   font-size: 20px;
-  line-height: 50px;
-  margin-left: -3px;
+  line-height: 48px;
 }
 
 .btn
 {
-  border-bottom: 3px solid transparent;
+  border-bottom: 2px solid transparent;
   -webkit-transition: border 0.3s;
   transition: border 0.3s;
   cursor: pointer;
@@ -277,9 +274,12 @@ html::-webkit-scrollbar-thumb
 
 .btn:hover, .btn.active
 {
-  border-bottom-color: var(--pri);
   background-color: var(--hover);
   padding-bottom: 0px;
+}
+
+.btn.active{
+  border-bottom-color: var(--pri);
 }
 
 .cdf-nav-logo
@@ -291,9 +291,9 @@ html::-webkit-scrollbar-thumb
   padding: 6px 0px;
   padding-left: 46px;
   background: var(--nav_bg);
-  box-shadow: 1px 1px 3px var(--shadow);
+  box-shadow: 1px 1px 2px var(--shadow);
   position: relative;
-  border: 1px solid transparent;
+  border: 2px solid transparent;
   border-top: none;
   border-left: none;
   z-index: 901;
@@ -301,7 +301,7 @@ html::-webkit-scrollbar-thumb
 
 .cdf-nav-logo:hover
 {
-  box-shadow: 1px 1px 3px #066cad;
+  box-shadow: 1px 1px 3px var(--shadow);
   border-color: var(--pri);
   cursor: pointer;
 }
@@ -877,7 +877,8 @@ footer{
   top: 50px;
   width: 100%;
   background: var(--nav_bg);
-  box-shadow: 0px 0px 3px var(--shadow);
+  border-bottom: 1px solid var(--border);
+  z-index: 12;
 }
 
 .post-toolbar-inner
@@ -905,14 +906,13 @@ footer{
   height: 40px;
   padding-top: 5px;
   cursor: pointer;
-  border-bottom: 3px solid transparent;
+  border-bottom: 2px solid transparent;
   -webkit-user-select: none;
   -moz-user-select: none;
 }
 
 .toolbar-btn:hover{
   background: var(--hover);
-  border-color: var(--pri);
 }
 
 .toolbar-btn-sm
@@ -941,7 +941,7 @@ footer{
 {
   position: fixed;
   float: right;
-  top: 100px;
+  top: 90px;
   right: 50%;
   z-index: 10;
 }
@@ -1100,11 +1100,6 @@ footer{
   height: 40px;
   margin-bottom: -80px;
   color: red;
-}
-
-svg path,
-svg rect{
-  /* fill: var(--pri); */
 }
 
 

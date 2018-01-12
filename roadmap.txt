@@ -23,7 +23,6 @@ Post Editor
 -----------------
 * parse markdown for:
   * code
-  * image alt tags
 * preview for mobile
 * publish in future
 * validate posts
