@@ -30,25 +30,25 @@ switch($_REQUEST["type"]){
       $sql = "SELECT * FROM `images` WHERE `userid`= '" . getUserID($_REQUEST['userid'], $con) . "' ORDER BY timestamp DESC";
       break;
     case "add-post" :
-      $text  = htmlspecialchars($_POST['text'], ENT_QUOTES);
-      $id = $_POST['id'];
-      $title = $_POST['title'];
-      $desc = $_POST['desc'];
-      $userid = getUserID($_POST['cookieid'], $con);
+      $text  = htmlspecialchars($_REQUEST['text'], ENT_QUOTES);
+      $id = $_REQUEST['id'];
+      $title = $_REQUEST['title'];
+      $desc = $_REQUEST['desc'];
+      $userid = getUserID($_REQUEST['cookieid'], $con);
 
-      $timestamp_epoch  = $_POST['timestamp'];
+      $timestamp_epoch  = $_REQUEST['timestamp'];
       $dt = new DateTime("@$timestamp_epoch");
       $timestamp = $dt->format('Y-m-d H:i:s');
 
-      $tags = $_POST['tags'];
-      $published = $_POST['published'];
+      $tags = $_REQUEST['tags'];
+      $published = $_REQUEST['published'];
 
-      $publish_time_epoch = $_POST['publish_time'];
+      $publish_time_epoch = $_REQUEST['publish_time'];
       $dt2 = new DateTime("@$publish_time_epoch");
       $publish_time = $dt2->format('Y-m-d H:i:s');
 
 
-      $game = $_POST['game'];
+      $game = $_REQUEST['game'];
 
       $sql1 =
         "INSERT INTO `cards` (`id`, `title`, `description`, `userid`, " .

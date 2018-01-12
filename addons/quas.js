@@ -441,7 +441,7 @@ class Quas{
     let str = req.url + "?";
     let i = 0;
     for(let key in req.data){
-      str += key + "=" + req.data[key] + "&"
+      str += key + "=" + encodeURIComponent(req.data[key]) + "&"
     }
     xhr.open(req.type, str.slice(0,-1), true);
     //xhr.setRequestHeader("Access-Control-Allow-Origin", "*");

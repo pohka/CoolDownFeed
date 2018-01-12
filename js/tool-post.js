@@ -246,17 +246,24 @@ class Toolbar extends Comp{
     }
 
     //btns for saving and publishing
-    let savebtns = [
-      "Publish",
-      "Save Draft",
-    ];
+    let savebtns = {
+      "Publish" : function(){
+          save(true);
+      },
+      "Save Draft" : function(){
+        save(false);
+      }
+    };
 
     for(let i in savebtns){
       super.addChild({
         tag : "div",
         class : "toolbar-btn toolbar-btn-right",
-        id : savebtns[i].toLowerCase().replace(" ", "-"),
-        txt : savebtns[i]
+        //id : savebtns[i].toLowerCase().replace(" ", "-"),
+        txt : i,
+        on : {
+          click : savebtns[i]
+        }
       });
     }
 
@@ -359,7 +366,7 @@ function genPostTool(){
 
 function getRaw(){
   var raw = "";
-  var banner = $("#post-editor-banner").val().trim();
+  var banner = Quas.getEl("#post-editor-banner").val().trim();
 
   if(banner!== "" && imageExists(banner)){
     raw += "b#" + banner + "\n";
@@ -466,7 +473,7 @@ function addMarkdown(type){
     closeToolModals();
   }
   else{
-    new Notification(errorMsg, 3).render();
+    new Notification(errorMsg, 3).render().render();
   }
 }
 
@@ -584,19 +591,18 @@ function validate(){
 function save(forNow){
   var cookieID = getCookie("session");
   if(cookieID == undefined){
-    new Notification("Not Logged In", 6, "error");
+    new Notification("Not Logged In", 6, "error").render();
     return;
   }
-  var text = getRaw();
-  var title = $("#post-editor-title").val();
-  var desc = $("#post-editor").val().substr(0, 65).trim();
-  var banner = $("#post-editor-banner").val();
+  var text = Quas.getEl("#post-editor").val();
+  var title = Quas.getEl("#post-editor-title").val();
+  var desc = Quas.getEl("#post-editor").val().substr(0, 65).trim();
+  var banner = Quas.getEl("#post-editor-banner").val();
   var time = Math.floor(Date.now() / 1000);
   var publish = 1;
   if(!forNow) publish = 0;
   var publishTime = time;
-
-  $.post( "php/cdf.php", {
+  let pageData = {
     type : "add-post",
     id : postID,
     text : text,
@@ -604,24 +610,33 @@ function save(forNow){
     desc : desc,
     cookieid : cookieID,
     timestamp : time,
-    tags : $("#post-editor-tags").val().trim(),
+    tags : Quas.getEl("#post-editor-tags").val().trim(),
     published : publish,
     publish_time : publishTime,
-    game : $("#post-editor-game").val()
-    }).done(function( data ) {
-      if(data==="success"){
+    game : Quas.getEl("#post-editor-game").val()
+  };
+
+  Quas.ajax({
+    url : "php/cdf.php",
+    type : "POST",
+    data : pageData,
+    success : function(data){
+      console.log("return:" + data);
+      if(data == "success"){
+        console.log("show notification:" + publish);
         if(publish == 1){
-          new Notification("Published", 6, "success");
+          new Notification("Published", 6, "success").render();
         }
         else {
-          new Notification("Saved", 6, "success");
+          new Notification("Saved", 6, "success").render();
         }
       }
       else{
         console.log(data);
-        new Notification("Server Error", 6, "error");
+        new Notification("Server Error", 6, "error").render();
       }
-    });
+    }
+  });
 }
 
 //uploads files, if success it calls the callback function
@@ -636,10 +651,10 @@ function upload(files, callback){
 
       //img too big
       if(size >= maxSize){
-        new Notification("Image must be smaller than 2MB", 8, "error");
+        new Notification("Image must be smaller than 2MB", 8, "error").render();
       }
       else{
-        new Notification("Uploading...", 10);
+        new Notification("Uploading...", 10).render();
         var formImage = new FormData();
         formImage.append('image', files[i]);
         var session = getCookie("session");
@@ -656,11 +671,11 @@ function upload(files, callback){
               clearNotifications("default");
 
               if(data.substr(0,3) === "/i/"){
-                new Notification("Uploaded: " + name, 4, "success");
+                new Notification("Uploaded: " + name, 4, "success").render();
                 callback(data);
               }
               else{
-                new Notification("Upload Error", 8, "error");
+                new Notification("Upload Error", 8, "error").render();
                 console.log("Upload Error:"+data);
               }
           }});
@@ -669,7 +684,7 @@ function upload(files, callback){
     }
     //invalid format
     else{
-      new Notification("File format must be png or jpeg", 8, "error");
+      new Notification("File format must be png or jpeg", 8, "error").render();
     }
   }
 }

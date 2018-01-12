@@ -7,10 +7,6 @@ Overall
 
 Quas convert
 ---------------
-* cloud images preview
-* upload images to server
-* save post
-* publish post
 * check privileges
 * author banner at the top of post
 
