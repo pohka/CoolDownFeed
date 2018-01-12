@@ -408,8 +408,8 @@ class Quas{
     }
   */
   static ajax(req){
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
           if(req.success!==undefined){
             let result;
@@ -443,10 +443,18 @@ class Quas{
     for(let key in req.data){
       str += key + "=" + req.data[key] + "&"
     }
-    xmlhttp.open(req.type, str.slice(0,-1), true);
-  //xmlhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
+    xhr.open(req.type, str.slice(0,-1), true);
+    //xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+    //var contentType = "multipart/form-data; boundary=" + boundary;
+    //xhr.setRequestHeader("Content-Type", contentType);
 
-    xmlhttp.send();
+    //file uploading
+    if(req.data.constructor === FormData){
+      xhr.send(req.data);
+    }
+    else{
+      xhr.send();
+    }
   }
 
   /**

@@ -9,15 +9,15 @@
     if($userID != ''){
     $errors= array();
     $file_name = $_FILES['image']['name'];
-    $file_size =$_FILES['image']['size'];
-    $file_tmp =$_FILES['image']['tmp_name'];
-    $file_type=$_FILES['image']['type'];
+    $file_size = $_FILES['image']['size'];
+    $file_tmp = $_FILES['image']['tmp_name'];
+    $file_type = $_FILES['image']['type'];
 
     $file_ext = pathinfo($file_name, PATHINFO_EXTENSION);
-    $expensions= array("jpeg","jpg","png");
+    $extensions= array("jpeg","jpg","png");
 
     //file format
-    if(in_array($file_ext,$expensions)=== false){
+    if(in_array($file_ext,$extensions) === false){
        $errors[]="extension not allowed, please choose a JPEG or PNG file.";
     }
 
@@ -26,14 +26,14 @@
        $errors[]='File size must be less than 2MB';
     }
 
-    if(empty($errors)==true){
+    if(empty($errors) == true){
       $path = "/i/".$userID;
       $id = genUID();
       $loc = $path  . "/" . $id . "." . $file_ext;
       $fullPath = $_SERVER['DOCUMENT_ROOT'] . $path;
 
       //make directory if it doesn't exist
-      if ( ! is_dir($fullPath)) {
+      if (!is_dir($fullPath)) {
            mkdir($fullPath, 0777, true);
        }
        move_uploaded_file($file_tmp, $_SERVER['DOCUMENT_ROOT'] . $loc);
@@ -45,7 +45,7 @@
        echo $loc;
     }
     else{
-       echo("error".$errors);
+       echo "error".$errors;
     }
    }
   }
@@ -67,7 +67,7 @@
     if(mysqli_connect_errno()){
       echo "Failed to connect to MySQL: " . mysqli_connect_error();
     }
-    $sid = $_POST['sid'];
+    $sid = $_REQUEST['sid'];
     $sql = "SELECT user_id FROM `sessions` WHERE session_id = '" . $sid . "'";
     $userID = "";
     $result = mysqli_query($con, $sql);

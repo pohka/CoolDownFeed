@@ -131,7 +131,7 @@ class Toolbar extends Comp{
 
     //track cursor position in editor
     Quas.on("click keyup paste change", "#post-editor", function(e){
-      Toolbar.cursorPosition = Quas.getEl('#post-editor').el.selectionStart;
+      Toolbar.cursorPosition = this.selectionStart;
     });
 
     //close modals on escape btn
@@ -140,6 +140,14 @@ class Toolbar extends Comp{
         closeToolModals();
       }
     });
+
+    Quas.on("click", "#open-user-images", function(e){
+      closeToolModals();
+      Quas.getEl("#post-tool-cloud").visible(true);
+      loadModal("cloud");
+    });
+
+    Toolbar.dragEvents();
 
     //btns for the mode of the post tool
     let modes = ["Editor", "Preview"];
@@ -266,6 +274,38 @@ class Toolbar extends Comp{
     });
   }
 
+  //manages events for drag and drop
+  static dragEvents(){
+    //enter drag
+    Quas.on("dragenter dragstart", ".drop", function(e){
+      e.preventDefault();
+      new Element(this).addCls("dragenter");
+    });
+
+    //exit drag
+    Quas.on("dragend dragleave", ".drop", function(e){
+      e.preventDefault();
+      new Element(this).delCls('dragenter');
+    });
+
+    //prevent default on other drag events
+    Quas.on("drag dragover", ".drop", function(e){
+      e.preventDefault();
+    });
+
+    //dropping the file
+    Quas.on("drop", ".drop", function(e){
+      e.preventDefault();
+      new Element(this).delCls('dragenter');
+      upload(e.dataTransfer.files, function(data){
+        //todo progress bar
+        closeToolModals();
+        Quas.getEl("#post-tool-cloud").visible(true);
+        loadModal("cloud");
+      });
+    });
+  }
+
   //toggles the modals with the small btns
   static toggleToolbarModal(btn){
     let id = "post-add-"+btn;
@@ -362,17 +402,39 @@ function imageExists(url)
 
 function addMarkdown(type){
   let fields = getFieldsForModalType(type)
+  let errorMsg = "Empty field(s)"
   let res;
   switch(type){
     //i#[src](desc)
     case "img" :
-
+      let q = document.querySelector(".img-viewer-thumb.active");
+      if(q != null){
+        let src = q.childNodes[0].src;
+        let val = "/i/" + src.split("/i/")[1];
+        res = "i#["+val+"](description)\n";
+      }
+      else{
+        errorMsg = "No image selected";
+      }
       break;
     //m#https://www.youtube.com/watch?v=d2daee3
     case "media" :
       var url = fields["url"].trim();
       if(url !== ""){
-        res = "m#" + url;
+        let shortUrl = url.replace("http://", "").replace("https://", "").replace("www.", "");
+        let domain = shortUrl.split("/")[0];
+        let allowedDomains = [
+          "youtube.com",
+          "youtu.be",
+          "clips.twitch.tv",
+          "gyfcat.com",
+        ];
+        if(domain !== undefined && allowedDomains.indexOf(domain) > -1){
+          res = "m#" + url;
+        }
+        else{
+          errorMsg = "Invalid domain: " + domain;
+        }
       }
       break;
     //[text](link)
@@ -404,7 +466,7 @@ function addMarkdown(type){
     closeToolModals();
   }
   else{
-    new Notification("Empty fields", 3).render();
+    new Notification(errorMsg, 3).render();
   }
 }
 
@@ -459,41 +521,58 @@ function getFieldsForModalType(type){
 }
 
 //loads a modal which requires a database request
-var modalsLoaded = [];
+//var modalsLoaded = [];
 function loadModal(type){
   if(type==="cloud"){
-    disableScroll();
-    modalsLoaded.push(type);
-    $("#cloud-spinner").show();
+    //modalsLoaded.push(type);
+    Quas.getEl("#cloud-spinner").visible(true);
     let sid = getCookie("session");
     if(sid === "") return;
-    $.post( "php/cdf.php", {
-      type : "user-images",
-      userid : sid
-      }).done(function( data ) {
-        if(data != "") {
-          var obj = JSON.parse(data);
-          $(".image-viewer").html("");
+    Quas.ajax({
+      url : "php/cdf.php",
+      data : {
+        type : "user-images",
+        userid : sid,
+      },
+      return : "json",
+      success: function(obj) {
+        if(obj.constructor == String) {
+          console.log(obj);
+        }
+        else{
+          let el = Quas.getEl(".image-viewer");
+          el.clearChildren();
 
           for(var i in obj){
-            var div = {
+            el.addChild({
               tag : "div",
               class : "img-viewer-thumb",
-              children : []
-            };
+              on : {
+                //set selected image as active
+                click : function(){
+                  let el = new Element(this);
+                  let q = document.querySelector(".img-viewer-thumb.active");
+                  if(q !== null){
+                    let qEl = new Element(q);
 
-            var img = {
-              tag : "img",
-              src : obj[i]["path"],
-              alt : obj[i]["tag"]
-            };
-            div["children"].push(img);
-
-            $(".image-viewer").append(bwe.build(div));
-            $("#cloud-spinner").hide();
+                    if(qEl.el != el.el){
+                      qEl.active(false);
+                    }
+                  }
+                  el.active();
+                }
+              },
+              children : [{
+                tag : "img",
+                src : obj[i]["path"]
+              }]
+            });
           }
+
+          Quas.getEl("#cloud-spinner").visible(false);
         }
-      });
+      }
+    });
   }
 }
 
@@ -505,7 +584,7 @@ function validate(){
 function save(forNow){
   var cookieID = getCookie("session");
   if(cookieID == undefined){
-    notification("Not Logged In", "error", 6);
+    new Notification("Not Logged In", 6, "error");
     return;
   }
   var text = getRaw();
@@ -532,15 +611,15 @@ function save(forNow){
     }).done(function( data ) {
       if(data==="success"){
         if(publish == 1){
-          notification("Published", "success", 6);
+          new Notification("Published", 6, "success");
         }
         else {
-          notification("Saved", "success", 6);
+          new Notification("Saved", 6, "success");
         }
       }
       else{
         console.log(data);
-        notification("Server Error", "error", 6);
+        new Notification("Server Error", 6, "error");
       }
     });
 }
@@ -551,37 +630,37 @@ function upload(files, callback){
   let maxSize = (1024 * 1024) * 2; //2MB
   for(let i=0; i<files.length; i++){
     let format = files[i]["name"].split(".").pop();
-    if($.inArray(format, allowedFormats) > -1 ){
+    if(allowedFormats.indexOf(format) > -1 ){
       let name = files[i]["name"];
       let size = files[i]["size"];
 
       //img too big
       if(size >= maxSize){
-        notification("Image must be smaller than 2MB", "error", 8);
+        new Notification("Image must be smaller than 2MB", 8, "error");
       }
       else{
-        notification("Uploading...", "default", 10);
+        new Notification("Uploading...", 10);
         var formImage = new FormData();
         formImage.append('image', files[i]);
         var session = getCookie("session");
         if(session !== ""){
           formImage.append('sid', session);
-          $.ajax({
+          Quas.ajax({
             url: "/php/upload.php",
             type: "POST",
             data: formImage,
-            contentType:false,
-            cache: false,
-            processData: false,
+            //contentType:false,
+            //cache: false,
+            //processData: false,
             success: function(data){
               clearNotifications("default");
 
               if(data.substr(0,3) === "/i/"){
-                notification("Uploaded: " + name, "success", 4);
+                new Notification("Uploaded: " + name, 4, "success");
                 callback(data);
               }
               else{
-                notification("Upload Error", "error", 8);
+                new Notification("Upload Error", 8, "error");
                 console.log("Upload Error:"+data);
               }
           }});
@@ -590,7 +669,7 @@ function upload(files, callback){
     }
     //invalid format
     else{
-      notification("File format must be png or jpeg", "error", 8);
+      new Notification("File format must be png or jpeg", 8, "error");
     }
   }
 }
