@@ -5,8 +5,8 @@
     echo "Failed to connect to MySQL: " . mysqli_connect_error();
   }
 
-  $page = htmlspecialchars($_POST["page"]);
-  $sessionID = htmlspecialchars($_POST["session_id"]);
+  $page = htmlspecialchars($_REQUEST["page"]);
+  $sessionID = htmlspecialchars($_REQUEST["session_id"]);
 
   $sql =
     "SELECT users.account_type FROM sessions ".

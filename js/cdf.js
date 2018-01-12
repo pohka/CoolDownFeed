@@ -75,11 +75,6 @@ class Navbar extends Comp{
         link : "/post-example",
         active : (Quas.path == "post-example"),
       },
-      {
-        text : "New Post",
-        link : "/new-post",
-        active : (Quas.path == "new-post"),
-      }
     ]);
   }
 }
@@ -394,7 +389,14 @@ class ConcealOverlay extends Comp{
         {
           tag : "div",
           class : "conceal-msg",
-          txt : "Permission Denied\n"+msg
+          txt : "Permission Denied",
+          children : [
+            {
+              tag : "div",
+              class : "conceal-reason",
+              txt : msg
+            }
+          ]
         }
       ]
     });
@@ -583,6 +585,7 @@ Quas.start = function(){
   new Footer().render("footer");
   loadSession();
   loadAllIcons();
+  checkPrivilages(concealDefault);
 }
 
 //refreshes all of the icons
@@ -590,6 +593,14 @@ function loadAllIcons(){
   Quas.each(".ico", function(el){
     loadIcon(el);
   });
+}
+
+//default conceal msg
+function concealDefault(){
+  new ConcealOverlay("You don't have access to this page").render("body");
+  setTimeout(function(){
+    location.href = "/";
+  }, 2000);
 }
 
 //loads the icon onto the page
@@ -874,6 +885,36 @@ function parseStrForLinks(paragraph){
 }
 
 
+function checkPrivilages(callbackIfDenied){
+  var privilagePages = [
+    "/new-post"
+  ];
+  var path = window.location.pathname;
+  if(privilagePages.indexOf(path) == -1){
+    return;
+  }
+  var cookie = getCookie("session");
+  if(cookie === ""){
+    callbackIfDenied();
+  }
+  else
+  {
+    Quas.ajax({
+      url: "/php/privilages.php",
+      type: "POST",
+      data: {
+        session_id : cookie,
+        page: path
+      },
+      success : function(data){
+        if(data!=="true"){
+          callbackIfDenied();
+        }
+      }
+    });
+  }
+}
+
 /*
 $(document).ready(function() {
 
@@ -1029,6 +1070,9 @@ function loadSession(){
     Quas.getEl("#login").visible(false);
     new NavSession().render(".cdf-nav-info");
     let userMenu = new UserMenu({
+      "New Post" : function(){
+        window.open("/new-post","_self");
+      },
       "My Posts" : function(){
         window.open("/my-posts","_self");
       },
