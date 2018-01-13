@@ -654,6 +654,9 @@ function responsiveLayoutCheck(){
       let navLogo = Quas.getEl(".cdf-nav-logo");
       navLogo.attr("href", "/");
       Quas.getEl(".cdf-nav-filters").el.style = "";
+      Quas.each(".video", function(el){
+        el.el.style = "";
+      });
     }
   }
 }
@@ -775,6 +778,9 @@ function quasLoadPage(){
   }
   else if(Quas.path === "preview"){
     genDevicePreview();
+  }
+  else{
+    onloadTest();
   }
 }
 

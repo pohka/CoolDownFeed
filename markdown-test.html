@@ -9,11 +9,15 @@
     <!-- Quas.js -->
     <script src="/addons/quas.js"></script>
 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width">
+
+
     <link rel="shortcut icon" type="image/ico" href="/img/favicon.ico"/>
     <script src="/js/cdf.js"></script>
     <script>
       //test for markdown
-      Quas.start= function(){
+      function onloadTest(){
       let p = new Post({
         avatar : "/temp/profile.png",
         publish_time : "2017-12-17 04:09:59",
@@ -38,8 +42,9 @@
         title : "checking to see if this works",
         username : "Pohka",
       });
-      p.render(".container");
+      p.render();
       console.log(p);
+      finishedLoadingPage();
     }
     </script>
     <link rel="stylesheet" type="text/css" href="/css/cdf.css">

@@ -19,8 +19,8 @@ Post Editor
 -----------------
 * parse markdown for:
   * code
-* preview for mobile
 * publish in future
+* saving draft over writes the original save
 * validate posts
 * banner image selection
 * preview post after publishing

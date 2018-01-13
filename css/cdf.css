@@ -1261,12 +1261,11 @@ footer{
     border-color: var(--border);
   }
 
-
   /*----------- Post (mobile) --------------*/
   .post-con ul{
     margin-left: 8%;
     width: 84% !important;
-    padding-left: 17% !important;
+    padding-left: 7% !important;
     padding: auto 30% !important;
   }
 
