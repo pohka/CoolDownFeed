@@ -780,7 +780,9 @@ function quasLoadPage(){
     genDevicePreview();
   }
   else{
-    onloadTest();
+    //for testing
+    if(typeof onloadTest === "function")
+      onloadTest();
   }
 }
 
