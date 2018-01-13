@@ -1391,36 +1391,6 @@ function clearNotifications(filter){
   }
 }
 
-//returns the data from the url in a json object
-function getUrlValues(){
-  let str = window.location.search;
-  if(str.charAt(0)=="?"){
-    str = str.substr(1, str.length-1);
-  }
-  let variables = str.split("&");
-  let data = {};
-  for(let i = 0; i<variables.length; i++){
-    if(variables[i]!==""){
-      let item = variables[i].split("=");
-      data[item[0]] = item[1];
-    }
-  }
-
-  return data;
-}
-
-//set or change a value in the url variables
-function setUrlValue(key, val){
-  let data = getUrlValues();
-  data[key] = val;
-  let str = "?";
-  for(let key in data){
-    str += key + "=" + data[key] + "&";
-  }
-  str = str.substr(0,str.length-1);
-  window.location = window.origin + window.location.pathname + str;
-}
-
 //changes sql date string to d-mmm-yyyy-hh-mm format
 function dateToString(datestr, includeYear){
   let els = datestr.split(" ");
