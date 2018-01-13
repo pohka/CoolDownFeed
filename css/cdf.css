@@ -206,131 +206,7 @@ a:hover{
 
 
 
-@media only screen and (max-width: 900px) {
-  /*----------- main (mobile) --------------*/
-  html, body{
-    width: 100% !important;
-    margin: 0 auto;
-    overflow-x: hidden;
-  }
 
-  .container{
-    width: 100%;
-  }
-
-  h1{
-    width: 84%;
-    margin: 20px auto;
-    font-size: 24px;
-  }
-
-  h2{
-    font-size: 22px;
-  }
-
-  p{
-    width: 84%;
-    padding: 0 8%;
-  }
-
-
-  /*----------- Post (mobile) --------------*/
-  .post-con ul{
-    margin-left: 8%;
-    width: 84% !important;
-    padding-left: 17% !important;
-    padding: auto 30% !important;
-  }
-
-  .post-img{
-    width: 100% !important;
-  }
-
-  .quote{
-    margin: 5% 8% !important;
-  }
-
-  .video{
-    width: 100% !important;
-  }
-
-  .banner{
-    height: 300px !important;
-  }
-
-  .banner img{
-    height: 100%;
-    width: auto !important;
-  }
-
-  .creator{
-    margin: 4% !important;
-    padding: 3px 4% !important;
-    width: 84% !important;
-    height: 32px !important;
-  }
-
-  .creator-avatar {
-    height: 32px !important;
-    width: 56px !important;
-  }
-
-  .creator-name{
-    font-size: 14px !important;
-    line-height: 32px !important;
-    margin-left: 10px !important;
-  }
-
-  .creator-date{
-    font-size: 12px !important;
-    line-height: 32px !important;
-  }
-
-  /*----------- Navbar (mobile) --------------*/
-  .cdf-nav-con{
-    margin-top: -4px !important;
-    border-bottom: 2px solid var(--border);
-  }
-
-  .cdf-nav-filters{
-    position: fixed;
-    top: 51px;
-    left: 0px;
-    display: none !important;
-  }
-
-  .cdf-nav-filters a{
-    display: block !important;
-    background: var(--nav_bg);
-    width: 100vw !important;
-    text-align: left !important;
-    border-bottom: 2px  solid var(--border);
-    box-sizing: border-box;
-    font-size: 26px !important;
-    line-height: 40px !important;
-    padding: 0 10%;
-  }
-
-  .cdf-nav-info a{
-    display: none !important;
-    width: 50px !important;
-    min-width: 50px !important;
-  }
-
-  #login{
-    width: 130px !important;
-    height: 53px !important;
-    line-height: 55px !important;
-  }
-
-  .cdf-nav-logo, .cdf-nav-logo img{
-    height: 40px !important;
-  }
-
-  .cdf-nav-logo{
-    width: 110px !important;
-  }
-}
 
 /*-------------- Scrollbar --------------*/
 /* html::-webkit-scrollbar-track
@@ -581,12 +457,14 @@ html::-webkit-scrollbar-thumb
   background: var(--nav_bg);
   box-shadow: 0px 0px 3px var(--shadow);
   z-index: 50;
+  font-size: 18px;
+  font-family: 'Barlow', sans-serif;
 }
 
 .user-menu div{
   width: 100%;
   padding: 0 20px;
-  line-height: 40px;
+  line-height: 48px;
   background: var(--bg);
   cursor: pointer;
 }
@@ -649,18 +527,6 @@ html::-webkit-scrollbar-thumb
   margin-right: -4px;
   line-height: 30px;
   height: 30px;
-}
-
-.notification-icon
-{
-  display: inline-block;
-  margin-right: -4px;
-  width: 40px;
-  padding-right: 10px;
-  height: 30px;
-  font-size: 18px;
-  text-align: center;
-  vertical-align: text-top;
 }
 
 .notification-success {
@@ -874,7 +740,8 @@ footer{
 
 .card-con
 {
-  width: 1104px;
+  width: 1068px;
+  box-sizing: border-box;
   margin: 0 auto;
 }
 
@@ -884,7 +751,7 @@ footer{
   height: auto;
   display: inline-block;
   float: left;
-  margin: 14px 14px;
+  margin: 10px 8px;
   background: var(--card_bg);
   box-shadow: 0px 2px 6px var(--shadow);
   -webkit-transition: box-shadow 0.2s;
@@ -1357,4 +1224,308 @@ footer{
 .ico-con-youtube:hover svg
 {
   fill: red;
+}
+
+@media only screen and (max-width: 900px) {
+  /*----------- main (mobile) --------------*/
+  html, body{
+    width: 100% !important;
+    margin: 0 auto;
+    overflow-x: hidden;
+  }
+
+  .container{
+    width: 100%;
+  }
+
+  h1{
+    width: 84%;
+    margin: 20px auto;
+    font-size: 24px;
+  }
+
+  h2{
+    font-size: 22px;
+  }
+
+  p{
+    width: 84%;
+    padding: 0 8%;
+  }
+
+  .btn.active{
+    border-color: var(--border);
+  }
+
+
+  /*----------- Post (mobile) --------------*/
+  .post-con ul{
+    margin-left: 8%;
+    width: 84% !important;
+    padding-left: 17% !important;
+    padding: auto 30% !important;
+  }
+
+  .post-img{
+    width: 100% !important;
+  }
+
+  .quote{
+    margin: 5% 8% !important;
+  }
+
+  .video{
+    width: 100% !important;
+  }
+
+  .banner{
+    height: 300px !important;
+  }
+
+  .banner img{
+    height: 100%;
+    width: auto !important;
+  }
+
+  .creator{
+    margin: 4% !important;
+    padding: 3px 4% !important;
+    width: 84% !important;
+    height: 32px !important;
+  }
+
+  .creator-avatar {
+    height: 32px !important;
+    width: 56px !important;
+  }
+
+  .creator-name{
+    font-size: 14px !important;
+    line-height: 32px !important;
+    margin-left: 10px !important;
+  }
+
+  .creator-date{
+    font-size: 12px !important;
+    line-height: 32px !important;
+  }
+
+  /*----------- Navbar (mobile) --------------*/
+  .cdf-nav-con{
+    margin-top: -4px !important;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .cdf-nav-filters{
+    position: fixed;
+    top: 51px;
+    left: 0px;
+    display: none !important;
+  }
+
+  .cdf-nav-filters a{
+    display: block !important;
+    background: var(--nav_bg);
+    width: 100vw !important;
+    text-align: left !important;
+    border-bottom: 2px  solid var(--border);
+    box-sizing: border-box;
+    font-size: 26px !important;
+    line-height: 40px !important;
+    padding: 0 10%;
+  }
+
+  .cdf-nav-info a{
+    display: none !important;
+    width: 50px !important;
+    min-width: 50px !important;
+  }
+
+  #login{
+    width: 130px !important;
+    height: 53px !important;
+    line-height: 55px !important;
+  }
+
+  .cdf-nav-logo, .cdf-nav-logo img{
+    height: 40px !important;
+  }
+
+  .cdf-nav-logo{
+    width: 110px !important;
+  }
+
+  #session-username{
+    display: none !important;
+    font-family: 'Barlow', sans-serif;
+  }
+
+  #session-down-icon{
+    min-width: 30px !important;
+    width: 30px !important;
+    padding-left: 0px !important;
+  }
+
+  .session-con{
+    width: 60px !important;
+    padding: 0 15px !important;
+  }
+
+  .session-avatar-con{
+    height: 40px !important;
+    margin-top: 10px !important;
+    border-radius: 2em;
+  }
+
+  #session-down-icon{
+    display: none !important;
+  }
+
+  /*----------- User Menu (mobile) --------------*/
+  .user-menu{
+    width: 100% !important;
+    font-size: 26px;
+  }
+
+  .user-menu div{
+    font-size: 26px !important;
+    padding: 0 10%;
+    width: 80%;
+    border-bottom: 2px solid var(--border) !important;
+  }
+
+  /*----------- Cards (mobile) --------------*/
+  .card-con{
+    width: 100% !important;
+  }
+
+  .card{
+    width: 94% !important;
+    margin: 2% 3% !important;
+  }
+
+  .card-title-and-desc{
+    height: 70px !important;
+  }
+
+  .card-title{
+    font-size: 26px !important;
+  }
+
+  /*----------- Login Modal (mobile) --------------*/
+  .login-modal{
+    top: 20 !important;
+  }
+
+  .login-con{
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
+    padding-top: 50px !important;
+    width: 100% !important;
+    height: 100% !important
+  }
+
+  input[type="text"], input[type="password"]{
+    font-size: 22px;
+    padding: 8px;
+  }
+
+  input[type="button"]{
+    font-size: 20px;
+  }
+
+
+    /*----------- Notification (mobile) --------------*/
+  .notification-con{
+    width: 100% !important;
+    left: 0 !important;
+    bottom: 30 !important;
+  }
+
+  .notification{
+    width: 80% !important;
+    margin: 2px auto !important;
+    text-align: center;
+    padding: 0 !important;
+    box-shadow: 0px 0px 6px var(--shadow);
+  }
+
+  .notification-text{
+    padding: 6px 0 !important;
+  }
+
+
+  /*----------- My Posts (mobile) --------------*/
+  .my-posts-con{
+    width: 100% !important;
+    margin-top: 0px !important;
+  }
+
+  .post-nav{
+    width: 92% !important;
+    float: left;
+    padding: 0 4%;
+  }
+
+  .post-list{
+    width:  100% !important;
+    margin-top: 60px !important;
+  }
+
+  .post-list-item{
+    width: 96% !important;
+    padding: 4px 2%  !important;
+  }
+
+  .post-item-title{
+    max-width: 180px !important;
+    height: 20px !important;
+    overflow-y: hidden;
+  }
+
+
+  .post-item-info{
+    margin-left: 10px !important;
+  }
+
+  .post-item-stats{
+    width: 40px !important;
+  }
+
+  .post-item-date{
+    font-size: 12px !important;
+  }
+
+  .my-posts-page-nav{
+    width: 100% !important;
+  }
+
+
+  /*----------- Footer (mobile) --------------*/
+  .footer-con{
+    width: 100% !important;
+    padding: 10px 0px !important;
+  }
+
+  .footer-logo{
+    height: 60px !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    width: 160px !important;
+    display: block !important;
+  }
+
+  .footer-logo img{
+    height: 40px !important;
+  }
+
+  .footer-filter{
+    height: 30px !important;
+    line-height: 30px !important;
+  }
+
+  .footer-contact{
+    margin-right: 20px !important;
+  }
 }

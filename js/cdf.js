@@ -197,17 +197,6 @@ class Footer extends Comp{
               tag : "div",
               class : "ico ico-twitter footer-social btn",
             },
-            {
-              tag : "div",
-              class :"footer-email",
-              children : [
-                {
-                  tag : "span",
-                  class : "email",
-                  txt : "moc.liamg@01akhop",
-                }
-              ]
-            }
           ]
         }
       ]
@@ -451,6 +440,9 @@ class NavSession extends Comp{
         },
         click : function(){
           Quas.getEl(".user-menu").toggleVisible();
+          if(isResponsiveMobile){
+            Quas.getEl(".cdf-nav-filters").visible(false);
+          }
         }
       },
       children : [
@@ -486,20 +478,23 @@ class Notification extends Comp{
     if(type === undefined || type === ""){
       type="default";
     }
+    let uid= "note-"+genUID();
     super({
       tag : "div",
-      id : "note-"+genUID(),
+      id : uid,
       class : "notification notification-"+type,
+      on : {
+        //close notification by clicking it
+        click : function(){
+          new Element(this).visible(false);
+        }
+      },
       children : [
         {
           tag : "div",
           class : "notification-text",
           txt : text
         },
-        {
-          tag : "div",
-          class : "notification-icon"
-        }
       ]
     });
     this.duration = duration;
@@ -641,6 +636,12 @@ function responsiveLayoutCheck(){
       el.el.style = "height:"+(w*0.55)+"px;";
     });
 
+    //cards thumbnail image keep 16:9 ratio
+    Quas.each(".card-thumb", function(el){
+      let curW = window.getComputedStyle(el.el).width.replace("px", "");
+      el.el.style = "height:"+(Number(curW)*0.55)+"px;";
+    });
+
     //changed state
     if(changed){
       let navLogo = Quas.getEl(".cdf-nav-logo");
@@ -652,6 +653,7 @@ function responsiveLayoutCheck(){
     if(changed){
       let navLogo = Quas.getEl(".cdf-nav-logo");
       navLogo.attr("href", "/");
+      Quas.getEl(".cdf-nav-filters").el.style = "";
     }
   }
 }
@@ -660,6 +662,7 @@ function toggleMobileMenu(){
   let menu = Quas.getEl(".cdf-nav-filters");
   menu.toggleVisible();
   let navLogo = Quas.getEl(".cdf-nav-logo");
+  Quas.getEl(".user-menu").visible(false);
 }
 
 //refreshes all of the icons
