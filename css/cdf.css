@@ -3,7 +3,7 @@
   --text:       #000;
   --hover:      #f9f9f9;
   --card_bg:    #fff;
-  --bg:         #fefefe;
+  --bg:         #fff;
   --text_faded: #ddd;
   --border:     #ccc;
   --nav_bg:     #fff;
@@ -1230,6 +1230,60 @@ footer{
   fill: red;
 }
 
+/*----------- About --------------*/
+.about-con{
+  margin-bottom: 150px;
+}
+
+.about-con h1{
+  font-weight: normal;
+  font-size: 20px;
+  padding: 140px 50px;
+  margin-bottom: 50px;
+  border-bottom: 1px solid var(--pri);
+}
+
+.about-banner{
+  height: 600px;
+}
+
+.about-profile{
+  width: 600px;
+  margin: 0 auto;
+  padding: 30px 0;
+}
+
+.about-profile img{
+  display: inline-block;
+  height: 80px;
+}
+
+.about-profile-right img{
+  float: right;
+}
+
+.about-profile-right h2, .about-profile-right p {
+  text-align: right !important;
+}
+
+.about-profile-text{
+  display: inline-block;
+  vertical-align: top;
+}
+
+.about-profile h2, .about-profile p{
+  text-align: left;
+  clear: left;
+  margin: 0;
+  padding-left: 20px;
+  vertical-align: top;
+  width: 400px;
+}
+
+.about-profile p{
+  padding-top: 5px;
+}
+
 @media only screen and (max-width: 900px) {
   /*----------- main (mobile) --------------*/
   html, body{
@@ -1531,4 +1585,34 @@ footer{
   .footer-contact{
     margin-right: 20px !important;
   }
+
+  /*----------- About (mobile) --------------*/
+  .about-con{
+    margin-bottom: 20px !important;
+  }
+
+  .about-con h1{
+    padding: 40px 0px;
+    margin-bottom: 20px;
+  }
+
+  .about-profile, .about-profile-text{
+    width: 100% !important;
+  }
+
+  .about-profile img, .about-profile-right img{
+    display: block !important;
+    margin: 0 auto !important;
+    float: none;
+    padding-bottom: 4px;
+  }
+
+  .about-profile-right h2, .about-profile-right p,
+  .about-profile-text h2, .about-profile-text p{
+    width: 80%;
+    padding: 0 10%;
+    text-align: left !important;
+  }
+
+
 }

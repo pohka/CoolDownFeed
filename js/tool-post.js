@@ -717,6 +717,8 @@ function checkDateLen(val){
 //load post from local storage
 function genDevicePreview(){
   let data = JSON.parse(localStorage.preview);
+  if(data.title.trim() === "")
+    data.title = "Untitled";
   new Post(data).render();
 }
 

@@ -176,6 +176,11 @@ class Footer extends Comp{
               tag : "div",
               class : "footer-filter btn",
               id : "footer-about",
+              on : {
+                click : function(){
+                  window.location = "/about";
+                }
+              },
               children : [
                 {
                   tag : "div",

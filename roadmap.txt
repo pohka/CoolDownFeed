@@ -21,7 +21,7 @@ Post Editor
   * code
 * publish in future
 * saving draft over writes the original save
-* validate posts
+* validate posts before publishing
 * banner image selection
 * preview post after publishing
 * upload progress bar
@@ -30,9 +30,3 @@ CMS
 -----------------
 * image compression and resizing
 * queries use html special character and decode them too
-
-CSS
-----------------
-* Responsive mobile version
-  * Home
-  * Posts
