@@ -925,6 +925,10 @@ footer{
   vertical-align: bottom;
 }
 
+.preview-type-btn{
+  display: none;
+}
+
 .toolbar-mode.active, .toolbar-modal-btn.active
 {
   background-color: var(--hover);

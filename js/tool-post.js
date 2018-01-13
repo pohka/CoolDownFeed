@@ -27,8 +27,10 @@ function toggleToolbarModal(btn){
   });
 }
 
+//toggles between editor modes
 function switchMode(mode){
   if(mode === "preview"){
+    //generate preview
     Quas.getEl(".post-raw-edit").visible(false);
     let preview = Quas.getEl(".post-preview");
 
@@ -54,12 +56,32 @@ function switchMode(mode){
       children : data
     }).render(preview);
     preview.visible(true);
+
+    //toggle toolbar buttons
+    Quas.each(".toolbar-modal-btn", function(el){
+      el.visible(false);
+    });
+
+    Quas.each(".preview-type-btn", function(el){
+      el.el.style = "display: inline-block;";
+    });
   }
   else if(mode === "editor"){
+    //show editor and hide the preview
     Quas.getEl(".post-raw-edit").visible(true);
     Quas.getEl(".post-preview").visible(false);
+
+    //toggle toolbar buttons
+    Quas.each(".toolbar-modal-btn", function(el){
+      el.el.style = "";
+    });
+
+    Quas.each(".preview-type-btn", function(el){
+      el.visible(false);
+    });
   }
 
+  //set toolbar active
   Quas.each(".toolbar-mode", function(el){
     if(el.attr("id") === "mode-"+mode){
       el.active(true);
@@ -189,6 +211,39 @@ class Toolbar extends Comp{
         on : {
           click : function(){
             Toolbar.toggleToolbarModal(i);
+          }
+        }
+      });
+    }
+
+    let previewTypes = ["Tablet", "Mobile"]
+    for(let i in previewTypes){
+      super.addChild({
+        tag : "div",
+        class : "toolbar-btn preview-type-btn",
+        txt : previewTypes[i],
+        on : {
+          click : function(){
+            let type = previewTypes[i].toLowerCase();
+            let size;
+            if(type === "mobile"){
+              size = {
+                w : 375,
+                h : 667
+              }
+            }
+            else if(type === "tablet"){
+              size = {
+                w : 768,
+                h : 1024
+              }
+            }
+            if(size !== undefined){
+              savePreview();
+              let top = 30;
+              var left = window.innerHeight-size.w/2;
+              window.open("/preview", true, 'width=' + size.w + ',height=' + size.h+',top=' + top + ',left=' + left);
+            }
           }
         }
       });
@@ -637,4 +692,41 @@ function upload(files, callback){
       new Notification("File format must be png or jpeg", 8, "error").render();
     }
   }
+}
+
+//converts epoch to sql date string (yyyy-mm-dd hh:mm:ss)
+function epochTimeToSQLDateString(time){
+  let now = new Date(time);
+  let month = checkDateLen(now.getMonth()+1);
+  let day = checkDateLen(now.getDate());
+  let hrs = checkDateLen(now.getHours());
+  let mins = checkDateLen( now.getMinutes());
+  let secs = checkDateLen(now.getSeconds());
+
+  return now.getFullYear()+"-" + month +"-"+ day +" "
+  + hrs + ":" + mins + ":" + secs;
+}
+
+//helper for converting date string
+function checkDateLen(val){
+  if(val < 10)
+    val = "0" + val;
+  return val;
+}
+
+//load post from local storage
+function genDevicePreview(){
+  let data = JSON.parse(localStorage.preview);
+  new Post(data).render();
+}
+
+//save preview in local storage
+function savePreview(){
+  localStorage.preview = JSON.stringify({
+    title : Quas.getEl("#post-editor-title").val(),
+    text : Quas.getEl("#post-editor").val(),
+    username : getCookie("user_name"),
+    avatar : getCookie("user_avatar"),
+    publish_time : epochTimeToSQLDateString(Date.now())
+  });
 }

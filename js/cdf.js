@@ -773,6 +773,9 @@ function quasLoadPage(){
   else if(Quas.path === "new-post"){
     genPostTool();
   }
+  else if(Quas.path === "preview"){
+    genDevicePreview();
+  }
 }
 
 /**

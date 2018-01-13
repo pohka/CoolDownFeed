@@ -2,8 +2,9 @@ Overall
 -----------------
 * tracking page views
 * meta tags
-* login menu
+* register user menu
 * post doesn't exist i.e invalid url
+* comments
 
 Pages
 -----------------
