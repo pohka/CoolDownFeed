@@ -8,9 +8,7 @@ Overall
 
 Pages
 -----------------
-* About
 * profile
-* my posts
 * edit post
 * popular
 
@@ -30,3 +28,4 @@ CMS
 -----------------
 * image compression and resizing
 * queries use html special character and decode them too
+* merge posts.text into cards

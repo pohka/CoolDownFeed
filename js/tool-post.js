@@ -593,6 +593,16 @@ function validate(){
   return true;
 }
 
+function genPath(){
+  let title = Quas.getEl("#post-editor-title").val().toLowerCase();
+  title = title.split(" ").join("-");
+  if(title.length > 50){
+    title = title.substr(0, 50);
+  }
+  console.log("title:" + title);
+  return title;
+}
+
 function save(forNow){
   var cookieID = getCookie("session");
   if(cookieID == undefined){
@@ -610,9 +620,10 @@ function save(forNow){
   let pageData = {
     type : "add-post",
     id : postID,
+    path : genPath(),
     text : text,
     title : title,
-    desc : desc,
+    desc : Quas.decodeHtmlSpecialChars(desc),
     cookieid : cookieID,
     timestamp : time,
     tags : Quas.getEl("#post-editor-tags").val().trim(),

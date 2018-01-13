@@ -728,7 +728,7 @@ function quasLoadPage(){
             img = "/temp/esl_ham.png";
           }
           new Card({
-            url : data[i].id,
+            url : data[i].path,
             img : img,
             title : data[i].title,
             author : data[i].author,
@@ -745,7 +745,7 @@ function quasLoadPage(){
       type : "POST",
       data : {
         type : "post-view",
-        id : Quas.path.substr(2),
+        path : Quas.path.substr(2),
       },
       return : "json",
       success : function(res){

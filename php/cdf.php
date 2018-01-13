@@ -20,7 +20,7 @@ $sql = "";
 switch($_REQUEST["type"]){
   case "cards-home" :
     $sql =
-      "SELECT cards.id, cards.title, cards.description, " .
+      "SELECT cards.path, cards.title, cards.description, " .
       "users.username as author, cards.publish_time, cards.tags, cards.thumbnail " .
       "FROM cards JOIN users ON users.id = cards.userid " .
       "WHERE cards.published = 1 " .
@@ -32,8 +32,9 @@ switch($_REQUEST["type"]){
     case "add-post" :
       $text  = htmlspecialchars($_REQUEST['text'], ENT_QUOTES);
       $id = $_REQUEST['id'];
+      $path = $_REQUEST['path'];
       $title = $_REQUEST['title'];
-      $desc = $_REQUEST['desc'];
+      $desc = htmlspecialchars($_REQUEST['desc'], ENT_QUOTES);
       $userid = getUserID($_REQUEST['cookieid'], $con);
 
       $timestamp_epoch  = $_REQUEST['timestamp'];
@@ -51,9 +52,9 @@ switch($_REQUEST["type"]){
       $game = $_REQUEST['game'];
 
       $sql1 =
-        "INSERT INTO `cards` (`id`, `title`, `description`, `userid`, " .
+        "INSERT INTO `cards` (`id`, `path`, `title`, `description`, `userid`, " .
         "`timestamp`, `tags`, `published`, `publish_time`, `game`) " .
-        "VALUES ('" . $id . "', '" . $title. "', '" . $desc . "', " .
+        "VALUES ('" . $id . "', '" . $path . "', '" . $title . "', '" . $desc . "', " .
           $userid . ", '" . $timestamp . "', '" .
           $tags . "', '" . $published . "', '" .
           $publish_time . "', '" . $game . "'); ";
@@ -67,11 +68,11 @@ switch($_REQUEST["type"]){
       break;
 
     case "post-view" :
-      $id = $_REQUEST['id'];
+      $path = $_REQUEST['path'];
       $sql = "SELECT cards.title, users.username, users.avatar, cards.publish_time, posts.text " .
       "FROM `cards` INNER JOIN posts ON posts.id = cards.id ".
       "INNER JOIN users ON cards.userid = users.id ".
-      "WHERE cards.id = '" . $id ."'";
+      "WHERE cards.path = '" . $path ."'";
       break;
     case "my-posts" :
       $sid = $_REQUEST['sid'];
