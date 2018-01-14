@@ -108,4 +108,56 @@ let emotes = [
     name  : "WutFace",
     url   : "https://i.imgur.com/2xY5jVy.png",
   },
+  {
+    name  : "ForsenLul",
+    url   : "https://i.imgur.com/87Lgrva.png"
+  },
+  {
+    name  : "SwiftRage",
+    url   : "https://i.imgur.com/d4qiZcn.png"
+  },
+  {
+    name  : "BaffledCena",
+    url   : "https://i.imgur.com/1OvkbU0.png"
+  },
+  {
+    name  : "VRKnuckles",
+    url   : "https://i.imgur.com/HcZcD5t.png"
+  },
+  {
+    name  : "ThomasTheTank",
+    url   : "https://i.imgur.com/aouzuIA.png"
+  },
+  {
+    name  : "PogChamp",
+    url   : "https://i.imgur.com/MMhwJvn.png"
+  },
+  {
+    name  : "4Head",
+    url   : "https://i.imgur.com/imBjRje.png"
+  },
+  {
+    name  : "SeemsGood",
+    url   : "https://i.imgur.com/0j5EVKJ.png"
+  },
+  {
+    name  : "JohnCena",
+    url   : "https://i.imgur.com/M0ZWGiF.png"
+  },
+  {
+    name  : "BibleThump",
+    url   : "https://i.imgur.com/dfUAsMS.png"
+  },
+  {
+    name  : "VoHiYo",
+    url   : "https://i.imgur.com/F1E2j4x.png"
+  },
+  {
+    name  : "HeyGuys",
+    url   : "https://i.imgur.com/T9MEvZR.png"
+  },
+  {
+    name  : "TaiLolPez",
+    url   : "https://i.imgur.com/j2ilxrj.png"
+  },
 ];
