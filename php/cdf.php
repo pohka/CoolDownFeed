@@ -48,6 +48,7 @@ switch($_REQUEST["type"]){
       $dt2 = new DateTime("@$publish_time_epoch");
       $publish_time = $dt2->format('Y-m-d H:i:s');
 
+      $msg = "";
       $publish_time = "";
       //check to see if this post has been published already
       //if updating a published post, use the existing publish_time
@@ -61,10 +62,10 @@ switch($_REQUEST["type"]){
         $data = array_values($rows)[0];
         if($data["published"] == 1){
             $publish_time = $data["publish_time"];
-            echo "Updated";
+            $msg = "Updated";
         }
         else{
-          echo "Published";
+          $msg = "Published";
         }
       }
       //otherwise use the given publish_time
@@ -72,8 +73,11 @@ switch($_REQUEST["type"]){
         $publish_time_epoch = $_REQUEST['publish_time'];
         $dt2 = new DateTime("@$publish_time_epoch");
         $publish_time = $dt2->format('Y-m-d H:i:s');
-        echo "Saved";
+        if($published != 1){
+          $msg =  "Saved";
+        }
       }
+      echo $msg;
 
       $game = $_REQUEST['game'];
 

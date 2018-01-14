@@ -4,23 +4,20 @@ Overall
 * meta tags
 * register user menu
 * comments
+* lazy image loading
 
 Pages
 -----------------
 * profile
-* edit post
 * popular
 
 
 Post Editor
 -----------------
-* parse markdown for:
-  * code
 * publish in future
-* saving draft over writes the original save
 * validate posts before publishing
 * banner image selection
-* preview post after publishing
+* banner image resizing for smaller screens
 * upload progress bar
 
 CMS
@@ -28,3 +25,9 @@ CMS
 * image compression and resizing
 * queries use html special character and decode them too
 * queries use limit
+
+
+Later
+----------------
+* parse markdown for:
+  * code
