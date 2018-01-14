@@ -396,6 +396,7 @@ function createNewPost(){
     },
     success : function(res){
       Toolbar.postID = res;
+      Quas.setUrlValues({p:Toolbar.postID});
       new Notification("Created Post", 3).render();
     }
   });
@@ -663,6 +664,7 @@ function genPath(){
   return title;
 }
 
+//save/publish/update a post
 function save(forNow){
   var cookieID = getCookie("session");
   if(cookieID == undefined){
@@ -702,15 +704,8 @@ function save(forNow){
     type : "POST",
     data : pageData,
     success : function(data){
-      console.log("return:" + data);
-      if(data == "success"){
-        console.log("show notification:" + publish);
-        if(publish == 1){
-          new Notification("Published", 6, "success").render();
-        }
-        else {
-          new Notification("Saved", 6, "success").render();
-        }
+      if(data.length > 0){
+        new Notification(data, 3, "success").render();
       }
       else{
         console.log(data);

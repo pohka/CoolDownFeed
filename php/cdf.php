@@ -43,9 +43,37 @@ switch($_REQUEST["type"]){
       $tags = $_REQUEST['tags'];
       $published = $_REQUEST['published'];
 
+
       $publish_time_epoch = $_REQUEST['publish_time'];
       $dt2 = new DateTime("@$publish_time_epoch");
       $publish_time = $dt2->format('Y-m-d H:i:s');
+
+      $publish_time = "";
+      //check to see if this post has been published already
+      //if updating a published post, use the existing publish_time
+      if($published == 1){
+        $checksql = "SELECT published, publish_time FROM posts WHERE id = '{$id}'";
+        $result = mysqli_query($con, $checksql);
+        $rows = array();
+        while($r = mysqli_fetch_assoc($result)) {
+            $rows[] = $r;
+        }
+        $data = array_values($rows)[0];
+        if($data["published"] == 1){
+            $publish_time = $data["publish_time"];
+            echo "Updated";
+        }
+        else{
+          echo "Published";
+        }
+      }
+      //otherwise use the given publish_time
+      if($publish_time == ""){
+        $publish_time_epoch = $_REQUEST['publish_time'];
+        $dt2 = new DateTime("@$publish_time_epoch");
+        $publish_time = $dt2->format('Y-m-d H:i:s');
+        echo "Saved";
+      }
 
       $game = $_REQUEST['game'];
 
@@ -56,7 +84,6 @@ switch($_REQUEST["type"]){
           "'{$userid}', '{$tags}', '{$published}', ".
           "'{$publish_time}', '{$game}')";
          mysqli_query($con, $sql1);
-         echo "success";
       break;
 
     case "post-view" :
