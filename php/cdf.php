@@ -20,11 +20,10 @@ $sql = "";
 switch($_REQUEST["type"]){
   case "cards-home" :
     $sql =
-      "SELECT cards.path, cards.title, cards.description, " .
-      "users.username as author, cards.publish_time, cards.tags, cards.thumbnail " .
-      "FROM cards JOIN users ON users.id = cards.userid " .
-      "WHERE cards.published = 1 " .
-      "ORDER BY cards.publish_time DESC";
+      "SELECT posts.id as id, posts.path, title, ".
+      "users.username as author, posts.publish_time, posts.tags, posts.thumbnail ".
+      "FROM posts INNER JOIN users on posts.userid = users.id ".
+      "ORDER BY posts.publish_time DESC";
       break;
     case "user-images" :
       $sql = "SELECT * FROM `images` WHERE `userid`= '" . getUserID($_REQUEST['userid'], $con) . "' ORDER BY timestamp DESC";
@@ -34,7 +33,6 @@ switch($_REQUEST["type"]){
       $id = $_REQUEST['id'];
       $path = $_REQUEST['path'];
       $title = $_REQUEST['title'];
-      $desc = htmlspecialchars($_REQUEST['desc'], ENT_QUOTES);
       $userid = getUserID($_REQUEST['cookieid'], $con);
 
       $timestamp_epoch  = $_REQUEST['timestamp'];
@@ -48,31 +46,26 @@ switch($_REQUEST["type"]){
       $dt2 = new DateTime("@$publish_time_epoch");
       $publish_time = $dt2->format('Y-m-d H:i:s');
 
-
       $game = $_REQUEST['game'];
 
       $sql1 =
-        "INSERT INTO `cards` (`id`, `path`, `title`, `description`, `userid`, " .
+        "INSERT INTO `posts` (`id`, `path`, `title`, `text`, `userid`, " .
         "`timestamp`, `tags`, `published`, `publish_time`, `game`) " .
-        "VALUES ('" . $id . "', '" . $path . "', '" . $title . "', '" . $desc . "', " .
-          $userid . ", '" . $timestamp . "', '" .
-          $tags . "', '" . $published . "', '" .
-          $publish_time . "', '" . $game . "'); ";
-      $sql2 =
-          "INSERT INTO `posts` (`id`, `title`, `text`) " .
-          "VALUES ('" . $id . "', '" . $title . "', '" . $text . "')";
-
-          mysqli_query($con, $sql1);
-          mysqli_query($con, $sql2);
-          echo "success";
+        "VALUES ('{$id}', '{$path}', '{$title}', '{$text}', ".
+          "'{$userid}', '{$timestamp}', ".
+          "'{$tags}', '{$published}', ".
+          "'{$publish_time}', '{$game}')";
+         mysqli_query($con, $sql1);
+         echo "success";
       break;
 
     case "post-view" :
+      $id = $_REQUEST['id'];
       $path = $_REQUEST['path'];
-      $sql = "SELECT cards.title, users.username, users.avatar, cards.publish_time, posts.text " .
-      "FROM `cards` INNER JOIN posts ON posts.id = cards.id ".
-      "INNER JOIN users ON cards.userid = users.id ".
-      "WHERE cards.path = '" . $path ."'";
+      $sql =
+        "SELECT posts.title, users.username, users.avatar, posts.publish_time, posts.text " .
+        "FROM `posts` INNER JOIN users ON posts.userid = users.id ".
+        "WHERE posts.id = '{$id}' AND posts.path = '{$path}'";
       break;
     case "my-posts" :
       $sid = $_REQUEST['sid'];
@@ -80,9 +73,18 @@ switch($_REQUEST["type"]){
       $itemsPerPage = 25;
       $offset = $itemsPerPage * $page;
       $sql =
-        "SELECT * FROM `cards` join sessions on cards.userid = sessions.user_id ".
+        "SELECT * FROM `posts` join sessions on posts.userid = sessions.user_id ".
         "WHERE sessions.session_id = '{$sid}' " .
-        "ORDER BY `cards`.`publish_time` DESC LIMIT {$offset},{$itemsPerPage}";
+        "ORDER BY `posts`.`publish_time` DESC LIMIT {$offset},{$itemsPerPage}";
+      break;
+    case "post-edit-open" :
+      $id = $_REQUEST['id'];
+      $path = $_REQUEST['path'];
+      $sid = $_REQUEST['sid'];
+      $sql = "SELECT posts.title, users.username, users.avatar, posts.publish_time, posts.text " .
+      "FROM `posts` INNER JOIN users ON posts.userid = users.id ".
+      "INNER JOIN sessions on posts.userid = sessions.user_id ".
+      "WHERE posts.id = '{$id}' AND posts.path = '{$path}' AND sessions.session_id = '{$sid}'";
       break;
 }
 

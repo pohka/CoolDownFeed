@@ -304,6 +304,13 @@ class Post extends Comp{
     }
   }
 
+  static getPathAndID(fullPath){
+    let pathEl = fullPath.split("-");
+    let id = pathEl.pop();
+    let path = pathEl.join("-");
+    return { id : id, path : path };
+  }
+
   render(){
     super.render(".container");
     let banner = new Comp({
@@ -526,16 +533,22 @@ class Notification extends Comp{
 //list item for posts in my-post page
 class MyPostsItem extends Comp{
   constructor(data){
+    let url = data.path+"-"+data.id;
     super({
       tag : "div",
       class : "post-list-item",
-      data : {
-        url : data.id
-      },
       children : [
         {
           tag : "img",
           src : data.img,
+          data : {
+            url : url
+          },
+          on : {
+            mousedown : function(e){
+              MyPostsItem.openPost(e.which, this.getAttribute("data-url"));
+            }
+          },
         },
         {
           tag : "div",
@@ -545,11 +558,25 @@ class MyPostsItem extends Comp{
               tag : "h3",
               class : "post-item-title",
               txt : data.title,
+              data : {
+                url : url
+              },
+              on : {
+                mousedown : function(e){
+                  MyPostsItem.openPost(e.which, this.getAttribute("data-url"));
+                }
+              },
             },
             {
               tag : "div",
               class : "post-item-date",
               txt : dateToString(data.publish_time)
+            },
+            {
+              tag : "a",
+              href : "/editor?p="+url,
+              class : "post-item-edit",
+              txt : "Edit",
             }
           ]
         },
@@ -561,6 +588,15 @@ class MyPostsItem extends Comp{
               tag : "div",
               txt : "",
               class : "ico-post-item ico ico-chart-bar",
+              data : {
+                url : url
+              },
+              on : {
+                mousedown : function(e){
+                  Quas.preventDefault(e);
+                  console.log(this.getAttribute("data-url"));
+                }
+              }
             },
             {
               tag : "div",
@@ -574,6 +610,15 @@ class MyPostsItem extends Comp{
               tag : "div",
               id : "",
               class : "ico-post-item ico ico-comment",
+              data : {
+                url : url
+              },
+              on : {
+                mousedown : function(e){
+                  Quas.preventDefault(e);
+                  console.log(this.getAttribute("data-url"));
+                }
+              }
             },
             {
               tag : "div",
@@ -584,6 +629,17 @@ class MyPostsItem extends Comp{
         }
       ]
     });
+  }
+
+  static openPost(btn, url){
+    let path = "/p/"+ url;
+    let type = "_self";
+    if(btn == 1){
+      window.open(path, "_self");
+    }
+    else if(btn == 2){
+      window.open(path);
+    }
   }
 }
 
@@ -728,7 +784,7 @@ function quasLoadPage(){
             img = "/temp/esl_ham.png";
           }
           new Card({
-            url : data[i].path,
+            url : data[i].path + "-" + data[i].id,
             img : img,
             title : data[i].title,
             author : data[i].author,
@@ -740,12 +796,15 @@ function quasLoadPage(){
     });
   }
   else if(Quas.path.indexOf("p/") == 0){
+    let fullPath = Quas.path.substr(2);
+    let p = Post.getPathAndID(fullPath);
     Quas.ajax({
       url : "/php/cdf.php",
       type : "POST",
       data : {
         type : "post-view",
-        path : Quas.path.substr(2),
+        id : p.id,
+        path : p.path,
       },
       return : "json",
       success : function(res){
@@ -778,7 +837,7 @@ function quasLoadPage(){
     });
     genMyPosts();
   }
-  else if(Quas.path === "new-post"){
+  else if(Quas.path === "editor"){
     genPostTool();
   }
   else if(Quas.path === "preview"){
@@ -981,7 +1040,7 @@ function parseStrForLinks(paragraph){
 
 function checkPrivilages(callbackIfDenied){
   var privilagePages = [
-    "/new-post"
+    "/editor"
   ];
   var path = window.location.pathname;
   if(privilagePages.indexOf(path) == -1){
@@ -1108,7 +1167,7 @@ function loadSession(){
     new NavSession().render(".cdf-nav-info");
     let userMenu = new UserMenu({
       "New Post" : function(){
-        window.open("/new-post","_self");
+        window.open("/editor","_self");
       },
       "My Posts" : function(){
         window.open("/my-posts","_self");
@@ -1122,8 +1181,6 @@ function loadSession(){
     loadIcon("#session-down-icon");
   }
 }
-
-
 
 //logs the user out of their current session
 function endSession(){

@@ -193,9 +193,11 @@ p{
 
 a{
   color: var(--pri);
+  text-decoration: none;
 }
 
 a:hover{
+  text-decoration: underline;
   color: var(--pri);
 }
 
@@ -1129,17 +1131,14 @@ footer{
 .post-list img{
   height: 60px;
   width: 105px;
+  cursor: pointer;
 }
 
 .post-list-item{
   width: 600px;
   padding: 6px 0px;
   border-bottom: 1px solid var(--border);
-}
-
-.post-list-item:hover{
-  background: var(--hover);
-  cursor: pointer;
+  cursor: default;
 }
 
 .post-item-info{
@@ -1193,6 +1192,11 @@ footer{
   text-align: left;
   margin-top: 4px;
   margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.post-item-title:hover{
+  text-decoration: underline;
 }
 
 .post-item-date{
@@ -1201,10 +1205,19 @@ footer{
 
 .ico-post-item{
   height: 16px;
-  padding-right: 8px;
-  margin-top: 2px;
+  padding: 3px 8px;
+  margin-right: 6px;
+  cursor: pointer;
+  margin-top: -2px;
   display: inline-block;
+  border: 1px solid transparent;
 }
+
+.ico-post-item:hover{
+  background: var(--hover);
+  border-color: var(--pri);
+}
+
 
 .ico-post-item-val{
   display: inline-block;

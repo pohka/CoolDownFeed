@@ -363,10 +363,34 @@ function genPostTool(){
       txt : games[i]
     });
   }
-
+  loadPostIfEdit();
   new Toolbar().render(".post-toolbar");
   loadAllIcons();
   finishedLoadingPage();
+}
+
+//loads the input field if the ediotr is editing an existing post
+function loadPostIfEdit(){
+  let fullPath = Quas.getUrlValues()["p"];
+  if(fullPath === undefined) return;
+  let p = Post.getPathAndID(fullPath);
+  Quas.ajax({
+    url : "/php/cdf.php",
+    type : "POST",
+    data : {
+      type : "post-edit-open",
+      id : p.id,
+      path : p.path,
+      sid : getCookie("session"),
+    },
+    return : "json",
+    success : function(res){
+      let data = res[0];
+      Quas.getEl("#post-editor-title").val(Quas.decodeHtmlSpecialChars(data.title));
+      Quas.getEl("#post-editor").val(Quas.decodeHtmlSpecialChars(data.text));
+    }
+  });
+
 }
 
 function getRaw(){
@@ -623,7 +647,6 @@ function save(forNow){
     path : genPath(),
     text : text,
     title : title,
-    desc : Quas.decodeHtmlSpecialChars(desc),
     cookieid : cookieID,
     timestamp : time,
     tags : Quas.getEl("#post-editor-tags").val().trim(),

@@ -23,6 +23,7 @@ Post Editor
 * banner image selection
 * preview post after publishing
 * upload progress bar
+* change url to be title-id
 
 CMS
 -----------------
