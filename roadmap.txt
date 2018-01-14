@@ -3,7 +3,6 @@ Overall
 * tracking page views
 * meta tags
 * register user menu
-* post doesn't exist i.e invalid url
 * comments
 
 Pages
@@ -29,4 +28,3 @@ CMS
 -----------------
 * image compression and resizing
 * queries use html special character and decode them too
-* merge posts.text into cards

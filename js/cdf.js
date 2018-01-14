@@ -664,6 +664,27 @@ class UserMenu extends Comp{
   }
 }
 
+class Error404 extends Comp{
+  constructor(){
+    super({
+      tag : "div",
+      class : "error-404",
+      children : [
+        {
+          tag : "h1",
+          txt : "404"
+        },
+        {
+          tag : "p",
+          txt : "Seems like you got lost!"
+        },
+      ]
+    });
+    this.render(".container");
+    Quas.getEl(".container").addCls("error-con");
+  }
+}
+
 let isResponsiveMobile;
 
 //start
@@ -808,7 +829,12 @@ function quasLoadPage(){
       },
       return : "json",
       success : function(res){
-        new Post(res[0]).render();
+        if(res.constructor == String){
+          new Error404();
+        }
+        else{
+          new Post(res[0]).render();
+        }
         finishedLoadingPage();
       }
     });
