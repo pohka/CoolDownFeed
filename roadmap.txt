@@ -22,9 +22,9 @@ Post Editor
 * banner image selection
 * preview post after publishing
 * upload progress bar
-* change url to be title-id
 
 CMS
 -----------------
 * image compression and resizing
 * queries use html special character and decode them too
+* queries use limit

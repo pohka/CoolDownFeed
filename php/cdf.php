@@ -81,7 +81,7 @@ switch($_REQUEST["type"]){
       $id = $_REQUEST['id'];
       $path = $_REQUEST['path'];
       $sid = $_REQUEST['sid'];
-      $sql = "SELECT posts.title, users.username, users.avatar, posts.publish_time, posts.text " .
+      $sql = "SELECT posts.title, users.username, users.avatar, posts.publish_time, posts.text, posts.published " .
       "FROM `posts` INNER JOIN users ON posts.userid = users.id ".
       "INNER JOIN sessions on posts.userid = sessions.user_id ".
       "WHERE posts.id = '{$id}' AND posts.path = '{$path}' AND sessions.session_id = '{$sid}'";

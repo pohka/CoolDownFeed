@@ -256,6 +256,9 @@ class Toolbar extends Comp{
       },
       "Save Draft" : function(){
         save(false);
+      },
+      "Update" : function(){
+        save(true);
       }
     };
 
@@ -263,7 +266,7 @@ class Toolbar extends Comp{
       super.addChild({
         tag : "div",
         class : "toolbar-btn toolbar-btn-right",
-        //id : savebtns[i].toLowerCase().replace(" ", "-"),
+        id : "save-" + i.toLowerCase().replace(" ", "-"),
         txt : i,
         on : {
           click : savebtns[i]
@@ -349,8 +352,17 @@ class Toolbar extends Comp{
         el.active();
     });
   }
+
+  //changes the buttons at the right side of the toolbar
+  static alreadyPublished(){
+    Quas.each(".toolbar-btn-right", function(el){
+      el.visible(false);
+    });
+    Quas.getEl("#save-update").visible(true);
+  }
 }
 Toolbar.cursorPosition = 0;
+Toolbar.published = false;
 
 function genPostTool(){
   //catagories or game options for this post
@@ -363,8 +375,8 @@ function genPostTool(){
       txt : games[i]
     });
   }
-  loadPostIfEdit();
   new Toolbar().render(".post-toolbar");
+  loadPostIfEdit();
   loadAllIcons();
   finishedLoadingPage();
 }
@@ -374,6 +386,7 @@ function loadPostIfEdit(){
   let fullPath = Quas.getUrlValues()["p"];
   if(fullPath === undefined) return;
   let p = Post.getPathAndID(fullPath);
+  if(p.path == "") return;
   Quas.ajax({
     url : "/php/cdf.php",
     type : "POST",
@@ -385,12 +398,15 @@ function loadPostIfEdit(){
     },
     return : "json",
     success : function(res){
+      if(res.constructor == String) return;
       let data = res[0];
       Quas.getEl("#post-editor-title").val(Quas.decodeHtmlSpecialChars(data.title));
       Quas.getEl("#post-editor").val(Quas.decodeHtmlSpecialChars(data.text));
+      if(data.published > 0){
+        Toolbar.alreadyPublished()
+      }
     }
   });
-
 }
 
 function getRaw(){
