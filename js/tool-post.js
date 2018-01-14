@@ -1,5 +1,3 @@
-//todo: get this value from the server
-var postID = genUID()
 
 //alerts the user before the close the window if they haven't saved their draft
 window.onbeforeunload = function(){
@@ -359,10 +357,12 @@ class Toolbar extends Comp{
       el.visible(false);
     });
     Quas.getEl("#save-update").visible(true);
+    Toolbar.published = true;
   }
 }
 Toolbar.cursorPosition = 0;
 Toolbar.published = false;
+Toolbar.postID = null;
 
 function genPostTool(){
   //catagories or game options for this post
@@ -376,37 +376,57 @@ function genPostTool(){
     });
   }
   new Toolbar().render(".post-toolbar");
-  loadPostIfEdit();
   loadAllIcons();
+  let newPost = !loadPostIfEdit();
+  if(newPost){
+    console.log("not exists");
+    createNewPost();
+  }
   finishedLoadingPage();
 }
 
+//creates a post on the server and returns the post id
+function createNewPost(){
+  Quas.ajax({
+    url : "/php/cdf.php",
+    type : "POST",
+    data : {
+      type : "post-create",
+      sid : getCookie("session")
+    },
+    success : function(res){
+      Toolbar.postID = res;
+      new Notification("Created Post", 3).render();
+    }
+  });
+}
+
 //loads the input field if the ediotr is editing an existing post
+//returns true if its in edit mode
 function loadPostIfEdit(){
-  let fullPath = Quas.getUrlValues()["p"];
-  if(fullPath === undefined) return;
-  let p = Post.getPathAndID(fullPath);
-  if(p.path == "") return;
+  let id = Quas.getUrlValues()["p"];
+  if(id === undefined) return false;
   Quas.ajax({
     url : "/php/cdf.php",
     type : "POST",
     data : {
       type : "post-edit-open",
-      id : p.id,
-      path : p.path,
+      id : id,
       sid : getCookie("session"),
     },
     return : "json",
     success : function(res){
       if(res.constructor == String) return;
       let data = res[0];
+      Toolbar.postID = id
       Quas.getEl("#post-editor-title").val(Quas.decodeHtmlSpecialChars(data.title));
       Quas.getEl("#post-editor").val(Quas.decodeHtmlSpecialChars(data.text));
       if(data.published > 0){
-        Toolbar.alreadyPublished()
+        Toolbar.alreadyPublished();
       }
     }
   });
+  return true;
 }
 
 function getRaw(){
@@ -654,17 +674,23 @@ function save(forNow){
   var desc = Quas.getEl("#post-editor").val().substr(0, 65).trim();
   var banner = Quas.getEl("#post-editor-banner").val();
   var time = Math.floor(Date.now() / 1000);
+  let publishTime = time;
+
   var publish = 1;
-  if(!forNow) publish = 0;
-  var publishTime = time;
+  if(!forNow){
+    publish = 0;
+  }
+  else{
+    Toolbar.alreadyPublished();
+  }
+
   let pageData = {
     type : "add-post",
-    id : postID,
+    id : Toolbar.postID,
     path : genPath(),
     text : text,
     title : title,
     cookieid : cookieID,
-    timestamp : time,
     tags : Quas.getEl("#post-editor-tags").val().trim(),
     published : publish,
     publish_time : publishTime,

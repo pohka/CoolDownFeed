@@ -534,9 +534,11 @@ class Notification extends Comp{
 class MyPostsItem extends Comp{
   constructor(data){
     let url = data.path+"-"+data.id;
+    let uid = genUID();
     super({
       tag : "div",
       class : "post-list-item",
+      id : "item-" + uid,
       children : [
         {
           tag : "img",
@@ -574,9 +576,40 @@ class MyPostsItem extends Comp{
             },
             {
               tag : "a",
-              href : "/editor?p="+url,
+              href : "/editor?p="+data.id,
               class : "post-item-edit",
               txt : "Edit",
+            },
+            {
+              tag : "div",
+              class : "post-item-more ico ico-caret-down noselect",
+              on : {
+                click : function(){
+                  let el = new Element(this);
+                  el.active();
+                  Quas.getEl("#menu-" + uid).visible(el.hasCls("active"));
+                }
+              }
+            },
+            {
+              tag : "div",
+              class : "post-item-more-menu noselect",
+              id : "menu-" + uid,
+              children : [
+                {
+                  tag : "div",
+                  txt : "Comments"
+                },
+                {
+                  tag : "div",
+                  txt : "Delete",
+                  on : {
+                    click : function(){
+                      MyPostsItem.deletePost(data.id, uid);
+                    }
+                  }
+                }
+              ]
             }
           ]
         },
@@ -640,6 +673,24 @@ class MyPostsItem extends Comp{
     else if(btn == 2){
       window.open(path);
     }
+  }
+
+  //deletes a post
+  static deletePost(id, itemUID){
+    Quas.ajax({
+      url : "/php/cdf.php",
+      type : "POST",
+      data : {
+        type : "post-remove",
+        postID : id,
+        sid : getCookie("session")
+      },
+      success : function(res){
+        Quas.getEl("#item-" + itemUID).del();
+        new Notification("Deleted Post", 3).render();
+      }
+    })
+
   }
 }
 
@@ -797,8 +848,8 @@ function quasLoadPage(){
       data : {
         type : "cards-home"
       },
-      success : function(res){
-        let data = JSON.parse(res);
+      return : "json",
+      success : function(data){
         for(let i in data){
           let img = data[i].thumbnail;
           if(img === ""){

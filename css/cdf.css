@@ -1175,6 +1175,42 @@ footer{
   margin-right: 10px;
 }
 
+.post-item-more{
+  height: 20px;
+  width: 30px;
+  vertical-align: middle;
+  display: inline-block;
+  margin-left: 30px;
+  cursor: pointer;
+}
+
+.post-item-more:hover, .post-item-more.active{
+  background: var(--pri);
+  fill: white;
+}
+
+.post-item-more:hover svg, .post-item-more.active svg{
+  fill: white;
+}
+
+.post-item-more-menu{
+  position: absolute;
+  width: 150px;
+  display: none;
+}
+
+.post-item-more-menu div{
+  padding: 4px;
+  cursor: pointer;
+  background: var(--hover);
+  border: 1px solid var(--border);
+  margin-bottom: -1px;
+}
+.post-item-more-menu div:hover{
+  background: var(--pri);
+  color: white;
+}
+
 .post-nav{
   width: 600px;
   text-align: left;
