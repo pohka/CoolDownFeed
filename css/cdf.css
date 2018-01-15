@@ -206,8 +206,14 @@ a:hover{
   -moz-user-select: none;     /* Firefox all */
 }
 
+img{
+  opacity: 1;
+  transition: opacity 0.3s;
+}
 
-
+img[data-src] {
+  opacity: 0;
+}
 
 
 /*-------------- Scrollbar --------------*/

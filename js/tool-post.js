@@ -45,7 +45,7 @@ function switchMode(mode){
       class : "banner",
       children : [{
         tag : "img",
-        src : "/temp/esl_ham.png"
+        "data-src" : "/temp/esl_ham.png"
       }]
     }).render(preview);
     new Comp({
@@ -53,6 +53,7 @@ function switchMode(mode){
       class : "post-con",
       children : data
     }).render(preview);
+    lazyLoader();
     preview.visible(true);
 
     //toggle toolbar buttons
@@ -637,11 +638,11 @@ function loadModal(type){
               },
               children : [{
                 tag : "img",
-                src : obj[i]["path"]
+                "data-src" : obj[i]["path"]
               }]
             });
           }
-
+          lazyLoader();
           Quas.getEl("#cloud-spinner").visible(false);
         }
       }
@@ -791,6 +792,7 @@ function genDevicePreview(){
   if(data.title.trim() === "")
     data.title = "Untitled";
   new Post(data).render();
+  lazyLoader();
 }
 
 //save preview in local storage

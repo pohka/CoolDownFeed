@@ -13,7 +13,7 @@ class Navbar extends Comp{
             {
               tag : "img",
               class : "skew",
-              src : "/img/logo_sm.png"
+              "data-src" : "/img/logo_sm.png"
             }
           ]
         },
@@ -111,7 +111,7 @@ class Card extends Comp{
           class : "card-thumb",
           children : [{
             tag : "img",
-            src : fields.img
+            "data-src" : fields.img
           }]
         },
         {
@@ -143,6 +143,8 @@ class Card extends Comp{
         }
       ]
     });
+
+
   }
 }
 
@@ -159,7 +161,7 @@ class Footer extends Comp{
           children : [
             {
               tag : "img",
-              src : "/img/logo_sm.png",
+              "data-src" : "/img/logo_sm.png",
             },
             {
               tag : "div",
@@ -318,7 +320,7 @@ class Post extends Comp{
       class : "banner",
       children : [{
         tag : "img",
-        src : "/temp/esl_ham.png"
+        "data-src" : "/temp/esl_ham.png"
       }]
     });
     banner.render(".container", "prepend");
@@ -336,7 +338,7 @@ class PostAuthor extends Comp{
           class : "creator-avatar",
           children : [{
             tag : "img",
-            src : avatar
+            "data-src" : avatar
           }]
         },
         {
@@ -465,7 +467,7 @@ class NavSession extends Comp{
             {
               tag : "img",
               id  : "session-avatar",
-              src : avatar
+              "data-src" : avatar
             }
           ]
         },
@@ -542,7 +544,7 @@ class MyPostsItem extends Comp{
       children : [
         {
           tag : "img",
-          src : data.img,
+          "data-src" : data.img,
           data : {
             url : url
           },
@@ -751,7 +753,17 @@ Quas.start = function(){
 }
 
 function finishedLoadingPage(){
+  lazyLoader();
   responsiveLayoutCheck();
+}
+
+function lazyLoader(){
+  [].forEach.call(document.querySelectorAll('img[data-src]'), function(img) {
+    img.setAttribute('src', img.getAttribute('data-src'));
+    img.onload = function() {
+      img.removeAttribute('data-src');
+    };
+  });
 }
 
 function responsiveLayoutCheck(){
@@ -788,6 +800,10 @@ function responsiveLayoutCheck(){
       navLogo.attr("href", "/");
       Quas.getEl(".cdf-nav-filters").el.style = "";
       Quas.each(".video", function(el){
+        el.el.style = "";
+      });
+
+      Quas.each(".card-thumb", function(el){
         el.el.style = "";
       });
     }
@@ -1065,7 +1081,7 @@ function parseMarkdown(text){
           class : "post-img",
           children : [{
             tag : "img",
-            src : kv[0],
+            "data-src" : kv[0],
             alt : kv[1]
           }]
         });
@@ -1228,6 +1244,7 @@ function login(){
           document.cookie = key + "=" + data[key] + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
         }
         loadSession();
+        lazyLoader();
       }
       else{
         new Notification("Login details were incorrect", 28, "error").render();
