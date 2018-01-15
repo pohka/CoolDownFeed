@@ -432,28 +432,6 @@ function loadPostIfEdit(){
   return true;
 }
 
-function getRaw(){
-  var raw = "";
-  var banner = Quas.getEl("#post-editor-banner").val().trim();
-
-  if(banner!== "" && imageExists(banner)){
-    raw += "b#" + banner + "\n";
-  }
-  else {
-    raw += "b#/img/placeholder_banner.png\n";
-  }
-
-  var title = $("#post-editor-title").val().trim();
-  if(title != ""){
-    raw += "t#" + title + "\n";
-  }
-  else{
-    raw += "t#Some Title\n";
-  }
-  raw += $("#post-editor").val();
-  return raw;
-}
-
 //closes all the modals
 function closeToolModals(){
   Quas.each(".post-tool-modal", function(el){
@@ -484,7 +462,7 @@ function addMarkdown(type){
     case "img" :
       let q = document.querySelector(".img-viewer-thumb.active");
       if(q != null){
-        let src = q.childNodes[0].src;
+        let src = q.childNodes[0].getAttribute("data-osrc");
         let val = "/i/" + src.split("/i/")[1];
         res = "i#["+val+"](description)\n";
       }
@@ -619,6 +597,9 @@ function loadModal(type){
           el.clearChildren();
 
           for(var i in obj){
+            let pathEls = obj[i]["path"].split(".");
+            pathEls[pathEls.length-2] += "-thumb";
+            let thumbPath = pathEls.join(".");
             el.addChild({
               tag : "div",
               class : "img-viewer-thumb",
@@ -639,7 +620,8 @@ function loadModal(type){
               },
               children : [{
                 tag : "img",
-                "data-src" : obj[i]["path"]
+                "data-src" : thumbPath,
+                "data-osrc" : obj[i]["path"]
               }]
             });
           }

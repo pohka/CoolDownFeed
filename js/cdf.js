@@ -761,12 +761,20 @@ function finishedLoadingPage(){
   lazyLoader();
 }
 
+//loads images aync
 function lazyLoader(){
   [].forEach.call(document.querySelectorAll('img[data-src]'), function(img) {
     img.setAttribute('src', img.getAttribute('data-src'));
     img.onload = function() {
       img.removeAttribute('data-src');
     };
+    img.onerror = function(){
+      //check to see if the image was a thumbnail, if so try the original src
+      if(img.getAttribute("data-osrc") !== null && img.getAttribute("data-osrc-loaded") === null){
+        img.setAttribute('src', img.getAttribute('data-osrc'));
+        img.setAttribute('osrc-loaded', "true");
+      }
+    }
   });
 }
 

@@ -1072,6 +1072,9 @@ footer{
   margin: 4px 6px;
   cursor: pointer;
   border: 2px solid var(--border);
+  background: var(--hover);
+  overflow-y: hidden;
+  text-align: center;
 }
 
 .img-viewer-thumb:hover{
@@ -1085,8 +1088,11 @@ footer{
 }
 
 .img-viewer-thumb img{
-  height: 100%;
-  width: 100%;
+  max-width: 100%;
+  position: relative;
+  top: 50%;
+
+  transform: translateY(-50%);
 }
 
 #post-editor-game{

@@ -42,8 +42,12 @@
          //add entry to database
          addImgToDatabase($id, $userID, $id.".".$file_ext, $loc);
 
-         $image_destination = $_SERVER['DOCUMENT_ROOT'] . $path . "/" . $id . "-min." . $file_ext;
-         $compress_images = compressImage($upload_loc, $upload_loc);
+         //compress the image
+         compressImage($upload_loc, $upload_loc);
+
+         //make a thumnail
+         $destPath = $_SERVER['DOCUMENT_ROOT'] . $path . "/" . $id . "-thumb." . $file_ext;
+         resizeImage($upload_loc, 260, 146, $destPath);
 
          //return the img src
          echo $loc;
@@ -56,21 +60,58 @@
   }
 
 
-  //compresses an image and outputs it to the given location
-  function compressImage($source_image, $compress_image) {
+  //compresses an image and outputs it to the given destiination
+  function compressImage($source_image, $dest) {
     $image_info = getimagesize($source_image);
     switch ($image_info['mime']){
       case "image/jpeg":
         $source_image = imagecreatefromjpeg($source_image);
-        imagejpeg($source_image, $compress_image, 90);
+        imagejpeg($source_image, $dest, 90);
         break;
       case 'image/png' :
         $source_image = imagecreatefrompng($source_image);
-        imagepng($source_image, $compress_image, 6);
+        imagepng($source_image, $dest, 6);
         break;
-    }
-    return $compress_image;
+    };
   }
+
+  //resize and save image
+  function resizeImage($file, $w, $h, $destPath, $crop=FALSE) {
+    list($width, $height) = getimagesize($file);
+    $r = $width / $height; //ratio
+    if ($crop) {
+        if ($width > $height) {
+            $width = ceil($width-($width*abs($r-$w/$h)));
+        } else {
+            $height = ceil($height-($height*abs($r-$w/$h)));
+        }
+        $newwidth = $w;
+        $newheight = $h;
+    } else {
+        if ($w/$h > $r) {
+            $newwidth = $h*$r;
+            $newheight = $h;
+        } else {
+            $newheight = $w/$r;
+            $newwidth = $w;
+        }
+    }
+
+    //create and save image
+    list($path, $ext)  = explode(".", $file);
+    if($ext == "jpg" || $ext == "jpeg"){
+      $src = imagecreatefromjpeg($file);
+      $dst = imagecreatetruecolor($newwidth, $newheight);
+      imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+      imagejpeg($dst, $destPath, 90);
+    }
+    else if($ext == "png"){
+      $src = imagecreatefrompng($file);
+      $dst = imagecreatetruecolor($newwidth, $newheight);
+      imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+      imagepng($dst, $destPath, 6);
+    }
+}
 
   //generate unique identifier
   function genUID(){
