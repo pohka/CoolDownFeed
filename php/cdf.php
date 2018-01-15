@@ -21,7 +21,7 @@ switch($_REQUEST["type"]){
   case "cards-home" :
     $sql =
       "SELECT posts.id as id, posts.path, title, ".
-      "users.username as author, posts.publish_time, posts.tags, posts.thumbnail ".
+      "users.username as author, posts.publish_time, posts.tags, posts.banner ".
       "FROM posts INNER JOIN users on posts.userid = users.id ".
       "WHERE posts.published = 1 AND posts.publish_time < CURRENT_TIMESTAMP ".
       "ORDER BY posts.publish_time DESC";
@@ -35,6 +35,7 @@ switch($_REQUEST["type"]){
       $path = $_REQUEST['path'];
       $title = $_REQUEST['title'];
       $userid = getUserID($_REQUEST['cookieid'], $con);
+      $banner = $_REQUEST['banner'];
 
     //  $timestamp_epoch  = $_REQUEST['timestamp'];
       //$dt = new DateTime("@$timestamp_epoch");
@@ -83,10 +84,10 @@ switch($_REQUEST["type"]){
 
       $sql1 =
         "REPLACE INTO `posts` (`id`, `path`, `title`, `text`, `userid`, " .
-        "`tags`, `published`, `publish_time`, `game`) " .
+        "`tags`, `published`, `publish_time`, `game`, `banner`) " .
         "VALUES ('{$id}', '{$path}', '{$title}', '{$text}', ".
           "'{$userid}', '{$tags}', '{$published}', ".
-          "'{$publish_time}', '{$game}')";
+          "'{$publish_time}', '{$game}', '{$banner}')";
          mysqli_query($con, $sql1);
       break;
 
@@ -94,7 +95,7 @@ switch($_REQUEST["type"]){
       $id = $_REQUEST['id'];
       $path = $_REQUEST['path'];
       $sql =
-        "SELECT posts.title, users.username, users.avatar, posts.publish_time, posts.text " .
+        "SELECT posts.title, users.username, users.avatar, posts.publish_time, posts.text, posts.banner " .
         "FROM `posts` INNER JOIN users ON posts.userid = users.id ".
         "WHERE posts.id = '{$id}' AND posts.path = '{$path}'";
       break;

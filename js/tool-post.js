@@ -1,7 +1,7 @@
 
 //alerts the user before the close the window if they haven't saved their draft
 window.onbeforeunload = function(){
-  if(Quas.getEl("#post-editor").val().length > 0)
+  if(Quas.getEl("#post-editor").val().length > 0 && Toolbar.contentChanged)
     return 'Any unsaved changes will not be saved?';
 };
 
@@ -33,6 +33,12 @@ function switchMode(mode){
     let preview = Quas.getEl(".post-preview");
 
     let title = Quas.getEl("#post-editor-title").val();
+    let banner = Toolbar.banner;
+
+    //placeholder
+    if(banner === ""){
+      banner = Post.placeholderImg;
+    }
 
     let data = parseMarkdown(Quas.getEl("#post-editor").val());
     data.unshift({
@@ -45,7 +51,7 @@ function switchMode(mode){
       class : "banner",
       children : [{
         tag : "img",
-        "data-src" : "/temp/esl_ham.png"
+        "data-src" : banner
       }]
     }).render(preview);
     new Comp({
@@ -102,6 +108,7 @@ class Toolbar extends Comp{
     //track cursor position in editor
     Quas.on("click keyup paste change", "#post-editor", function(e){
       Toolbar.cursorPosition = this.selectionStart;
+      Toolbar.contentChanged = true;
     });
 
     //close modals on escape btn
@@ -362,8 +369,10 @@ class Toolbar extends Comp{
   }
 }
 Toolbar.cursorPosition = 0;
+Toolbar.contentChanged = false;
 Toolbar.published = false;
 Toolbar.postID = null;
+Toolbar.banner = "";
 
 function genPostTool(){
   //catagories or game options for this post
@@ -383,7 +392,22 @@ function genPostTool(){
     console.log("not exists");
     createNewPost();
   }
+  Quas.on("click", "#post-editor-banner", function(){
+    Quas.getEl("#post-tool-cloud").visible(true);
+    loadModal("cloud", true);
+  });
   finishedLoadingPage();
+}
+
+function setBanner(){
+  let el = document.querySelector(".img-viewer-thumb.active img");
+  if(el == null){
+    new Notification("No Image Selected", 4).render();
+    return;
+  }
+  Toolbar.banner = el.getAttribute("data-osrc");
+  new Notification("Banner Set", 4).render();
+  closeToolModals();
 }
 
 //creates a post on the server and returns the post id
@@ -575,10 +599,21 @@ function getFieldsForModalType(type){
 
 //loads a modal which requires a database request
 //var modalsLoaded = [];
-function loadModal(type){
+function loadModal(type, mode){
   if(type==="cloud"){
-    //modalsLoaded.push(type);
+
+    //true if in banner selection mode
+    if(mode){
+      Quas.getEl("#editor-add-img").el.style.display = "none";
+      Quas.getEl("#editor-add-banner").el.style.display="";
+    }
+    else{
+      Quas.getEl("#editor-add-img").el.style.display = "";
+      Quas.getEl("#editor-add-banner").el.style.display="none";
+    }
+
     Quas.getEl("#cloud-spinner").visible(true);
+
     let sid = getCookie("session");
     if(sid === "") return;
     Quas.ajax({
@@ -658,7 +693,6 @@ function save(forNow){
   var text = Quas.getEl("#post-editor").val();
   var title = Quas.getEl("#post-editor-title").val();
   var desc = Quas.getEl("#post-editor").val().substr(0, 65).trim();
-  var banner = Quas.getEl("#post-editor-banner").val();
   var time = Math.floor(Date.now() / 1000);
   let publishTime = time;
 
@@ -668,6 +702,11 @@ function save(forNow){
   }
   else{
     Toolbar.alreadyPublished();
+  }
+
+  let banner = Toolbar.banner;
+  if(banner === ""){
+    banner = Post.placeholderImg;
   }
 
   let pageData = {
@@ -680,7 +719,8 @@ function save(forNow){
     tags : Quas.getEl("#post-editor-tags").val().trim(),
     published : publish,
     publish_time : publishTime,
-    game : Quas.getEl("#post-editor-game").val()
+    game : Quas.getEl("#post-editor-game").val(),
+    banner : banner,
   };
 
   Quas.ajax({

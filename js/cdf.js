@@ -298,7 +298,10 @@ class Post extends Comp{
       }]
     });
 
-    this.bannerSrc = "/temp/esl_ham.png";
+    this.bannerSrc = fields.banner;
+    if(fields.banner === ""){
+      this.bannerSrc = Post.placeholderImg;
+    }
     let credit = new PostAuthor(fields.username, fields.avatar, fields.publish_time);
     this.addChild(credit.data);
     let els = parseMarkdown(fields.text);
@@ -316,17 +319,19 @@ class Post extends Comp{
 
   render(){
     super.render(".container");
+
     let banner = new Comp({
       tag : "div",
       class : "banner",
       children : [{
         tag : "img",
-        "data-src" : "/temp/esl_ham.png"
+        "data-src" : this.bannerSrc
       }]
     });
     banner.render(".container", "prepend");
   }
 }
+Post.placeholderImg = "/temp/esl_ham.png";
 
 class PostAuthor extends Comp{
   constructor(author, avatar, time){
@@ -602,7 +607,7 @@ class MyPostsItem extends Comp{
               children : [
                 {
                   tag : "div",
-                  txt : "Comments"
+                  txt : "- temp -"
                 },
                 {
                   tag : "div",
@@ -900,9 +905,12 @@ function quasLoadPage(){
       return : "json",
       success : function(data){
         for(let i in data){
-          let img = data[i].thumbnail;
+          let img = data[i].banner;
           if(img === ""){
-            img = "/temp/esl_ham.png";
+            img = Post.placeholderImg;
+          }
+          else{
+            img = img.split(".").join("-thumb.");
           }
           new Card({
             url : data[i].path + "-" + data[i].id,
@@ -1654,7 +1662,7 @@ function genMyPosts(){
         let postList = Quas.getEl(".post-list");
         postList.clearChildren();
         for(let i=0; i<json.length; i++){
-          let img = json[i]["thumbnail"];
+          let img = json[i]["banner"];
           if(img === ""){
             img = "/temp/esl_ham.png";
           }
