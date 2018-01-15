@@ -30,4 +30,6 @@ CMS
 Later
 ----------------
 * parse markdown for:
-  * code
+  * cod
+* gfycat ids are capitalized
+* gfycat get data from their api, so it can use alt tag

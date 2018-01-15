@@ -842,6 +842,16 @@ class Quas{
     str = str.split("&gt;").join(">");
     return str;
   }
+
+  static enableScrollTracker(callback){
+    Quas.on("scroll", window, function(){
+      let viewport = {
+        top : window.scrollY,
+        bottom : window.scrollY + window.innerHeight
+      };
+      callback(viewport);
+    });
+  }
 }
 /**
   Current state of the users ability to scroll

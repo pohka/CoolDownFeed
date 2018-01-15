@@ -426,6 +426,7 @@ function loadPostIfEdit(){
       if(data.published > 0){
         Toolbar.alreadyPublished();
       }
+      lazyLoader();
     }
   });
   return true;
@@ -501,7 +502,7 @@ function addMarkdown(type){
           "youtube.com",
           "youtu.be",
           "clips.twitch.tv",
-          "gyfcat.com",
+          "gfycat.com",
         ];
         if(domain !== undefined && allowedDomains.indexOf(domain) > -1){
           res = "m#" + url;

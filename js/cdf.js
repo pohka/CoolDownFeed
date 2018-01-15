@@ -750,11 +750,12 @@ Quas.start = function(){
   loadAllIcons();
   checkPrivilages(concealDefault);
   window.addEventListener("resize", responsiveLayoutCheck);
+  Quas.enableScrollTracker(lazyLoadScroll);
 }
 
 function finishedLoadingPage(){
-  lazyLoader();
   responsiveLayoutCheck();
+  lazyLoader();
 }
 
 function lazyLoader(){
@@ -763,6 +764,25 @@ function lazyLoader(){
     img.onload = function() {
       img.removeAttribute('data-src');
     };
+  });
+}
+
+function lazyLoadScroll(viewport){
+  //only play video gifs if they visible in the viewport
+  let navH = 50;
+  let offset = 50;
+  Quas.each(".vgif", function(el){
+    let top = el.prop("offsetTop");
+    let h = el.prop("offsetHeight");
+    let bot = top+h;
+    Quas.each(".vgif", function(el){
+      if(viewport.bottom-offset > top && viewport.top+navH+offset < bot){
+        el.el.play();
+      }
+      else{
+        el.el.pause();
+      }
+    });
   });
 }
 
@@ -955,7 +975,7 @@ function quasLoadPage(){
   - i#[src](desc)         - image
   - > my quote            - quote
   - * item 1              - list item
-  - m#youtube             - media embded (youtube/cooldownfeed/gyfcat/twitch)
+  - m#youtube             - media embded (youtube/cooldownfeed/gfycat/twitch)
   - ```LANG\n my code```  - code
 */
 function parseMarkdown(text){
@@ -1387,7 +1407,6 @@ function genMediaEmbed(content){
   var url = content.replace("http://", "");
   url = url.replace("https://", "");
   url = url.replace("www.", "");
-
   var els = url.split("/");
   var domain = els[0];
   var type = "";
@@ -1469,11 +1488,14 @@ function genMediaEmbed(content){
   }
   else if(type=="gfycat"){
     var mediaSrc = "https://giant.gfycat.com/" + mediaID + ".webm";
+    let poster  = "https://thumbs.gfycat.com/" + mediaID + "-mobile.jpg";
     mediaObj = {
       tag : "video",
-      class : "video",
-      autoplay : "true",
+      class : "video vgif",
+      preload : "metadata",
+    //  autoplay : "false",
       loop : "true",
+      poster : poster,
       children : [
         {
           tag : "source",
