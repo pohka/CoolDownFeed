@@ -13,6 +13,7 @@ class Navbar extends Comp{
             {
               tag : "img",
               class : "skew",
+              alt : "logo",
               "data-src" : "/img/logo_sm.png"
             }
           ]
@@ -467,6 +468,7 @@ class NavSession extends Comp{
             {
               tag : "img",
               id  : "session-avatar",
+              alt : "avatar",
               "data-src" : avatar
             }
           ]
