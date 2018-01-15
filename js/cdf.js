@@ -751,6 +751,9 @@ Quas.start = function(){
   checkPrivilages(concealDefault);
   window.addEventListener("resize", responsiveLayoutCheck);
   Quas.enableScrollTracker(lazyLoadScroll);
+  window.addEventListener('pagehide', function(){
+    console.log("hide");
+  }, false);
 }
 
 function finishedLoadingPage(){

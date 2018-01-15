@@ -732,7 +732,7 @@ function upload(files, callback){
         new Notification("Image must be smaller than 2MB", 8, "error").render();
       }
       else{
-        new Notification("Uploading...", 10).render();
+        new Notification("Uploading...", 15).render();
         var formImage = new FormData();
         formImage.append('image', files[i]);
         var session = getCookie("session");

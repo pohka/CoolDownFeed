@@ -36,18 +36,40 @@
       if (!is_dir($fullPath)) {
            mkdir($fullPath, 0777, true);
        }
-       move_uploaded_file($file_tmp, $_SERVER['DOCUMENT_ROOT'] . $loc);
 
-       //add entry to database
-       addImgToDatabase($id, $userID, $id.".".$file_ext, $loc);
+       $upload_loc = $_SERVER['DOCUMENT_ROOT'] . $loc;
+       if(move_uploaded_file($file_tmp, $upload_loc)){
+         //add entry to database
+         addImgToDatabase($id, $userID, $id.".".$file_ext, $loc);
 
-       //return the img src
-       echo $loc;
+         $image_destination = $_SERVER['DOCUMENT_ROOT'] . $path . "/" . $id . "-min." . $file_ext;
+         $compress_images = compressImage($upload_loc, $upload_loc);
+
+         //return the img src
+         echo $loc;
+       }
     }
     else{
        echo "error".$errors;
     }
    }
+  }
+
+
+  //compresses an image and outputs it to the given location
+  function compressImage($source_image, $compress_image) {
+    $image_info = getimagesize($source_image);
+    switch ($image_info['mime']){
+      case "image/jpeg":
+        $source_image = imagecreatefromjpeg($source_image);
+        imagejpeg($source_image, $compress_image, 90);
+        break;
+      case 'image/png' :
+        $source_image = imagecreatefrompng($source_image);
+        imagepng($source_image, $compress_image, 6);
+        break;
+    }
+    return $compress_image;
   }
 
   //generate unique identifier
