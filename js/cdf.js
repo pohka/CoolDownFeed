@@ -112,7 +112,8 @@ class Card extends Comp{
           class : "card-thumb",
           children : [{
             tag : "img",
-            "data-src" : fields.img
+            "data-src" : fields.img,
+            "data-osrc" : Post.placeholderImg,
           }]
         },
         {
@@ -1256,7 +1257,7 @@ function timeSinceString(time){
       str = diffYears + " years ago";
     }
   }
-  
+
   return str;
 }
 
