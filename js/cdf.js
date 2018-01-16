@@ -923,7 +923,7 @@ function quasLoadPage(){
           else{
             img = img.split(".").join("-thumb.");
           }
-          
+
           //card sizes
           let size = "";
           if(window.innerWidth > 900){
@@ -931,11 +931,11 @@ function quasLoadPage(){
               case 0 : size = "card-lg"; break;
               case 1 : case 8: size = "card-md"; break;
               case 4 : size = "card-md"; break;
-              case 5 : size = "card-clear"; break;
-              case 14: count = 1; break;
+              case 12: count = 0; break;
             }
             count++;
           }
+          
           new Card({
             url : data[i].path + "-" + data[i].id,
             img : img,
