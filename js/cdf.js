@@ -102,7 +102,7 @@ class Card extends Comp{
     super({
       tag : "a",
       href : "/p/"+fields.url,
-      class : "card link",
+      class : "card link " +fields.size,
       data : {
         url : fields.url,
       },
@@ -357,6 +357,14 @@ class PostAuthor extends Comp{
           tag : "div",
           class : "creator-date",
           txt : dateToString(time, false)
+        },
+        {
+          tag : "div",
+          class : "creator-underline",
+          children : [{
+            tag : "div",
+            class : "creator-underline-color"
+          }]
         }
       ]
     });
@@ -823,7 +831,7 @@ function responsiveLayoutCheck(){
     //cards thumbnail image keep 16:9 ratio
     Quas.each(".card-thumb", function(el){
       let curW = window.getComputedStyle(el.el).width.replace("px", "");
-      el.el.style = "height:"+(Number(curW)*0.55)+"px;";
+      el.el.style = "height:"+(Number(curW)*0.667)+"px;";
     });
 
     //changed state
@@ -905,7 +913,9 @@ function quasLoadPage(){
       },
       return : "json",
       success : function(data){
+        let count = 0;
         for(let i in data){
+
           let img = data[i].banner;
           if(img === ""){
             img = Post.placeholderImg;
@@ -913,12 +923,26 @@ function quasLoadPage(){
           else{
             img = img.split(".").join("-thumb.");
           }
+          
+          //card sizes
+          let size = "";
+          if(window.innerWidth > 900){
+            switch(count){
+              case 0 : size = "card-lg"; break;
+              case 1 : case 8: size = "card-md"; break;
+              case 4 : size = "card-md"; break;
+              case 5 : size = "card-clear"; break;
+              case 14: count = 1; break;
+            }
+            count++;
+          }
           new Card({
             url : data[i].path + "-" + data[i].id,
             img : img,
             title : data[i].title,
             author : data[i].author,
             time : timeSinceString(data[i].publish_time),
+            size : size,
           }).render(".card-con");
         }
         finishedLoadingPage();
