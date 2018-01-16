@@ -4,6 +4,7 @@ Overall
 * meta tags
 * register user menu
 * comments
+* post timestamp includes year if it not current year
 
 Pages
 -----------------
@@ -31,6 +32,7 @@ Later
 * gfycat ids are capitalized
 * gfycat get data from their api, so it can use alt tag
 * banner dimensions validation
+
 
 meta tags
 --------------

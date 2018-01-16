@@ -258,13 +258,13 @@ class Toolbar extends Comp{
     //btns for saving and publishing
     let savebtns = {
       "Publish" : function(){
-          save(true);
+          save("publish");
       },
       "Save Draft" : function(){
-        save(false);
+        save("save");
       },
       "Update" : function(){
-        save(true);
+        save("update");
       }
     };
 
@@ -373,6 +373,7 @@ Toolbar.contentChanged = false;
 Toolbar.published = false;
 Toolbar.postID = null;
 Toolbar.banner = "";
+Toolbar.publishNow = true;
 
 function genPostTool(){
   //catagories or game options for this post
@@ -448,6 +449,16 @@ function loadPostIfEdit(){
       Quas.getEl("#post-editor-title").val(Quas.decodeHtmlSpecialChars(data.title));
       Quas.getEl("#post-editor").val(Quas.decodeHtmlSpecialChars(data.text));
       if(data.published > 0){
+        let pt = new Date(data.publish_time);
+        //already published
+        if(Date.now() > pt.getTime()){
+          Quas.getEl(".publish-time-btn").visible(false);
+        }
+        //published but scheduled for the future
+        else{
+          Toolbar.curTime = pt;
+          setTimeString();
+        }
         Toolbar.alreadyPublished();
       }
       lazyLoader();
@@ -684,7 +695,7 @@ function genPath(){
 }
 
 //save/publish/update a post
-function save(forNow){
+function save(btn){
   var cookieID = getCookie("session");
   if(cookieID == undefined){
     new Notification("Not Logged In", 6, "error").render();
@@ -694,14 +705,21 @@ function save(forNow){
   var title = Quas.getEl("#post-editor-title").val();
   var desc = Quas.getEl("#post-editor").val().substr(0, 65).trim();
   var time = Math.floor(Date.now() / 1000);
-  let publishTime = time;
+  if(Toolbar.publishNow == false){
+    time = Math.floor(Toolbar.curTime.getTime() / 1000);
+  }
 
   var publish = 1;
-  if(!forNow){
+  if(btn === "save"){
     publish = 0;
   }
   else{
     Toolbar.alreadyPublished();
+  }
+
+  //schedule post -> now/predate
+  if(btn === "update" && (Toolbar.publishNow || Toolbar.curTime.getTime() < Date.now())){
+    Quas.getEl(".publish-time-btn").visible(false);
   }
 
   let banner = Toolbar.banner;
@@ -718,7 +736,7 @@ function save(forNow){
     cookieid : cookieID,
     tags : Quas.getEl("#post-editor-tags").val().trim(),
     published : publish,
-    publish_time : publishTime,
+    publish_time : time,
     game : Quas.getEl("#post-editor-game").val(),
     banner : banner,
   };
@@ -827,4 +845,132 @@ function savePreview(){
     avatar : getCookie("user_avatar"),
     publish_time : epochTimeToSQLDateString(Date.now())
   });
+}
+
+//loads the date picker
+function loadTimePicker(){
+  Quas.getEl("#publish-time-picker").visible(true);
+  let picker = Quas.getEl(".date-picker");
+  Toolbar.curTime = new Date(Date.now());
+  genDateTable();
+
+
+  //clicking table data
+  let td = document.querySelectorAll("#date-table td");
+  for(let i=0; i<td.length; i++){
+    td[i].addEventListener('click', function(e) {
+      if(this.className === "allowed"){
+        let curActive = document.querySelector("#date-table td.active");
+        if(curActive){
+          curActive.className = "allowed";
+        }
+        this.className += " active";
+        Toolbar.curTime.setDate(Number(this.textContent));
+      }
+    });
+  }
+
+  //month buton event listener
+  let monthBtns = document.querySelectorAll(".picker-month");
+  for(let i=0; i<monthBtns.length; i++){
+    monthBtns[i].addEventListener("click", function(){
+      monthChange(monthBtns[i]);
+    });
+  }
+}
+
+//change month in the date picker
+function monthChange(btn){
+  let newMonth = Toolbar.curTime.getMonth() + Number(btn.getAttribute("data-dir"));
+  let newYear = Toolbar.curTime.getFullYear();
+  if(newMonth<0){
+    newMonth = 11;
+    newYear--;
+  }
+  else if(newMonth > 11){
+    newMonth = 0;
+    newYear++;
+  }
+  Toolbar.curTime.setMonth(newMonth);
+  Toolbar.curTime.setFullYear(newYear);
+  genDateTable();
+}
+
+//sets the current time in the toolbar
+function setTime(){
+  let hr = Quas.getEl("#time-picker-hr").val();
+  let min = Quas.getEl("#time-picker-min").val();
+
+  //validate time
+  if(   isNaN(hr) || isNaN(min) ||
+        min < 0 || min > 59 || hr < 0 || hr > 23 ||
+        hr=== "" || min === ""){
+    new Notification("Invalid Time", 4).render();
+  }
+  else{
+    Toolbar.curTime.setHours(Number(hr), Number(min), 0);
+    setTimeString();
+    Toolbar.publishNow = false;
+    closeToolModals();
+  }
+}
+
+function clearTime(){
+  Toolbar.publishNow = true;
+  Quas.getEl(".post-publish-time-text").text("Now");
+  closeToolModals();
+}
+
+//sets the current time string in the publish time button
+function setTimeString(){
+  let strEls = Toolbar.curTime.toUTCString().split(":");
+  strEls.pop();
+  Quas.getEl(".post-publish-time-text").text(strEls.join(":"));
+}
+
+//generate the date when changing month in the date picker
+function genDateTable(){
+  let day = Toolbar.curTime.getDate();
+  let month = Toolbar.curTime.getMonth();
+  let year = Toolbar.curTime.getFullYear();
+  let monthData = {
+    0 : ["January", 31],
+    1 : ["February", 28],
+    2 : ["March", 31],
+    3 : ["April", 30],
+    4 : ["May", 31],
+    5 : ["June", 30],
+    6 : ["July", 31],
+    7 : ["August", 31],
+    8 : ["September", 30],
+    9 : ["October", 31],
+    10 : ["November", 30],
+    11 : ["December", 31],
+  };
+  //0=mon, 6=sun
+  let dayofWeekNum = dayofweek(day,month+1,year).toFixed(0)-2;
+  let count = 1;
+  Quas.getEl("#date-picker-title").text(monthData[month][0] + " " + year);
+  for(let a=1; a<=6; a++){
+    let week = document.querySelectorAll("#week-"+a+" td");
+    for(let i=0; i<week.length; i++){
+      if(((a==1 && dayofWeekNum <= i) || a>1) && count <= monthData[month][1]){
+        week[i].textContent = count;
+        week[i].className = "allowed";
+        count++;
+      }
+      else{
+        week[i].className = "";
+        week[i].textContent = "";
+      }
+    }
+  }
+}
+
+//returns 0-6 value for the day of the week
+//m(1-12)
+function dayofweek(d,m,y){
+    let t = [ 0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4 ];
+    y -= m < 3;
+    return ( y + y/4 - y/100 + y/400 + t[m-1] + d) % 7;
 }

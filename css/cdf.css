@@ -1108,6 +1108,8 @@ footer{
 
 #post-editor-banner{
   margin: 10px 0px;
+  margin-bottom: 30px;
+  margin-left: 8px;
 }
 
 #post-editor-title{
@@ -1143,6 +1145,63 @@ footer{
   color: red;
 }
 
+.publish-time-btn{
+  margin-bottom: 10px;
+}
+
+.post-publish-time-text, .sm-btn-txt{
+  font-size: 13px;
+  margin-top: 6px;
+  padding-top: 6px;
+  width: 300px;
+  border-top: 1px solid var(--border);
+}
+
+.time-picker{
+  margin: 0 auto;
+  width: 80px;
+}
+
+.time-picker input[type="text"]{
+  width: 35px;
+  display: inline-block;
+  text-align: right;
+}
+
+.picker-submit-con{
+  margin: 0 auto;
+  width: 340px;
+}
+
+.date-picker{
+  height: 330px;
+  margin: 0 auto;
+  width: 380px;
+}
+.date-picker h4{
+  text-align: center;
+}
+
+.date-picker table{
+  table-layout: fixed;
+}
+
+.date-picker td{
+  text-align: center;
+  height: 32px;
+  cursor: pointer;
+}
+
+.date-picker td.allowed:hover, .date-picker td.active{
+  background-color: var(--pri);
+  color: white;
+}
+
+.picker-month{
+  width: 50%;
+  margin: 0px -2px;
+  margin-bottom: 4px;
+}
 
 /*-------------- My Posts --------------*/
 .post-list{

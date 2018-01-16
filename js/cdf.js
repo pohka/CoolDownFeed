@@ -1238,7 +1238,7 @@ function timeSinceString(time){
   }
   else {
     var diffMonths = Math.floor(timeDiff / (1000 * 3600 * 24 * 30));
-    var diffYears = Math.floor(timeDiff / (1000 * 3600 * 24 * 30 * 365));
+    var diffYears = Math.floor(timeDiff / (1000 * 3600 * 24 * 30 * 12));
 
     if(diffMonths==0){
       str = diffDays+" days ago";
@@ -1246,8 +1246,8 @@ function timeSinceString(time){
     if(diffMonths==1){
       str = "1 month ago";
     }
-    else if(diffMonths < 12){
-
+    else if(diffMonths < 12 && diffMonths > 1){
+      str = diffMonths + " months ago";
     }
     else if(diffYears==1){
       str = "1 year ago";
@@ -1256,7 +1256,7 @@ function timeSinceString(time){
       str = diffYears + " years ago";
     }
   }
-
+  
   return str;
 }
 

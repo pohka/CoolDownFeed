@@ -260,8 +260,13 @@ class Element{
   /**
     Returns the text content of the element
   */
-  text(){
-    return this.el.textContent;
+  text(val){
+    if(val !==undefined){
+      this.el.textContent = val;
+    }
+    else{
+      return this.el.textContent;
+    }
   }
 
   val(val){

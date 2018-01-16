@@ -51,8 +51,10 @@ switch($_REQUEST["type"]){
 
       $msg = "";
       $publish_time = "";
+
       //check to see if this post has been published already
-      //if updating a published post, use the existing publish_time
+      //if updating a published post,
+      //use the existing publish_time
       if($published == 1){
         $checksql = "SELECT published, publish_time FROM posts WHERE id = '{$id}'";
         $result = mysqli_query($con, $checksql);
@@ -61,12 +63,20 @@ switch($_REQUEST["type"]){
             $rows[] = $r;
         }
         $data = array_values($rows)[0];
-        if($data["published"] == 1){
+
+        //update existing, that is published
+        //if published on server is 1 and is published in the past
+        if($data["published"] == 1 && strtotime($data["publish_time"]) < time()){
             $publish_time = $data["publish_time"];
             $msg = "Updated";
         }
         else{
-          $msg = "Published";
+          if($_REQUEST["publish_time"] > time()){
+            $msg = "Publish Scheduled";
+          }
+          else{
+            $msg = "Published Now";
+          }
         }
       }
       //otherwise use the given publish_time
