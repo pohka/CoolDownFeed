@@ -17,7 +17,6 @@ Post Editor
 * publish in future
 * validate posts before publishing
 * thumbnail maker from banner
-* banner image resizing for smaller screens
 
 CMS
 -----------------
