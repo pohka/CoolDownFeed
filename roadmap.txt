@@ -5,6 +5,7 @@ Overall
 * register user menu
 * comments
 * post timestamp includes year if it not current year
+* share bar on posts
 
 Pages
 -----------------
@@ -14,9 +15,8 @@ Pages
 
 Post Editor
 -----------------
-* publish in future
 * validate posts before publishing
-* thumbnail maker from banner
+* thumbnail made from banner (sm, md, lg)
 
 CMS
 -----------------

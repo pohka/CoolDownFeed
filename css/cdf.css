@@ -607,13 +607,12 @@ html::-webkit-scrollbar-thumb
 .creator-underline{
   width: 100%;
   margin-top: 8px;
-  height: 3px;
-  background: var(--hover);
+  height: 2px;
 }
 
 .creator-underline-color{
   height: 100%;
-  width: 40%;
+  width: 30%;
   background: var(--pri);
 }
 
