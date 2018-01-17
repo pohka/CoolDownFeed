@@ -1732,15 +1732,27 @@ function setPageNumber(pageNum){
   Quas.setUrlValues({"page" : pageNum});
 }
 
-function register(){
+function registerValidate(form){
   let username = Quas.getEl("#username").val();
   let email = Quas.getEl("#email").val();
   let pass = Quas.getEl("#password").val();
   let pass2 = Quas.getEl("#password-2").val();
-  //validate
-  //ajax request reister.php
-  //success:
+
+  let data = {
+    username : username,
+    email : email,
+    pass : pass,
+    pass2 : pass2
+  };
+
+
+  document.cookie = "register=" + JSON.stringify(data) + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/register";
+
+  //validate input
   //check if username already exists
-  //redirect to homepage
-  return false;
+  //matching passwords
+  //valid email pattern
+
+  //returns true/false if valid/invalid
+  return true;
 }

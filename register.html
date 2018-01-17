@@ -23,15 +23,49 @@
     <div class="container">
       <h1>Register<h1>
       <div class="login-form">
-        <input type="text" id="username" placeholder="Username">
-        <input type="text" id="email" placeholder="Email">
-        <input type="password" id="password" placeholder="Password">
-        <input type="password" id="password-2" placeholder="Re-enter Password">
-        <br>
-        <input type="button" onclick="register(0)" value="Register">
+        <form action"#" onsubmit="return registerValidate()">
+          <input type="text" id="username" placeholder="Username" maxlength="20">
+          <input type="text" id="email" placeholder="Email">
+          <input type="password" id="password" placeholder="Password" maxlength="20">
+          <input type="password" id="password-2" placeholder="Re-enter Password"  maxlength="20">
+          <div class="captcha-con">
+            <div class="g-recaptcha" data-sitekey="6Lf0MUEUAAAAAIe0b29AHa0QiMNg82oEij-F6zL9"></div>
+          </div>
+          <input type="submit" value="Register">
+      </form>
       </div>
     </div>
 
     <footer></footer>
   </body>
+  <script>
+    let response = Quas.getUrlValues()["g-recaptcha-response"];
+    if(response){
+      let data = JSON.parse(getCookie("register"));
+      Quas.getEl("#username").val(data["username"]);
+      Quas.getEl("#email").val(data["email"]);
+      Quas.getEl("#password").val(data["pass"]);
+      Quas.getEl("#password-2").val(data["pass2"]);
+      console.log(response);
+      data["response"] = response;
+      Quas.ajax({
+        url : "/php/register.php",
+        type : "POST",
+        data : data,
+        success : function(res){
+          console.log(res);
+          return;
+          if(res !== "failed"){
+            let data = JSON.parse(res);
+            for(let key in data){
+              document.cookie = key + "=" + data[key] + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
+            }
+          }
+          else{
+            new Notification("Failed reCaptcha", 10, "error").render();
+          }
+        }
+      })
+    }
+  </script>
 <html>
