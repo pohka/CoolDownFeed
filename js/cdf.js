@@ -56,7 +56,7 @@ class Navbar extends Comp{
                   }
                 }
               }
-            }
+            },
           ]
         },
       ]
@@ -226,6 +226,22 @@ class LoginModal extends Comp{
           children : [
             {
               tag : "div",
+              class : "login-close-modal",
+              children : [
+                {
+                  tag : "input",
+                  type : "button",
+                  value : "X",
+                  on : {
+                    click : function(){
+                      Quas.getEl(".login-modal").visible(false);
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              tag : "div",
               class : "login-menu",
               children : [
                 {
@@ -239,47 +255,41 @@ class LoginModal extends Comp{
                   class : "btn",
                   id : "login-new-user",
                   txt : "Register",
+                  on : {
+                    click : function(){
+                      location.href = "/register";
+                    }
+                  }
                 },
               ]
             },
             {
-              tag : "input",
-              id : "login-user",
-              placeholder : "Username",
-              type : "text",
+              tag : "div",
+              id : "login-input-login",
+              children : [
+                {
+                  tag : "input",
+                  id : "login-user",
+                  placeholder : "Username",
+                  type : "text",
+                },
+                {
+                  tag : "input",
+                  id : "login-pass",
+                  placeholder : "Password",
+                  type : "password",
+                },
+                {
+                  tag : "input",
+                  type : "button",
+                  class : "login-submit",
+                  value : "Submit",
+                  on : {
+                    click : login
+                  }
+                },
+              ]
             },
-            {
-              tag : "br"
-            },
-            {
-              tag : "input",
-              id : "login-pass",
-              placeholder : "Password",
-              type : "password",
-            },
-            {
-              tag :"br"
-            },
-            {
-              tag : "input",
-              id : "submit-login",
-              type : "button",
-              value : "Submit",
-              on : {
-                click : login
-              }
-            },
-            {
-              tag : "input",
-              id : "hide-login",
-              type : "button",
-              value : "Cancel",
-              on : {
-                click : function(){
-                  Quas.getEl(".login-modal").visible(false);
-                }
-              }
-            }
           ]
         }
       ]
@@ -935,7 +945,7 @@ function quasLoadPage(){
             }
             count++;
           }
-          
+
           new Card({
             url : data[i].path + "-" + data[i].id,
             img : img,
@@ -1006,6 +1016,7 @@ function quasLoadPage(){
     //for testing
     if(typeof onloadTest === "function")
       onloadTest();
+    finishedLoadingPage();
   }
 }
 
@@ -1719,4 +1730,17 @@ function setPageNumber(pageNum){
   }
 
   Quas.setUrlValues({"page" : pageNum});
+}
+
+function register(){
+  let username = Quas.getEl("#username").val();
+  let email = Quas.getEl("#email").val();
+  let pass = Quas.getEl("#password").val();
+  let pass2 = Quas.getEl("#password-2").val();
+  //validate
+  //ajax request reister.php
+  //success:
+  //check if username already exists
+  //redirect to homepage
+  return false;
 }

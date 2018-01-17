@@ -3,14 +3,17 @@ Overall
 * tracking page views
 * meta tags
 * register user menu
-* comments
 * post timestamp includes year if it not current year
 * share bar on posts
+* suggested posts at the bottom
+
 
 Pages
 -----------------
 * profile
 * popular
+* user setting (change username, set avatar)
+* comments
 
 
 Post Editor
@@ -37,3 +40,7 @@ meta tags
 --------------
 * lang
 * utf-8
+
+bugs
+-------------
+* forging url post id in editor

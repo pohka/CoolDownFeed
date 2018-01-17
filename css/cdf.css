@@ -444,6 +444,20 @@ html::-webkit-scrollbar-thumb
   cursor: pointer;
 }
 
+.login-close-modal{
+  float: right;
+}
+
+
+.login-close-modal input[type="button"]{
+  position: absolute;
+  margin-top: -20px;
+  margin-left: 4px;
+  font-size: 10px;
+  padding: 8px 14px;
+  border-color: var(--hover);
+}
+
 .login-menu div.active
 {
   background: var(--hover);
@@ -451,11 +465,16 @@ html::-webkit-scrollbar-thumb
 
 .login-con
 {
-  width: 400px;
-  margin: 20 auto;
-  padding: 20px 30px;
+  width: 420px;
+  margin: 30 auto;
+  padding: 20px 40px;
   background: var(--bg);
   box-shadow: 0px 0px 8px black;
+}
+
+
+.login-con input[type="text"], .login-con input[type="password"]{
+  margin-bottom: 16px;
 }
 
 .user-menu{
@@ -481,6 +500,16 @@ html::-webkit-scrollbar-thumb
 .user-menu div:hover{
   background: var(--hover);
 }
+
+.login-submit{
+  margin-left: 50% !important;
+  width: 220px;
+  padding: 10px;
+  height: 40px;
+  transform: translateX(-50%);
+}
+
+/*-------------- Conceal Overlay --------------*/
 
 .conceal{
   position: fixed;
@@ -513,7 +542,7 @@ html::-webkit-scrollbar-thumb
 .notification-con
 {
   position: fixed;
-  bottom: 10;
+  bottom: 25;
   left: 10;
   width: 400px;
   z-index: 200;
@@ -1477,6 +1506,12 @@ footer{
   padding-top: 5px;
 }
 
+/*------------- Register Page --------*/
+.login-form{
+  width: 400px;
+  margin: auto;
+}
+
 @media only screen and (max-width: 900px) {
   /*----------- main (mobile) --------------*/
   html, body{
@@ -1666,6 +1701,7 @@ footer{
     top: 20 !important;
   }
 
+
   .login-con{
     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
@@ -1683,7 +1719,6 @@ footer{
   input[type="button"]{
     font-size: 20px;
   }
-
 
     /*----------- Notification (mobile) --------------*/
   .notification-con{
