@@ -70,6 +70,11 @@ class Navbar extends Comp{
         link : "/post-example",
         active : (Quas.path == "post-example"),
       },
+      {
+        text : "About",
+        link : "/about",
+        active : (Quas.path == "about"),
+      },
     ]);
   }
 }
@@ -139,8 +144,6 @@ class Card extends Comp{
         }
       ]
     });
-
-
   }
 }
 
@@ -150,59 +153,7 @@ class Footer extends Comp{
     super({
       tag : "div",
       class : "footer-con",
-      children : [
-        {
-          tag : "div",
-          class : "footer-logo btn",
-          children : [
-            {
-              tag : "img",
-              "data-src" : "/img/logo_sm.png",
-            },
-            {
-              tag : "div",
-              class : "footer-logo-text",
-              txt : "CoolDownFeed.com",
-            },
-          ]
-        },
-        {
-          tag : "div",
-          class : "footer-filter-con",
-          children : [
-            {
-              tag : "div",
-              class : "footer-filter btn",
-              id : "footer-about",
-              on : {
-                click : function(){
-                  window.location = "/about";
-                }
-              },
-              children : [
-                {
-                  tag : "div",
-                  txt : "About",
-                }
-              ]
-            }
-          ]
-        },
-        {
-          tag : "div",
-          class : "footer-contact",
-          children : [
-            {
-              tag : "div",
-              class : "ico ico-youtube footer-social btn",
-            },
-            {
-              tag : "div",
-              class : "ico ico-twitter footer-social btn",
-            },
-          ]
-        }
-      ]
+      txt : "Copyright 2017-"+new Date().getFullYear()+". Dota 2 is a registered trademark of Valve Corporation."
     });
   }
 }

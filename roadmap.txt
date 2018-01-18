@@ -1,48 +1,65 @@
 Overall
 -----------------
+* user avatar set to placeholder if there is no cookie
+* placeholder image if post doesn't have a banner/thumbnail
+* get salt values from .htaccess
+* get database login from .htaccess
+* https://websitelaunchchecklist.com/
+
+Analytics
+----------------
 * tracking page views
-* meta tags
-* register user menu
-* post timestamp includes year if it not current year
+
+
+Posts
+-----------------
 * share bar on posts
 * suggested posts at the bottom
-* user avatar set to placeholder if there is no cookie
-* get salt values from .htaccess
-* make smaller footer
-
+* comments
 
 Pages
 -----------------
 * popular
-* comments
-
 
 Post Editor
 -----------------
 * validate posts before publishing
 * thumbnail made from banner (sm, md, lg)
 
-CMS
+Server Side
 -----------------
 * queries use html special character and decode them too
 * queries use limit
 
-meta tags
+Add meta tags
 --------------
 * lang
 * utf-8
+* title, desc, etc
 
-bugs
+Bugs
 -------------
 * forging url post id in editor
 * new post access
 
+---
+After Launch
+--------------
 
-Later
-----------------
-* parse markdown for:
-  * code
-* gfycat ids are capitalized
-* profile
-* gfycat get data from their api, so it can use alt tag
-* banner dimensions validation
+* editor
+ * parse markdown for code
+ * gfycat get data from their api, so it can use alt tag
+ * gfycat ids are capitalized
+ * banner dimensions validation
+
+
+* profiles
+  * comments
+  * posts
+
+
+
+
+* Analytics
+ * scroll distance
+ * scroll percentage

@@ -696,80 +696,10 @@ footer{
 {
   width: 1170px;
   margin: auto;
-  height: 180px;
+  height: 20px;
+  font-size: 12px;
   padding: 10px 20px;
   border-top: 1px solid var(--pri);
-}
-
-.footer-logo
-{
-  display: inline-block;
-  margin-right: 20px;
-  padding: 8px 20px;
-  height: 90px;
-  text-align: center;
-  cursor: pointer;
-}
-
-.footer-logo img
-{
-  height: 60px;
-}
-
-.footer-filter-con
-{
-  display: inline-block;
-  vertical-align: top;
-}
-
-.footer-filter
-{
-  display: inline-block;
-  cursor: pointer;
-  height: 57px;
-  width: 150px;
-  line-height: 60px;
-  font-size: 16px;
-  text-align: center;
-  margin: 10px -2px;
-}
-
-.footer-contact
-{
-  display: inline-block;
-  float: right;
-  margin-top: 10px;
-}
-
-.footer-social
-{
-  float: right;
-  font-size: 20px;
-  width: 60px;
-  height: 40px;
-  line-height: 43px;
-  text-align: center;
-  margin-right: 6px;
-}
-
-.footer-social:hover, .footer-filter:hover, .footer-logo:hover
-{
-  background: var(--hover);
-}
-
-.footer-email
-{
-  clear: both;
-  padding-top: 10px;
-}
-
-.email
-{
-  unicode-bidi: bidi-override;
-  direction: rtl;
-  margin-left: 6px;
-  -webkit-user-select: all;  /* Chrome 49+ */
-  -moz-user-select: all;     /* Firefox 43+ */
 }
 
 /*-------------- Cards --------------*/
