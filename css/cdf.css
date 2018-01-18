@@ -597,7 +597,8 @@ img[data-src] {
 
 .creator-avatar{
   overflow: hidden;
-  width: 90px;
+  width: 48px;
+  border-radius: 2em;
   height: 48px;
   display: inline-block;
 }
