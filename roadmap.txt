@@ -6,13 +6,14 @@ Overall
 * post timestamp includes year if it not current year
 * share bar on posts
 * suggested posts at the bottom
+* user menu options is based on the user type
+* user avatar set to placeholder if there is no cookie
+* get salt values from .htaccess
 
 
 Pages
 -----------------
-* profile
 * popular
-* user setting (change username, set avatar)
 * comments
 
 
@@ -26,16 +27,6 @@ CMS
 * queries use html special character and decode them too
 * queries use limit
 
-
-Later
-----------------
-* parse markdown for:
-  * code
-* gfycat ids are capitalized
-* gfycat get data from their api, so it can use alt tag
-* banner dimensions validation
-
-
 meta tags
 --------------
 * lang
@@ -44,3 +35,14 @@ meta tags
 bugs
 -------------
 * forging url post id in editor
+* new post access
+
+
+Later
+----------------
+* parse markdown for:
+  * code
+* gfycat ids are capitalized
+* profile
+* gfycat get data from their api, so it can use alt tag
+* banner dimensions validation

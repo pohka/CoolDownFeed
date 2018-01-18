@@ -47,13 +47,7 @@ class Navbar extends Comp{
               txt : "Login",
               on : {
                 click : function(){
-                  let el = Quas.getEl(".login-modal");
-                  if(el === undefined){
-                    new LoginModal().render("body");
-                  }
-                  else{
-                    Quas.getEl(".login-modal").visible(true);
-                  }
+                  location.href = "/login";
                 }
               }
             },
@@ -465,8 +459,8 @@ class ConcealOverlay extends Comp{
 //user session in the navbar
 class NavSession extends Comp{
   constructor(){
-    let avatar = getCookie("user_avatar");
-    let userName = getCookie("user_name");
+    let avatar = getCookie("avatar");
+    let userName = getCookie("username");
     super({
       tag : "div",
       class : "session-con",
@@ -770,8 +764,9 @@ let isResponsiveMobile;
 Quas.start = function(){
   let nav = new Navbar();
   nav.render(".cdf-nav");
-  quasLoadPage();
   new Footer().render("footer");
+  quasLoadPage();
+
   loadSession();
   loadAllIcons();
   checkPrivilages(concealDefault);
@@ -939,9 +934,9 @@ function quasLoadPage(){
           if(window.innerWidth > 900){
             switch(count){
               case 0 : size = "card-lg"; break;
-              case 1 : case 8: size = "card-md"; break;
-              case 4 : size = "card-md"; break;
-              case 12: count = 0; break;
+              case 4: size = "card-md"; break;
+              case 7 : size = "card-md"; break;
+              case 13: count = 0; break;
             }
             count++;
           }
@@ -1014,8 +1009,9 @@ function quasLoadPage(){
   }
   else{
     //for testing
-    if(typeof onloadTest === "function")
+    if(typeof onloadTest === "function"){
       onloadTest();
+    }
     finishedLoadingPage();
   }
 }
@@ -1297,56 +1293,61 @@ function timeSinceString(time){
 }
 
 //request login user
-function login(){
+function login(user){
   //console.log("val:" + Quas.getEl("#login-user").val());
-  let userEl = Quas.getEl("#login-user");
-  let passEl = Quas.getEl("#login-pass");
+  //let userEl = Quas.getEl("#login-user");
+//  let passEl = Quas.getEl("#login-pass");
+  let profile = user.getBasicProfile();
+  let data = {
+    google_id : profile.getId(),
+    username : profile.getName(),
+    avatar : profile.getImageUrl(),
+    email : profile.getEmail(),
+  };
+
   Quas.ajax({
     url: "/php/login.php",
     type: "POST",
-    data: {
-      username: userEl.val(),
-      password: passEl.val()
-    },
+    data: data,
     return : "json",
-    success : function(data){
-      if(data.constructor != String){
-        //create session
-        clearNotifications();
-        new Notification("Logged In", 4, "success").render();
-        userEl.val("");
-        passEl.val("");
-        Quas.getEl(".login-modal").visible(false);
-        for(let key in data){
-          document.cookie = key + "=" + data[key] + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
-        }
-        loadSession();
-        lazyLoader();
-      }
-      else{
-        new Notification("Login details were incorrect", 28, "error").render();
-      }
+    success : function(res){
+      document.cookie = "session=" + res["session"] + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
+      document.cookie = "username=" + data["username"] + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
+      document.cookie = "avatar=" + data["avatar"] + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
+      document.cookie = "userType=" + res["type"] + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
+      window.history.back();
     }
   });
 }
 
 //sets the session info at the top right
 function loadSession(){
-  var session = getCookie("session");
+  let session = getCookie("session");
+  let userType = getCookie("userType");
   if(session !== undefined){
     Quas.getEl("#login").visible(false);
     new NavSession().render(".cdf-nav-info");
-    let userMenu = new UserMenu({
-      "New Post" : function(){
-        window.open("/editor","_self");
-      },
-      "My Posts" : function(){
-        window.open("/my-posts","_self");
-      },
-      "Log Out" : function(){
-        endSession();
-      },
-    });
+
+    //choose the user menu items to display based on the account type
+    let listItems = {};
+    if(userType === "admin"){
+      listItems["New Post"] =
+        function(){
+          window.open("/editor","_self");
+        };
+
+      listItems["My Posts"] =
+        function(){
+            window.open("/my-posts","_self");
+        };
+    }
+
+    listItems["Log Out"] =
+      function(){
+          endSession();
+      };
+
+    let userMenu = new UserMenu(listItems);
     userMenu.render("body");
     Quas.getEl(".user-menu").visible(false);
     loadIcon("#session-down-icon");
@@ -1358,16 +1359,10 @@ function endSession(){
   var session = getCookie("session");
   if(session !== ""){
     clearCookie("session");
-    clearCookie("user_avatar");
-    clearCookie("user_name");
-
-    Quas.getEl(".session-con").del();
-    Quas.getEl("#login").visible(true);
-    Quas.getEl(".user-menu").visible(false);
-    setTimeout(function(){
-      location.reload();
-    }, 1000);
-    new Notification("Logged Out", 3).render();
+    clearCookie("avatar");
+    clearCookie("username");
+    clearCookie("userType");
+    location.reload();
   }
 }
 
