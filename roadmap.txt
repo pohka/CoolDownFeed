@@ -6,9 +6,9 @@ Overall
 * post timestamp includes year if it not current year
 * share bar on posts
 * suggested posts at the bottom
-* user menu options is based on the user type
 * user avatar set to placeholder if there is no cookie
 * get salt values from .htaccess
+* make smaller footer
 
 
 Pages
