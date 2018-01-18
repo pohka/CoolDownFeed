@@ -38,8 +38,8 @@ require_once(__ROOT__.'/php/generator.php');
     //insert new user
     $userID = genUID();
     $addSQL =
-    "INSERT INTO `users` (`id`, `username`, `avatar`, `email`, `account_type`, `google_id`) ".
-    "VALUES ('{$userID}', '{$username}', '{$avatar}', '{$email}', 'user', '{$google_id}');";
+      "INSERT INTO `users` (`id`, `username`, `avatar`, `email`, `account_type`, `google_id`) ".
+      "VALUES ('{$userID}', '{$username}', '{$avatar}', '{$email}', 'user', '{$google_id}');";
     mysqli_query($con, $addSQL);
     $newUser = true;
     $userType = "user";
@@ -50,7 +50,9 @@ require_once(__ROOT__.'/php/generator.php');
   $salt2 = "placeholder";
   $sid = md5($salt1.$userID.$salt2);
 
-  $sessionSQL = "INSERT INTO `sessions` (`session_id`, `user_id`, `timestamp`) VALUES ('{$sid}', '{$userID}', CURRENT_TIMESTAMP);";
+  $sessionSQL =
+    "REPLACE INTO `sessions` (`session_id`, `user_id`, `timestamp`) ".
+    "VALUES ('{$sid}', '{$userID}', CURRENT_TIMESTAMP)";
   mysqli_query($con, $sessionSQL);
 
   //return result

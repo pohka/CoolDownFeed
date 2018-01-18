@@ -376,6 +376,11 @@ Toolbar.banner = "";
 Toolbar.publishNow = true;
 
 function genPostTool(){
+  if(getCookie("session") === undefined) {
+    lazyLoader();
+    return;
+  }
+
   //catagories or game options for this post
   let gameEl = Quas.getEl("#post-editor-game");
   let games = ["Dota 2", "IRL"];
@@ -391,7 +396,7 @@ function genPostTool(){
   let newPost = !loadPostIfEdit();
   if(newPost){
     console.log("not exists");
-    createNewPost();
+    //createNewPost();
   }
   Quas.on("click", "#post-editor-banner", function(){
     Quas.getEl("#post-tool-cloud").visible(true);
