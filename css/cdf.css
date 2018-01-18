@@ -217,26 +217,6 @@ img[data-src] {
   opacity: 0;
 }
 
-
-/*-------------- Scrollbar --------------*/
-/* html::-webkit-scrollbar-track
-{
-	background-color: var(--card_bg);
-  border-left: 1px solid var(--shadow);
-}
-
-html::-webkit-scrollbar
-{
-	width: 6px;
-	background-color: var(--card_bg);
-
-}
-
-html::-webkit-scrollbar-thumb
-{
-	background-color: var(--border);
-} */
-
 /*-------------- Navbar --------------*/
 .cdf-nav
 {
@@ -378,6 +358,7 @@ html::-webkit-scrollbar-thumb
 .session-con
 {
   min-width: 220px;
+  width: 200px;
   padding: 0px 20px;
   height: 50px !important;
   text-align: left !important;
@@ -394,16 +375,19 @@ html::-webkit-scrollbar-thumb
 
 .session-avatar-con {
   overflow: hidden;
-  height: 32px !important;
-  width: 60px !important;
-  min-width: 60px !important;
-  margin-top: 9px !important;
+  height: 38px !important;
+  width: 38px !important;
+  min-width: 32px !important;
+  margin-top: 6px !important;
+  margin-right: 2px !important;
+  border-radius: 2em;
 }
 
 #session-down-icon{
   float: right;
   width: 30px;
   padding-left: 10px;
+  padding-top: 2px;
 }
 
 #session-down-icon svg{
@@ -1645,6 +1629,7 @@ footer{
 
   .session-avatar-con{
     height: 40px !important;
+    margin-left: 15px;
     margin-top: 10px !important;
     border-radius: 2em;
   }
