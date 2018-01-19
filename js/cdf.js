@@ -490,20 +490,19 @@ class Sharebar extends Comp{
           class : "sharebar",
           children : [
             {
-              tag : "div",
-              class : "ico ico-facebook"
+              tag : "a",
+              class : "ico ico-facebook",
+              href : "https://www.facebook.com/sharer/sharer.php?u="+window.location
             },
             {
-              tag : "div",
-              class : "ico ico-twitter"
+              tag : "a",
+              class : "ico ico-twitter",
+              href : "https://twitter.com/home?status=Some%20good%20stuff%20"+window.location
             },
             {
-              tag : "div",
-              class : "ico ico-reddit"
-            },
-            {
-              tag : "div",
-              class : "ico ico-link"
+              tag : "a",
+              class : "ico ico-reddit",
+              href : "https://www.reddit.com/submit?url="+window.location
             },
           ]
         }

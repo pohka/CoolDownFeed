@@ -729,9 +729,10 @@ img[data-src] {
 
 }
 
-.sharebar .ico{
-  height: 60px;
+.sharebar a{
+  height: 70px;
   width: 70px;
+  display: block;
   cursor: pointer;
 }
 
@@ -741,6 +742,10 @@ img[data-src] {
 
 .sharebar svg{
   width: 25px;
+}
+
+.sharebar .ico-icon{
+  height: 70px;
 }
 
 /*-------------- Footer --------------*/
