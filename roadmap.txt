@@ -12,7 +12,6 @@ Analytics
 
 Posts
 -----------------
-* share bar on posts
 * comments
 
 Pages

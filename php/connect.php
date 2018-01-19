@@ -5,6 +5,7 @@
    {
      echo "Failed to connect to MySQL: " . mysqli_connect_error();
    }
+   date_default_timezone_set('UTC');
    return $con;
  }
 

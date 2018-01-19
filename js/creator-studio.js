@@ -146,10 +146,9 @@ class MyPostsItem extends Comp{
   //deletes a post
   static deletePost(id, itemUID){
     Quas.ajax({
-      url : "/php/cdf.php",
+      url : "/php/cs-post-remove.php",
       type : "POST",
       data : {
-        type : "post-remove",
         postID : id,
         sid : getCookie("session")
       },
@@ -177,10 +176,9 @@ function genMyPosts(){
   }
   Quas.ajax(
     {
-    url: "/php/cdf.php",
+    url: "/php/cs-my-posts.php",
     type: "POST",
     data: {
-      type : "my-posts",
       page : page,
       sid : sid,
     },

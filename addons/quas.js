@@ -445,8 +445,10 @@ class Quas{
     };
     let str = req.url + "?";
     let i = 0;
-    for(let key in req.data){
-      str += key + "=" + encodeURIComponent(req.data[key]) + "&"
+    if(req.data!==undefined){
+      for(let key in req.data){
+        str += key + "=" + encodeURIComponent(req.data[key]) + "&"
+      }
     }
     xhr.open(req.type, str.slice(0,-1), true);
     //xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
@@ -454,7 +456,7 @@ class Quas{
     //xhr.setRequestHeader("Content-Type", contentType);
 
     //file uploading
-    if(req.data.constructor === FormData){
+    if(req.data !== undefined && req.data.constructor === FormData){
       xhr.send(req.data);
     }
     else{

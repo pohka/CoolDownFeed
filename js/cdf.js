@@ -717,11 +717,8 @@ function loadIcon(sel){
 function quasLoadPage(){
   if(Quas.path === "" || Quas.path === "index"){
     Quas.ajax({
-      url : "/php/cdf.php",
+      url : "/php/cards-home.php",
       type : "POST",
-      data : {
-        type : "cards-home"
-      },
       return : "json",
       success : function(data){
         let count = 0;
@@ -1128,9 +1125,6 @@ function timeSinceString(time){
 
 //request login user
 function login(user){
-  //console.log("val:" + Quas.getEl("#login-user").val());
-  //let userEl = Quas.getEl("#login-user");
-//  let passEl = Quas.getEl("#login-pass");
   let profile = user.getBasicProfile();
   let data = {
     google_id : profile.getId(),

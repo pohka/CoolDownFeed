@@ -388,8 +388,7 @@ function genPostTool(){
   loadAllIcons();
   let newPost = !loadPostIfEdit();
   if(newPost){
-    console.log("not exists");
-    //createNewPost();
+    createNewPost();
   }
   Quas.on("click", "#post-editor-banner", function(){
     Quas.getEl("#post-tool-cloud").visible(true);
@@ -412,10 +411,9 @@ function setBanner(){
 //creates a post on the server and returns the post id
 function createNewPost(){
   Quas.ajax({
-    url : "/php/cdf.php",
+    url : "/php/post-create.php",
     type : "POST",
     data : {
-      type : "post-create",
       sid : getCookie("session")
     },
     success : function(res){
@@ -432,10 +430,9 @@ function loadPostIfEdit(){
   let id = Quas.getUrlValues()["p"];
   if(id === undefined) return false;
   Quas.ajax({
-    url : "/php/cdf.php",
+    url : "/php/post-edit-open.php",
     type : "POST",
     data : {
-      type : "post-edit-open",
       id : id,
       sid : getCookie("session"),
     },
@@ -626,9 +623,8 @@ function loadModal(type, mode){
     let sid = getCookie("session");
     if(sid === "") return;
     Quas.ajax({
-      url : "php/cdf.php",
+      url : "php/user-images.php",
       data : {
-        type : "user-images",
         userid : sid,
       },
       return : "json",
@@ -726,7 +722,6 @@ function save(btn){
   }
 
   let pageData = {
-    type : "add-post",
     id : Toolbar.postID,
     path : genPath(),
     text : text,
@@ -740,10 +735,11 @@ function save(btn){
   };
 
   Quas.ajax({
-    url : "php/cdf.php",
+    url : "php/post-update.php",
     type : "POST",
     data : pageData,
     success : function(data){
+      console.log(data);
       if(data.length > 0){
         new Notification(data, 3, "success").render();
       }
