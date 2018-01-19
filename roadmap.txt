@@ -14,7 +14,6 @@ Analytics
 Posts
 -----------------
 * share bar on posts
-* suggested posts at the bottom
 * comments
 
 Pages
@@ -58,8 +57,10 @@ After Launch
   * posts
 
 
-
-
 * Analytics
  * scroll distance
  * scroll percentage
+
+
+* php
+  * use require for reused functions

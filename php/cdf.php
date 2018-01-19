@@ -100,15 +100,6 @@ switch($_REQUEST["type"]){
           "'{$publish_time}', '{$game}', '{$banner}')";
          mysqli_query($con, $sql1);
       break;
-
-    case "post-view" :
-      $id = $_REQUEST['id'];
-      $path = $_REQUEST['path'];
-      $sql =
-        "SELECT posts.title, users.username, users.avatar, posts.publish_time, posts.text, posts.banner " .
-        "FROM `posts` INNER JOIN users ON posts.userid = users.id ".
-        "WHERE posts.id = '{$id}' AND posts.path = '{$path}'";
-      break;
     case "my-posts" :
       $sid = $_REQUEST['sid'];
       $page = $_REQUEST['page'];

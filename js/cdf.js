@@ -98,6 +98,7 @@ class NavItem extends Comp{
 //card on the home page
 class Card extends Comp{
   constructor(fields){
+    console.log(fields);
     super({
       tag : "a",
       href : "/p/"+fields.url,
@@ -825,20 +826,45 @@ function quasLoadPage(){
     let fullPath = Quas.path.substr(2);
     let p = Post.getPathAndID(fullPath);
     Quas.ajax({
-      url : "/php/cdf.php",
+      url : "/php/post-view.php",
       type : "POST",
       data : {
-        type : "post-view",
         id : p.id,
         path : p.path,
       },
       return : "json",
       success : function(res){
+        console.log(res);
         if(res.constructor == String){
           new Error404();
         }
         else{
-          new Post(res[0]).render();
+          new Post(res["article"][0]).render();
+          Quas.getEl(".container").addChild({
+            tag : "div",
+            class : "suggested-con",
+            children : [
+              {
+                tag : "h3",
+                txt : "Suggested"
+              },
+              {
+                tag : "hr"
+              }
+            ]
+          });
+          //suggested cards
+          let suggested = res["suggested"];
+          for(let i in suggested){
+            new Card({
+              size : "",
+              url : suggested[i].path + "-" + suggested[i].id,
+              img : suggested[i].banner,
+              title : suggested[i].title,
+              author : suggested[i].username,
+              time : timeSinceString(suggested[i].publish_time),
+            }).render(".suggested-con");
+          }
         }
         finishedLoadingPage();
       }
