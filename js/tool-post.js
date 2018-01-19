@@ -837,6 +837,7 @@ function savePreview(){
     text : Quas.getEl("#post-editor").val(),
     username : getCookie("user_name"),
     avatar : getCookie("user_avatar"),
+    banner : Toolbar.banner,
     publish_time : epochTimeToSQLDateString(Date.now())
   });
 }

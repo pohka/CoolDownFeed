@@ -67,7 +67,7 @@ class Navbar extends Comp{
       },
       {
         text : "Discover",
-        link : "/post-example",
+        link : "/p/markdown-example-vx2o1x",
         active : (Quas.path == "post-example"),
       },
       {
@@ -371,7 +371,7 @@ class NavSession extends Comp{
               tag : "img",
               id  : "session-avatar",
               alt : "avatar",
-              "data-src" : avatar
+              src : avatar
             }
           ]
         },
@@ -560,9 +560,10 @@ Quas.start = function(){
   let nav = new Navbar();
   nav.render(".cdf-nav");
   new Footer().render("footer");
+  loadSession();
   quasLoadPage();
 
-  loadSession();
+
   loadAllIcons();
   checkPrivilages(concealDefault);
   window.addEventListener("resize", responsiveLayoutCheck);
@@ -839,10 +840,6 @@ function quasLoadPage(){
     genDevicePreview();
   }
   else{
-    //for testing
-    if(typeof onloadTest === "function"){
-      onloadTest();
-    }
     finishedLoadingPage();
   }
 }
