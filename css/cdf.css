@@ -183,8 +183,8 @@ h3{
 .post-con{
   font-size: 17px;
   padding-bottom: 100px;
+  min-height: 500px;
 }
-
 
 p{
   width: 700px;
@@ -701,6 +701,46 @@ img[data-src] {
   border-top: 1px solid var(--pri);
   margin-top: -5px;
   margin-bottom: 15px;
+}
+
+
+/*-------------- Sharebar --------------*/
+.sharebar-con{
+  position: fixed;
+  left: 50%;
+  top: 0;
+}
+
+.sharebar{
+  width: 70px;
+  height: 300px;
+  margin-left: -480px;
+  margin-top: 150px;
+  text-align: center;
+  opacity: 0;
+  -webkit-transition: opacity 0.3s;
+  transition: opacity 0.3s;
+}
+
+.sharebar.active{
+  -webkit-transition: opacity 0.3s;
+  transition: opacity 0.3s;
+  opacity: 1;
+
+}
+
+.sharebar .ico{
+  height: 60px;
+  width: 70px;
+  cursor: pointer;
+}
+
+.sharebar .ico:hover{
+  background: var(--hover);
+}
+
+.sharebar svg{
+  width: 25px;
 }
 
 /*-------------- Footer --------------*/

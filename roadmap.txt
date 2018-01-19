@@ -1,6 +1,5 @@
 Overall
 -----------------
-* user avatar set to placeholder if there is no cookie
 * placeholder image if post doesn't have a banner/thumbnail
 * get salt values from .htaccess
 * get database login from .htaccess

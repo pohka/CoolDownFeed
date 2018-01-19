@@ -98,7 +98,6 @@ class NavItem extends Comp{
 //card on the home page
 class Card extends Comp{
   constructor(fields){
-    console.log(fields);
     super({
       tag : "a",
       href : "/p/"+fields.url,
@@ -278,10 +277,27 @@ let icons = {
     width : "1em",
     d : 'M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z'
   },
+  facebook :{
+    box : "0 0 448 512",
+    width: "1em",
+    d : "M448 56.7v398.5c0 13.7-11.1 24.7-24.7 24.7H309.1V306.5h58.2l8.7-67.6h-67v-43.2c0-19.6 5.4-32.9 33.5-32.9h35.8v-60.5c-6.2-.8-27.4-2.7-52.2-2.7-51.6 0-87 31.5-87 89.4v49.9h-58.4v67.6h58.4V480H24.7C11.1 480 0 468.9 0 455.3V56.7C0 43.1 11.1 32 24.7 32h398.5c13.7 0 24.8 11.1 24.8 24.7z"
+  },
+  reddit : {
+    box : "0 0 512 512",
+    width : "1em",
+    d : "M440.3 203.5c-15 0-28.2 6.2-37.9 15.9-35.7-24.7-83.8-40.6-137.1-42.3L293 52.3l88.2 19.8c0 21.6 17.6 39.2 39.2 39.2 22 0 39.7-18.1 39.7-39.7s-17.6-39.7-39.7-39.7c-15.4 0-28.7 9.3-35.3 22l-97.4-21.6c-4.9-1.3-9.7 2.2-11 7.1L246.3 177c-52.9 2.2-100.5 18.1-136.3 42.8-9.7-10.1-23.4-16.3-38.4-16.3-55.6 0-73.8 74.6-22.9 100.1-1.8 7.9-2.6 16.3-2.6 24.7 0 83.8 94.4 151.7 210.3 151.7 116.4 0 210.8-67.9 210.8-151.7 0-8.4-.9-17.2-3.1-25.1 49.9-25.6 31.5-99.7-23.8-99.7zM129.4 308.9c0-22 17.6-39.7 39.7-39.7 21.6 0 39.2 17.6 39.2 39.7 0 21.6-17.6 39.2-39.2 39.2-22 .1-39.7-17.6-39.7-39.2zm214.3 93.5c-36.4 36.4-139.1 36.4-175.5 0-4-3.5-4-9.7 0-13.7 3.5-3.5 9.7-3.5 13.2 0 27.8 28.5 120 29 149 0 3.5-3.5 9.7-3.5 13.2 0 4.1 4 4.1 10.2.1 13.7zm-.8-54.2c-21.6 0-39.2-17.6-39.2-39.2 0-22 17.6-39.7 39.2-39.7 22 0 39.7 17.6 39.7 39.7-.1 21.5-17.7 39.2-39.7 39.2z"
+  },
   youtube :{
     box : "0 0 576 512",
     width : "1.2em",
     d : 'M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z'
+  },
+  link : {
+    box : "0 0 512 512",
+    width : "1em",
+    d : "M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037"+
+        " 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0"+
+        " 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"
   },
   "caret-down" :{
     box: "0 0 320 512",
@@ -420,170 +436,6 @@ class Notification extends Comp{
   }
 }
 
-//list item for posts in my-post page
-class MyPostsItem extends Comp{
-  constructor(data){
-    let url = data.path+"-"+data.id;
-    let uid = genUID();
-    super({
-      tag : "div",
-      class : "post-list-item",
-      id : "item-" + uid,
-      children : [
-        {
-          tag : "img",
-          "data-src" : data.img,
-          data : {
-            url : url
-          },
-          on : {
-            mousedown : function(e){
-              MyPostsItem.openPost(e.which, this.getAttribute("data-url"));
-            }
-          },
-        },
-        {
-          tag : "div",
-          class : "post-item-info",
-          children :[
-            {
-              tag : "h3",
-              class : "post-item-title",
-              txt : data.title,
-              data : {
-                url : url
-              },
-              on : {
-                mousedown : function(e){
-                  MyPostsItem.openPost(e.which, this.getAttribute("data-url"));
-                }
-              },
-            },
-            {
-              tag : "div",
-              class : "post-item-date",
-              txt : dateToString(data.publish_time)
-            },
-            {
-              tag : "a",
-              href : "/editor?p="+data.id,
-              class : "post-item-edit",
-              txt : "Edit",
-            },
-            {
-              tag : "div",
-              class : "post-item-more ico ico-caret-down noselect",
-              on : {
-                click : function(){
-                  let el = new Element(this);
-                  el.active();
-                  Quas.getEl("#menu-" + uid).visible(el.hasCls("active"));
-                }
-              }
-            },
-            {
-              tag : "div",
-              class : "post-item-more-menu noselect",
-              id : "menu-" + uid,
-              children : [
-                {
-                  tag : "div",
-                  txt : "- temp -"
-                },
-                {
-                  tag : "div",
-                  txt : "Delete",
-                  on : {
-                    click : function(){
-                      MyPostsItem.deletePost(data.id, uid);
-                    }
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          tag : "div",
-          class : "post-item-stats",
-          children : [
-            {
-              tag : "div",
-              txt : "",
-              class : "ico-post-item ico ico-chart-bar",
-              data : {
-                url : url
-              },
-              on : {
-                mousedown : function(e){
-                  Quas.preventDefault(e);
-                  console.log(this.getAttribute("data-url"));
-                }
-              }
-            },
-            {
-              tag : "div",
-              class : "ico-post-item-val",
-              txt : "0"
-            },
-            {
-              tag : "br",
-            },
-            {
-              tag : "div",
-              id : "",
-              class : "ico-post-item ico ico-comment",
-              data : {
-                url : url
-              },
-              on : {
-                mousedown : function(e){
-                  Quas.preventDefault(e);
-                  console.log(this.getAttribute("data-url"));
-                }
-              }
-            },
-            {
-              tag : "div",
-              class : "ico-post-item-val",
-              txt : "0"
-            }
-          ]
-        }
-      ]
-    });
-  }
-
-  static openPost(btn, url){
-    let path = "/p/"+ url;
-    let type = "_self";
-    if(btn == 1){
-      window.open(path, "_self");
-    }
-    else if(btn == 2){
-      window.open(path);
-    }
-  }
-
-  //deletes a post
-  static deletePost(id, itemUID){
-    Quas.ajax({
-      url : "/php/cdf.php",
-      type : "POST",
-      data : {
-        type : "post-remove",
-        postID : id,
-        sid : getCookie("session")
-      },
-      success : function(res){
-        Quas.getEl("#item-" + itemUID).del();
-        new Notification("Deleted Post", 3).render();
-      }
-    })
-
-  }
-}
-
 //user menu in the top right
 class UserMenu extends Comp{
   constructor(items){
@@ -626,6 +478,82 @@ class Error404 extends Comp{
   }
 }
 
+class Sharebar extends Comp{
+  constructor(){
+    Sharebar.created = true;
+    super({
+      tag : "div",
+      class : "sharebar-con",
+      children : [
+        {
+          tag : "div",
+          class : "sharebar",
+          children : [
+            {
+              tag : "div",
+              class : "ico ico-facebook"
+            },
+            {
+              tag : "div",
+              class : "ico ico-twitter"
+            },
+            {
+              tag : "div",
+              class : "ico ico-reddit"
+            },
+            {
+              tag : "div",
+              class : "ico ico-link"
+            },
+          ]
+        }
+      ]
+    });
+  }
+
+  //handles scrolling breakpoints for sharebar
+  static onscroll(viewport){
+    if(!Sharebar.created) return;
+
+    let postcon = Quas.getEl(".post-con").el;
+    let h = Number(window.getComputedStyle(postcon,null).getPropertyValue("height").replace("px", ""));
+    let postBottom = h + window.innerHeight;
+    let postTop = 400;
+    let appearH = 1000;
+
+    if(h<1200){
+      appearH = 500;
+    }
+
+    let inBanner = viewport.top < postTop;
+    let afterBanner = viewport.top > postTop;
+    let afterAppear = viewport.top > appearH;
+    let afterBottom = viewport.bottom > postBottom+200;
+
+    //show if after appear break point and before the bottom of the post
+    //once shown the appear break point is set after the banner
+    if(!Sharebar.active &&
+      ((afterAppear && !Sharebar.shownOnce) || (afterBanner && Sharebar.shownOnce)) &&
+      !afterBottom){
+      Sharebar.active = true;
+      Quas.getEl(".sharebar").active(true);
+      Sharebar.shownOnce = true;
+    }
+    //hide if after bottom of the post or in banner
+    else if(Sharebar.active && (afterBottom || inBanner)){
+      Sharebar.active = false;
+      Quas.getEl(".sharebar").active(false);
+    }
+  }
+
+  render(){
+    super.render("body");
+  }
+}
+Sharebar.created = false;
+Sharebar.active = false;
+Sharebar.shownOnce = false;
+
 let isResponsiveMobile;
 
 //start
@@ -639,11 +567,17 @@ Quas.start = function(){
   loadAllIcons();
   checkPrivilages(concealDefault);
   window.addEventListener("resize", responsiveLayoutCheck);
-  Quas.enableScrollTracker(lazyLoadScroll);
-  window.addEventListener('pagehide', function(){
-    console.log("hide");
-  }, false);
+  Quas.enableScrollTracker(handleScrolling);
 }
+
+//todo pause video gifs when losing focus
+// document.addEventListener("visibilitychange", function() {
+//     if (document.hidden){
+//         console.log("Browser tab is hidden")
+//     } else {
+//         console.log("Browser tab is visible")
+//     }
+// });
 
 function finishedLoadingPage(){
   responsiveLayoutCheck();
@@ -665,6 +599,11 @@ function lazyLoader(){
       }
     }
   });
+}
+
+function handleScrolling(viewport){
+  Sharebar.onscroll(viewport);
+  lazyLoadScroll(viewport);
 }
 
 function lazyLoadScroll(viewport){
@@ -866,6 +805,9 @@ function quasLoadPage(){
             }).render(".suggested-con");
           }
         }
+
+        new Sharebar().render();
+        loadAllIcons();
         finishedLoadingPage();
       }
     });
