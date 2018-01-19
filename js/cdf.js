@@ -14,7 +14,7 @@ class Navbar extends Comp{
               tag : "img",
               class : "skew",
               alt : "logo",
-              "data-src" : "/img/logo_sm.png"
+              "data-src" : "/img/logo_nav.png"
             }
           ]
         },

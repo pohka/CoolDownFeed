@@ -12,6 +12,10 @@
   --link:       #037ac5;
 }
 
+html{
+  direction: ltr;
+}
+
 body{
   margin: 0;
   background: var(--bg);
@@ -1548,7 +1552,7 @@ footer{
 
   .creator-avatar {
     height: 32px !important;
-    width: 56px !important;
+    width: 32px !important;
   }
 
   .creator-name{

@@ -1,6 +1,6 @@
 Overall
 -----------------
-* placeholder image if post doesn't have a banner/thumbnail
+* placeholder image in my-posts if post doesn't have a banner/thumbnail
 * get salt values from .htaccess
 * get database login from .htaccess
 * https://websitelaunchchecklist.com/
@@ -60,5 +60,5 @@ After Launch
  * scroll percentage
 
 
-* php
-  * use require for reused functions
+* no javascript
+  * better message
