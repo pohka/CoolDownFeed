@@ -25,14 +25,13 @@ Post Editor
 
 Server Side
 -----------------
-* queries use html special character and decode them too
+* remove use of queries use html special character and decode them too
+* use $mysqli->real_escape_string for checking for sql injection
 * queries use limit
 
 Add meta tags
 --------------
-* lang
-* utf-8
-* title, desc, etc
+* rest of pages
 
 Bugs
 -------------
